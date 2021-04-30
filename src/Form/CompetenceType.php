@@ -13,7 +13,7 @@ class CompetenceType extends AbstractType
     {
         $builder
             ->add('competence')
-            ->add('profils')
+            // ->add('profils')
         ;
     }
 

@@ -40,9 +40,11 @@ class Recruteur
     private $disponibilites;
 
     /**
-     * @ORM\OneToOne(targetEntity=Profil::class, mappedBy="recruteur", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Profil::class, cascade={"persist", "remove"})
      */
     private $profil;
+
+    
 
     public function __construct()
     {
@@ -146,18 +148,10 @@ class Recruteur
 
     public function setProfil(?Profil $profil): self
     {
-        // unset the owning side of the relation if necessary
-        if ($profil === null && $this->profil !== null) {
-            $this->profil->setRecruteur(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($profil !== null && $profil->getRecruteur() !== $this) {
-            $profil->setRecruteur($this);
-        }
-
         $this->profil = $profil;
 
         return $this;
     }
+
+    
 }

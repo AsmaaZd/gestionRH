@@ -11,6 +11,8 @@
                 <th>Id</th>
                 <th>Nom</th>
                 <th>Prenom</th>
+                <th>Années d'experience</th>
+                <th>Competences</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -20,6 +22,13 @@
                 <td>{{ recruteur.id }}</td>
                 <td>{{ recruteur.nom }}</td>
                 <td>{{ recruteur.prenom }}</td>
+                <td>{% if recruteur.profil %}{{ recruteur.profil.nbAnneesExp }}{% endif %}</td>
+                <td>
+                {% if recruteur.profil.competence %}
+                {% for competence in recruteur.profil.competence %}
+                {{ competence.competence }}
+                {% endfor %}
+                {% endif %}</td>
                 <td>
                     <a href="{{ path('recruteur_show', {'id': recruteur.id}) }}">Voir</a>
                     <a href="{{ path('recruteur_edit', {'id': recruteur.id}) }}">Modifier</a>

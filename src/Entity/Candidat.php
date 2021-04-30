@@ -35,7 +35,7 @@ class Candidat
     private $entretiens;
 
     /**
-     * @ORM\OneToOne(targetEntity=Profil::class, mappedBy="candidat", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Profil::class, cascade={"persist", "remove"})
      */
     private $profil;
 
@@ -108,15 +108,12 @@ class Candidat
         return $this->profil;
     }
 
-    public function setProfil(Profil $profil): self
+    public function setProfil(?Profil $profil): self
     {
-        // set the owning side of the relation if necessary
-        if ($profil->getCandidat() !== $this) {
-            $profil->setCandidat($this);
-        }
-
         $this->profil = $profil;
 
         return $this;
     }
+
+    
 }

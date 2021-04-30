@@ -29,15 +29,7 @@ class Profil
      */
     private $competence;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Candidat::class, inversedBy="profil", cascade={"persist", "remove"})
-     */
-    private $candidat;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Recruteur::class, inversedBy="profil", cascade={"persist", "remove"})
-     */
-    private $recruteur;
+   
 
     public function __construct()
     {
@@ -85,27 +77,5 @@ class Profil
         return $this;
     }
 
-    public function getCandidat(): ?Candidat
-    {
-        return $this->candidat;
-    }
-
-    public function setCandidat(Candidat $candidat): self
-    {
-        $this->candidat = $candidat;
-
-        return $this;
-    }
-
-    public function getRecruteur(): ?Recruteur
-    {
-        return $this->recruteur;
-    }
-
-    public function setRecruteur(?Recruteur $recruteur): self
-    {
-        $this->recruteur = $recruteur;
-
-        return $this;
-    }
+    
 }

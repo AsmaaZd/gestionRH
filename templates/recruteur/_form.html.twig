@@ -1,4 +1,9 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Enregistrer') }}</button>
+    {{ form_start(formProfil) }}
+    {{ form_widget(formProfil) }}
+
+    {# <button class="btn">{{ button_label|default('Enregistrer') }}</button> #}
+    <input type="submit" value="{{ button_label|default('Enregistrer') }}">
+    {{ form_end(formProfil) }}
 {{ form_end(form) }}
