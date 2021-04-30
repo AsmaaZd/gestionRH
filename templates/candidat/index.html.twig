@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des candidats{% endblock %}
+
+{% block body %}
+    <h1>Liste des candidats</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for candidat in candidats %}
+            <tr>
+                <td>{{ candidat.id }}</td>
+                <td>{{ candidat.nom }}</td>
+                <td>{{ candidat.prenom }}</td>
+                <td>
+                    <a href="{{ path('candidat_show', {'id': candidat.id}) }}">Voir</a>
+                    <a href="{{ path('candidat_edit', {'id': candidat.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Liste vide!</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('candidat_new') }}">Ajouter</a>
+{% endblock %}

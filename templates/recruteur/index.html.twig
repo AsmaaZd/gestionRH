@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des recruteurs{% endblock %}
+
+{% block body %}
+    <h1>Liste des recruteurs</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for recruteur in recruteurs %}
+            <tr>
+                <td>{{ recruteur.id }}</td>
+                <td>{{ recruteur.nom }}</td>
+                <td>{{ recruteur.prenom }}</td>
+                <td>
+                    <a href="{{ path('recruteur_show', {'id': recruteur.id}) }}">Voir</a>
+                    <a href="{{ path('recruteur_edit', {'id': recruteur.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Liste vide!</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('recruteur_new') }}">Ajouter</a>
+{% endblock %}
