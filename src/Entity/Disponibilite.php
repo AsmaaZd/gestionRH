@@ -20,7 +20,7 @@ class Disponibilite
     /**
      * @ORM\Column(type="date")
      */
-    private $dateDipro;
+    private $dateDispo;
 
     /**
      * @ORM\ManyToOne(targetEntity=Recruteur::class, inversedBy="disponibilites")
@@ -32,14 +32,14 @@ class Disponibilite
         return $this->id;
     }
 
-    public function getDateDipro(): ?\DateTimeInterface
+    public function getDateDispo(): ?\DateTimeInterface
     {
-        return $this->dateDipro;
+        return $this->dateDispo;
     }
 
-    public function setDateDipro(\DateTimeInterface $dateDipro): self
+    public function setDateDispo(\DateTimeInterface $dateDispo): self
     {
-        $this->dateDipro = $dateDipro;
+        $this->dateDispo = $dateDispo;
 
         return $this;
     }

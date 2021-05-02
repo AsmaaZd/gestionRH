@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+<a href="{{ path('recruteur_index') }}">Liste des recruteurs</a>
+<a href="{{ path('candidat_index') }}">Liste des candidats</a>
+<a href="{{ path('entretien_index') }}">Liste des entretiens</a>
+<a href="{{ path('competence_index') }}">Liste des competences</a>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Recruteur{% endblock %}
+
+{% block body %}
+    <h1>Ajouter Recruteur</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+
+    {# <button class="btn">{{ button_label|default('Enregistrer') }}</button> #}
+    <input type="submit" value="{{ button_label|default('Enregistrer') }}">
+ 
+{{ form_end(form) }}
+
+    <a href="{{ path('recruteur_index') }}">Retour à la liste</a>
+{% endblock %}

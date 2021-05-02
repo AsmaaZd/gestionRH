@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Recruteur;
+use App\Entity\Disponibilite;
 use App\Entity\Profil;
 use App\Form\ProfilType;
+use App\Entity\Recruteur;
 use App\Form\RecruteurType;
+use App\Form\DisponibiliteType;
 use App\Repository\RecruteurRepository;
 use App\Repository\CompetenceRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -145,5 +147,33 @@ class RecruteurController extends AbstractController
         }
 
         return $this->redirectToRoute('recruteur_index');
+    }
+
+    /**
+     * @Route("/addDisponibilite/{id}", name="recruteur_dispo_new")
+     */
+    public function newDispo(Recruteur $recruteur,Request $request,CompetenceRepository $competenceRepo): Response
+    {
+        $disponibilite= new Disponibilite();
+        $form = $this->createForm(DisponibiliteType::class, $disponibilite);
+        
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid() ) {
+
+            $recruteur->addDisponibilite($disponibilite);
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($disponibilite);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('recruteur_index');
+        }
+
+        return $this->render('recruteur/newDispo.html.twig', [
+            'recruteur' => $recruteur,
+            'form' => $form->createView(),
+           
+        ]);
     }
 }

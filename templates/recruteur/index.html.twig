@@ -13,6 +13,7 @@
                 <th>Prenom</th>
                 <th>Années d'experience</th>
                 <th>Competences</th>
+                <th>Disponibilités</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -29,9 +30,17 @@
                 {{ competence.competence }}
                 {% endfor %}
                 {% endif %}</td>
+                
+                <td>
+                {% if recruteur.disponibilites %}
+                {% for disponibilite in recruteur.disponibilites %}
+                {{ disponibilite.dateDispo | date('d-m-Y') }}
+                {% endfor %}
+                {% endif %}</td>
                 <td>
                     <a href="{{ path('recruteur_show', {'id': recruteur.id}) }}">Voir</a>
                     <a href="{{ path('recruteur_edit', {'id': recruteur.id}) }}">Modifier</a>
+                    <a href="{{ path('recruteur_dispo_new', {'id': recruteur.id}) }}">Ajouter une disponibilité</a>
                 </td>
             </tr>
         {% else %}

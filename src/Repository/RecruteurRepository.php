@@ -36,6 +36,57 @@ class RecruteurRepository extends ServiceEntityRepository
     }
     */
 
+    public function searchForEntretien($candidatAnneesExp,$competenceArray){
+        // return $this->createQueryBuilder('r')
+        //     ->leftJoin('r.', 'u')
+        //     ->where('u = :user')
+        //     ->andWhere('r.profil.nbAnneesExp >= :val1')
+        //     // ->andWhere('r.profil.competence in :val2')
+        //     ->setParameter('val1', $candidatAnneesExp)
+        //     // ->setParameter('val2', $competenceArray)
+        //     ->setMaxResults(1)
+        //     ->getQuery()
+        //     ->getResult()
+        // ;
+        $qb = $this->createQueryBuilder('r');
+        $qb
+        ->select('r', 'p')
+        ->leftJoin('r.profil', 'p')
+        // ->leftJoin('p.competence','c')
+        ->where('p.nbAnneesExp >= :nbAnneesExp')
+        // ->andWhere('c.competence = :competenceArray')
+        ->setParameter('nbAnneesExp', $candidatAnneesExp)
+        // ->setParameter('competenceArray', "PHP")
+        ->setMaxResults(1);
+
+    return $qb->getQuery()->getResult();
+    }
+
+    public function searchForAnneesExp($nbAnneesExp){
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.profil','p')
+            ->andWhere('p.nbAnneesExp >= :nbAnneesExp')
+            ->setParameter('nbAnneesExp', $nbAnneesExp)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findRecruteurCompetenceOk($recruteursPlusExp,$competenceOne,$dateDispo){
+        return $this->createQueryBuilder('r')
+            ->where('r = :recruteur')
+            ->setParameter('recruteur', $recruteursPlusExp)
+            ->leftJoin('r.disponibilites','d')
+            ->leftJoin('r.profil','p')
+            ->leftJoin('p.competence','c')
+            ->andWhere('d.dateDispo = :dateDispo ')
+            ->andWhere('c.competence = :competenceOne')
+            ->setParameter('dateDispo', $dateDispo)
+            ->setParameter('competenceOne', $competenceOne)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     /*
     public function findOneBySomeField($value): ?Recruteur
     {
