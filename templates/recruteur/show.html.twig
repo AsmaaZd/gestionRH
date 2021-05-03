@@ -7,24 +7,44 @@
 
     <table class="table">
         <tbody>
+           
             <tr>
-                <th>Id</th>
-                <td>{{ recruteur.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
+                <th><i class="fas fa-id-card"></i> Nom</th>
                 <td>{{ recruteur.nom }}</td>
             </tr>
             <tr>
-                <th>Prenom</th>
+                <th><i class="fas fa-id-card"></i> Prenom</th>
                 <td>{{ recruteur.prenom }}</td>
+            </tr>
+            <tr>
+                <th><i class="fas fa-chart-line"></i> Nombre d'années d'experience</th>
+                <td>{% if recruteur.profil %}
+					{{ recruteur.profil.nbAnneesExp }}
+				{% endif %}</td>
+            </tr>
+            <tr>
+				{% if recruteur.profil.competence %}
+                <th><i class="fas fa-toolbox"></i> Compétences</th>
+					<td>{% for competence in recruteur.profil.competence %}
+						<button disabled="disabled">{{ competence.competence }}</button>
+					{% endfor %}</td>
+				{% endif %}
+			</tr>
+            <tr>
+            <th><i class="fas fa-edit"></i>Actions</th>
+            <td>
+            
+            <div class="row">
+            <a class="col-md-2" href="{{ path('recruteur_edit', {'id': recruteur.id}) }}"><button class="btn btn-primary btn-xs"><i class="fas fa-edit"></i></button></a>
+            <div class="col-md-1">
+            {{ include('recruteur/_delete_form.html.twig') }}
+            </div>
+            </div>
+            </td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('recruteur_index') }}">Retour à la liste</a>
+    <a href="{{ path('recruteur_index') }}"><button class="btn btn-secondary btn-xs"><i class="fas fa-chevron-circle-left"></i> Retour à la liste</button></a>
 
-    <a href="{{ path('recruteur_edit', {'id': recruteur.id}) }}">Modifier</a>
-
-    {{ include('recruteur/_delete_form.html.twig') }}
 {% endblock %}

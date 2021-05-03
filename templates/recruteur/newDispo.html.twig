@@ -3,15 +3,16 @@
 {% block title %}New Recruteur{% endblock %}
 
 {% block body %}
-    <h1>Ajouter Recruteur</h1>
-
+    <h1>Ajouter une disponibilité</h1>
+Candidat:
+    <input class="form-control" value="{{ recruteur.nom }} {{ recruteur.prenom }}" disabled="disabled">
     {{ form_start(form) }}
     {{ form_widget(form) }}
 
-    {# <button class="btn">{{ button_label|default('Enregistrer') }}</button> #}
-    <input type="submit" value="{{ button_label|default('Enregistrer') }}">
- 
+    <br>
+ <input class="btn btn-success btn-xs" type="submit" value="{{ button_label|default('Enregistrer') }}">
+<a class="btn btn-outline-secondary" href="{{ path('recruteur_index') }}">Retour à la liste</a>
 {{ form_end(form) }}
 
-    <a href="{{ path('recruteur_index') }}">Retour à la liste</a>
+   
 {% endblock %}

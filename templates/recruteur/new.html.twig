@@ -1,11 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Recruteur{% endblock %}
+{% block title %}Nouveau Recruteur{% endblock %}
+{% block stylesheets %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
+{% endblock %}
 {% block body %}
-    <h1>Ajouter Recruteur</h1>
+    <h1>Nouveau recruteur</h1>
 
     {{ include('recruteur/_form.html.twig') }}
 
-    <a href="{{ path('recruteur_index') }}">Retour à la liste</a>
+    
+    {% block javascripts %}
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+		<script>
+			$(document).ready(function () {
+                $('.js-example-basic-multiple').select2();
+                });
+		</script>
+	{% endblock %}
 {% endblock %}
