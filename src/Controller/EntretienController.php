@@ -35,12 +35,13 @@ class EntretienController extends AbstractController
     public function new(Candidat $candidat, Request $request, RecruteurRepository $recruteurRepo): Response
     {
         $entretien = new Entretien();
+        $entretien->setCandidat($candidat);
         $form = $this->createForm(EntretienType::class, $entretien);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $entretien->setCandidat($candidat);
+            
             $candidatAnneesExp = $candidat->getProfil()->getNbAnneesExp();
             $candidatCompetences = $candidat->getProfil()->getCompetence()->toArray();
             $competenceArray = [];
@@ -58,13 +59,6 @@ class EntretienController extends AbstractController
 
             //date dispo 
             $dateEntretien=$request->request->get("entretien")["dateEntretien"];
-          
-            // $maDate = DateTime::createFromFormat('m/d/Y', vsprintf('%s/%s/%s', [
-            //     $dateEntretien['month'],
-            //     $dateEntretien['day'],
-            //     $dateEntretien['year']
-            // ]));
-            // $maDateFormat=$maDate->format('Y-m-d');
 
             foreach ($recruteursPlusExp as $recruteurPlusExp) {
 

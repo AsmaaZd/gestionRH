@@ -8,38 +8,35 @@
             {{message}}
         </div>
     {% endfor  %}
-    <h1>Entretien index</h1>
+    <h1>Liste des entretiens</h1>
 
-    <table class="table">
-        <thead>
+    <table class="table table-striped">
+        <thead class="thead-dark">
             <tr>
-                <th>Id</th>
-                <th>Candidat</th>
-                <th>Recruteur</th>
-                <th>DateEntretien</th>
-                <th>actions</th>
+                <th><i class="fas fa-user"></i> Candidat</th>
+                <th><i class="fas fa-user-tie"></i> Recruteur</th>
+                <th><i class="fas fa-calendar-alt"></i> Date de l'entretien</th>
+                <th><i class="fas fa-edit"></i> Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for entretien in entretiens %}
             <tr>
-                <td>{{ entretien.id }}</td>
                 <td>{{ entretien.candidat.nom }} {{ entretien.candidat.prenom }}</td>
                 <td>{{ entretien.recruteur.nom }} {{ entretien.recruteur.prenom }}</td>
                 <td>{{ entretien.dateEntretien ? entretien.dateEntretien|date('Y-m-d') : '' }}</td>
                 <td>
-                    {# <a href="{{ path('entretien_show', {'id': entretien.id}) }}">show</a>
-                    <a href="{{ path('entretien_edit', {'id': entretien.id}) }}">edit</a> #}
+                    
                     {{ include('entretien/_delete_form.html.twig') }}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">Liste vide!</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    {# <a href="{{ path('entretien_new') }}">Create new</a> #}
+ 
 {% endblock %}

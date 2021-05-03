@@ -21,7 +21,8 @@ class ProfilType extends AbstractType
                 'label' => "Nombre d'années d'experience",
                 'attr' => [
                     'placeholder' => "5",
-                    'invalid_message'=> "doit être un nombre"
+                    'invalid_message'=> "doit être un nombre",
+                    'class' => "form-control"
 
                 ],
             ])
@@ -29,10 +30,10 @@ class ProfilType extends AbstractType
                 "class" => Competence::class,
                 "choice_label" => "competence",
                 'multiple' => true,
-                "expanded" => true, // checkbox
+                
                 'attr' => [
-                    'class' => "select2",
-                    'data-placeholder' => "Sélectionnez une ou des matières" 
+                    'class' => "form-control js-example-basic-multiple",
+                    'data-placeholder' => "Exp:PHP.." 
                 ]
             ])
            
@@ -40,8 +41,25 @@ class ProfilType extends AbstractType
         }
         else{
             $builder
-            ->add('nbAnneesExp')
-            ->add('competence');
+            ->add('nbAnneesExp', NumberType::class, [
+                'label' => "Nombre d'années d'experience",
+                'attr' => [
+                    'placeholder' => "5",
+                    'invalid_message'=> "doit être un nombre",
+                    'class' => "form-control"
+
+                ],
+            ])
+            ->add('competence', EntityType::class, [
+                "class" => Competence::class,
+                "choice_label" => "competence",
+                'multiple' => true,
+                
+                'attr' => [
+                    'class' => "form-control js-example-basic-multiple",
+                    'data-placeholder' => "Exp:PHP.." 
+                ]
+            ]);
         }
         
     }

@@ -1,52 +1,89 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des candidats{% endblock %}
+{% block title %}Liste des candidats
+{% endblock %}
 
 {% block body %}
-{% for message in app.flashes('pasDeDisponibilite') %}
-        <div class="alert alert-success col-md-6 mx-auto text-center">
-            {{message}}
-        </div>
-    {% endfor  %}
-    <h1>Liste des candidats</h1>
+	{% for message in app.flashes('pasDeDisponibilite') %}
+		<div class="alert alert-danger col-md-6 mx-auto text-center">
+			{{message}}
+		</div>
+	{% endfor  %}
+	<h1>Liste des candidats</h1>
+	<a href="{{ path('candidat_new') }}">
+		<button class="btn btn-outline-success btn-xs">
+			<i class="fas fa-plus"></i>
+			Nouveau candidat</button>
+	</a>
+	<table class="table table-striped table-index">
+		<thead class="thead-dark">
+			<tr>
+				<th>
+					<i class="fas fa-id-card"></i>
+					Nom
+				</th>
+				<th>
+					<i class="fas fa-id-card"></i>
+					Prenom</th>
+				<th>
+					<i class="fas fa-chart-line"></i>
+					Années d'experience</th>
+				<th>
+					<i class="fas fa-toolbox"></i>
+					Competences</th>
+				<th>
+					<i class="fas fa-edit"></i>
+					Actions</th>
+				<th>
+					<i class="fas fa-handshake"></i>
+					Entretien</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for candidat in candidats %}
+				<tr>
+					<td>{{ candidat.nom }}</td>
+					<td>{{ candidat.prenom }}</td>
+					<td>
+						{% if candidat.profil %}
+							{{ candidat.profil.nbAnneesExp }}
+						{% endif %}
+					</td>
+					<td>
+						{% if candidat.profil.competence %}
+							{% for competence in candidat.profil.competence %}
+								<button disabled="disabled">{{ competence.competence }}</button>
+							{% endfor %}
+						{% endif %}
+					</td>
+					<td>
+						<a href="{{ path('candidat_show', {'id': candidat.id}) }}">
+							<button class="btn btn-success btn-xs">
+								<i class="fas fa-search"></i>
+							</button>
+						</a>
+						<a href="{{ path('candidat_edit', {'id': candidat.id}) }}">
+							<button class="btn btn-primary btn-xs">
+								<i class="fas fa-edit"></i>
+							</button>
+						</a>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Prenom</th>
-                <th>Années d'experience</th>
-                <th>Competences</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for candidat in candidats %}
-            <tr>
-                <td>{{ candidat.id }}</td>
-                <td>{{ candidat.nom }}</td>
-                <td>{{ candidat.prenom }}</td>
-                <td>{% if candidat.profil %}{{ candidat.profil.nbAnneesExp }}{% endif %}</td>
-                <td>
-                {% if candidat.profil.competence %}
-                {% for competence in candidat.profil.competence %}
-                {{ competence.competence }}
-                {% endfor %}
-                {% endif %}</td>
-                <td>
-                    <a href="{{ path('candidat_show', {'id': candidat.id}) }}">Voir</a>
-                    <a href="{{ path('candidat_edit', {'id': candidat.id}) }}">Modifier</a>
-                    <a href="{{ path('entretien_new', {'id': candidat.id}) }}">Entretien</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">Liste vide!</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+					</td>
+					<td>
+						<a href="{{ path('entretien_new', {'id': candidat.id}) }}">
+							<button class="btn btn-secondary btn-xs">
+								<i class="fas fa-street-view"></i>
+							</button>
+						</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="4">Liste vide!</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 
-    <a href="{{ path('candidat_new') }}">Ajouter</a>
+
 {% endblock %}

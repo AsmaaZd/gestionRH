@@ -1,9 +1,13 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_start(formProfil) }}
-    {{ form_widget(formProfil) }}
+{{ form_widget(form) }}
+{{ form_start(formProfil) }}
+{{ form_widget(formProfil) }}
 
-    {# <button class="btn">{{ button_label|default('Enregistrer') }}</button> #}
-    <input type="submit" value="{{ button_label|default('Enregistrer') }}">
-    {{ form_end(formProfil) }}
+{# <button class="btn">{{ button_label|default('Enregistrer') }}</button> #}
+<br>
+	<input class="btn btn-success btn-xs" type="submit" value="{{ button_label|default('Enregistrer') }}">
+<a class="btn btn-outline-secondary" href="{{ path('candidat_index') }}">Retour à la liste</a>
+
+
+{{ form_end(formProfil) }}
 {{ form_end(form) }}

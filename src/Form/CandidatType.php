@@ -26,7 +26,7 @@ class CandidatType extends AbstractType
             ->add('prenom', TextType::class, [
                 'required' => false,
                 'attr' => [
-                    'placeholder' => "Prenom",
+                    'placeholder' => "Prénom",
                     'class' => "form-control"
                 ],
 

@@ -1,26 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Competence index{% endblock %}
+{% block title %}Competences{% endblock %}
 
 {% block body %}
-    <h1>Competence index</h1>
-
-    <table class="table">
-        <thead>
+    <h1>Liste des competences</h1>
+<a href="{{ path('competence_new') }}"><button class="btn btn-outline-success btn-xs"><i class="fas fa-plus"></i> Nouvelle competence</button></a>
+    <table class="table table-striped">
+        <thead class="thead-dark">
             <tr>
-                <th>Id</th>
-                <th>Competence</th>
-                <th>actions</th>
+                
+                <th> <i class="fas fa-cogs"></i> Competence</th>
+                <th><i class="fas fa-edit"></i> Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for competence in competences %}
             <tr>
-                <td>{{ competence.id }}</td>
+            
                 <td>{{ competence.competence }}</td>
                 <td>
-                    <a href="{{ path('competence_show', {'id': competence.id}) }}">Voir</a>
-                    <a href="{{ path('competence_edit', {'id': competence.id}) }}">Modifier</a>
+                    <a href="{{ path('competence_show', {'id': competence.id}) }}"><button class="btn btn-success btn-xs"><i class="fas fa-search"></i></button></a>
+                    <a href="{{ path('competence_edit', {'id': competence.id}) }}"><button class="btn btn-primary btn-xs"><i class="fas fa-edit"></i></button></a>
                 </td>
             </tr>
         {% else %}
@@ -31,5 +31,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('competence_new') }}">Ajouter</a>
+    
 {% endblock %}

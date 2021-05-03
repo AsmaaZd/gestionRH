@@ -1,30 +1,54 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Candidat{% endblock %}
+{% block title %}Candidat
+{% endblock %}
 
 {% block body %}
-    <h1>Candidat</h1>
+	<h1>Candidat</h1>
 
-    <table class="table">
-        <tbody>
+	<table class="table">
+		<tbody>
+
+			<tr>
+				<th><i class="fas fa-id-card"></i> Nom</th>
+				<td>{{ candidat.nom }}</td>
+			</tr>
+			<tr>
+				<th><i class="fas fa-id-card"></i> Prenom</th>
+				<td>{{ candidat.prenom }}</td>
+			</tr>
+			<tr>
+                <th><i class="fas fa-chart-line"></i> Nombre d'années d'experience</th>
+				<td>{% if candidat.profil %}
+					{{ candidat.profil.nbAnneesExp }}
+				{% endif %}</td>
+			</tr>
+			<tr>
+				{% if candidat.profil.competence %}
+                <th><i class="fas fa-toolbox"></i> Compétences</th>
+					<td>{% for competence in candidat.profil.competence %}
+						<button disabled="disabled">{{ competence.competence }}</button>
+					{% endfor %}</td>
+				{% endif %}
+			</tr>
             <tr>
-                <th>Id</th>
-                <td>{{ candidat.id }}</td>
+            <th><i class="fas fa-edit"></i>Actions</th>
+            <td>
+            
+            <div class="row">
+            <a class="col-md-2" href="{{ path('candidat_edit', {'id': candidat.id}) }}"><button class="btn btn-primary btn-xs"><i class="fas fa-edit"></i></button></a>
+            <div class="col-md-1">
+            {{ include('candidat/_delete_form.html.twig') }}
+            </div>
+            </div>
+            </td>
             </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ candidat.nom }}</td>
-            </tr>
-            <tr>
-                <th>Prenom</th>
-                <td>{{ candidat.prenom }}</td>
-            </tr>
-        </tbody>
-    </table>
+		</tbody>
+	</table>
 
-    <a href="{{ path('candidat_index') }}">Retour à la liste</a>
+	<a href="{{ path('candidat_index') }}"><button class="btn btn-secondary btn-xs"><i class="fas fa-chevron-circle-left"></i> Retour à la liste</button></a>
 
-    <a href="{{ path('candidat_edit', {'id': candidat.id}) }}">Modifier</a>
+	
 
-    {{ include('candidat/_delete_form.html.twig') }}
+	{# {{ include('candidat/_delete_form.html.twig') }} #}
 {% endblock %}
