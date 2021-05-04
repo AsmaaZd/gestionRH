@@ -1,4 +1,8 @@
+# App\Entity\Candidat:
+#   candidat{1..10}:
+#     nom: candidat<current()>
+#     prenom: prenom<current()>
 App\Entity\Candidat:
-  candidat1{1..10}:
-    nom: <nom()>
-    prenom: <prenom()>
+  candidat{1..10}:
+    nom: <firstName()>
+    prenom: <lastName()>
