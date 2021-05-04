@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\CandidatRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CandidatRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CandidatRepository::class)
@@ -21,11 +24,35 @@ class Candidat
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez renseigner le nom")
+     * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false,
+     *     message="Your name cannot contain a number"
+     * )
+     * @Assert\Length(
+     * min = 3,
+     * max = 16,
+     * minMessage = "3 caractères minimum",
+     * maxMessage = "16 caractères maximum"
+     * )
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez renseigner le prenom")
+     * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false,
+     *     message="Your name cannot contain a number"
+     * )
+     * @Assert\Length(
+     * min = 3,
+     * max = 16,
+     * minMessage = "3 caractères minimum",
+     * maxMessage = "16 caractères maximum"
+     * )
      */
     private $prenom;
 

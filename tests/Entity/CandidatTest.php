@@ -1,18 +1,47 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Entity;
 
 use App\Entity\Candidat;
-use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\Validation;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class CandidatTest extends TestCase{
-
-    public function testCandidat(){
-        
-        $candidat= new Candidat();
-
-        $candidat->setNom("ziadi");
-
-        $this->assertEquals("ziadi",$candidat->getNom());
+class CandidatTest extends KernelTestCase
+{
+    public function getEntity():Candidat{
+        return (new Candidat() )
+        ->setNom("ziadi")
+        ->setPrenom("asmaa");
     }
+
+    public function assertHasErrors(Candidat $candidat, int $number=0){
+        self::bootKernel();
+        // $validator = Validation::createValidator();
+        // $validator = Validation::createValidatorBuilder();
+        $validator = Validation::createValidator();
+
+        // or if you also need to read constraints from annotations
+        $validator = Validation::createValidatorBuilder()
+            ->enableAnnotationMapping(true)
+            ->addDefaultDoctrineAnnotationReader()
+            ->getValidator();
+        
+        $error= $validator->validate($candidat);
+        // $error= $validator->getValidator()->validate($candidat);
+        $this->assertCount($number,$error);
+    }
+
+    public function testValidEntity(){
+
+        
+        $this->assertHasErrors($this->getEntity(),0);
+        
+    }
+
+    public function testInvalidEntity(){
+
+        
+         $this->assertHasErrors($this->getEntity()->setNom(2),2);
+     }
+  
 }
