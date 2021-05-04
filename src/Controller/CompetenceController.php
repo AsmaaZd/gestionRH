@@ -35,6 +35,9 @@ class CompetenceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $color="#".substr(md5(rand()), 0, 6);
+            $competence->setColor($color);
+            
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($competence);
             $entityManager->flush();

@@ -52,7 +52,10 @@
 					<td>
 						{% if candidat.profil.competence %}
 							{% for competence in candidat.profil.competence %}
-								<button disabled="disabled">{{ competence.competence }}</button>
+								{# <button disabled="disabled">{{ competence.competence }}</button> #}
+								<button class="no-click" style="background-color:{{ competence.color }}80 !important;">
+                {{ competence.competence }}
+                </button>
 							{% endfor %}
 						{% endif %}
 					</td>

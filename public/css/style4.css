@@ -258,8 +258,12 @@ a.article:hover {
 
 .table-index tr{
     text-align: center;
+    
   
 }
+
 .btnInfo{
     background-color: #43A59F
 }
+
+.no-click {pointer-events: none;}

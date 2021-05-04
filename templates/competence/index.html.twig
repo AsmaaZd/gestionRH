@@ -10,6 +10,7 @@
             <tr>
                 
                 <th> <i class="fas fa-cogs"></i> Competence</th>
+                
                 <th><i class="fas fa-edit"></i> Actions</th>
             </tr>
         </thead>
@@ -17,7 +18,12 @@
         {% for competence in competences %}
             <tr>
             
-                <td>{{ competence.competence }}</td>
+                <td >
+                <button class="no-click" style="background-color:{{ competence.color }}80 !important;">
+                {{ competence.competence }}
+                </button>
+                </td>
+                
                 <td>
                     
                     <div class="row">

@@ -55,12 +55,21 @@
 
 					<td>
 						{% if recruteur.disponibilites %}
-							{% for disponibilite in recruteur.disponibilites %}
-								{{ disponibilite.dateDispo | date('d-m-Y') }}
-							{% endfor %}
+							<select class="form-select" name="" id="">
+								{% for disponibilite in recruteur.disponibilites %}
+									<option value="{{ disponibilite.dateDispo | date('d-m-Y') }}">{{ disponibilite.dateDispo | date('d-m-Y') }}</option>
+								{% endfor %}
+							</select>
 						{% endif %}
-
-
+						{% if recruteur.disponibilites %}
+							<input class="form-control" type="date" id="start" name="trip-start" list="malist">
+							<datalist id="malist">
+							{% for disponibilite in recruteur.disponibilites %}
+								<option value="{{ disponibilite.dateDispo | date('d-m-Y') }}">{{ disponibilite.dateDispo | date('d-m-Y') }}</option>
+								{% endfor %}
+							</datalist>
+							{% endif %}
+						</td>
 					</td>
 					<td>
 						<a href="{{ path('recruteur_show', {'id': recruteur.id}) }}">
