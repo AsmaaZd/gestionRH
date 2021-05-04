@@ -1,0 +1,4 @@
+App\Entity\Candidat:
+  candidat1{1..10}:
+    nom: <nom()>
+    prenom: <prenom()>
