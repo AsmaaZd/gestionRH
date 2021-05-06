@@ -5,7 +5,12 @@
 			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
 		{% endblock %}
 {% block body %}
-    <h1>Ajouter une disponibilité</h1>
+    <h1>Calendrier</h1>
+    
+        {# {{ dump(data) }}
+        {{ data }} #}
+ 
+{#     
 Candidat:
     <input class="form-control" value="{{ recruteur.nom }} {{ recruteur.prenom }}" disabled="disabled">
     {{ form_start(form) }}
@@ -14,8 +19,33 @@ Candidat:
     <br>
  <input class="btn btn-success btn-xs" type="submit" value="{{ button_label|default('Enregistrer') }}">
 <a class="btn btn-outline-secondary" href="{{ path('recruteur_index') }}">Retour à la liste</a>
-{{ form_end(form) }}
+{{ form_end(form) }} #}
+{# {{ data.recruteur.nom|raw }} #}
+<br>
 
+<!-- Button trigger modal -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Une nouvelle disponibilité</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-primary">Ajouter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<input class="btn btn-success btn-xs" data-bs-toggle="modal" data-bs-target="#exampleModal" type="submit" value="Ajouter une disponibilité">
+<br>
 <br>
 <div id="calendrier">
 </div>
@@ -34,12 +64,58 @@ Candidat:
                 start: 'prev,next today',
                 center: 'title',
                 end: 'dayGridMonth,timeGridWeek'    
+            },
+            buttonText:{
+                today:    'Aujourd\'hui',
+                month:    'Mois',
+                week:     'Semaine',
+                day:      'Jour',
+            },
+            // customButtons: {
+            //     myCustomButton: {
+            //     text: 'Ajouter une disponibilité',
+            //     click: function() {
+            //         alert('clicked the custom button!');
+                   
+            //     }
+            //     }
+            // },
+            headerToolbar: {
+                start: 'prev,next today',
+                center: 'title',
+                end: 'dayGridMonth,timeGridWeek'    
+            },
+            events: {{ data|raw }},
+            editable: true,
+            eventResizableFromStart: true,
+        })
+
+        calendar.on('eventChange', (e)=>{
+            // console.log(e)
+            let url = `/api/calendar/${e.event.id}/edit`
+            let donnees={
+                "title": e.event.title,
+                "description": e.event.extendedProps.description,
+                "start": e.event.start,
+                "end": e.event.end,
+                "backgroundColor": e.event.backgroundColor,
+                "textColor": e.event.textColor,
+                "borderColor": e.event.borderColor,
+                "allDay": e.event.allDay,
+
             }
+            console.log(donnees)
+            let xhr = new XMLHttpRequest
+
+            xhr.open("PUT",url)
+            xhr.send(JSON.stringify(donnees))
+
         })
 
         calendar.render()
     }
 </script>
+
 {% endblock %}
 
 {% endblock %}

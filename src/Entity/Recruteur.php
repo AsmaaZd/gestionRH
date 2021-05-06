@@ -44,12 +44,18 @@ class Recruteur
      */
     private $profil;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Calendar::class, mappedBy="recruteur")
+     */
+    private $calendars;
+
     
 
     public function __construct()
     {
         $this->entretiens = new ArrayCollection();
         $this->disponibilites = new ArrayCollection();
+        $this->calendars = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -149,6 +155,36 @@ class Recruteur
     public function setProfil(?Profil $profil): self
     {
         $this->profil = $profil;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Calendar[]
+     */
+    public function getCalendars(): Collection
+    {
+        return $this->calendars;
+    }
+
+    public function addCalendar(Calendar $calendar): self
+    {
+        if (!$this->calendars->contains($calendar)) {
+            $this->calendars[] = $calendar;
+            $calendar->setRecruteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCalendar(Calendar $calendar): self
+    {
+        if ($this->calendars->removeElement($calendar)) {
+            // set the owning side to null (unless already changed)
+            if ($calendar->getRecruteur() === $this) {
+                $calendar->setRecruteur(null);
+            }
+        }
 
         return $this;
     }

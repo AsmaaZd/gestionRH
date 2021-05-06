@@ -2,12 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\Disponibilite;
 use App\Entity\Profil;
+use App\Entity\Calendar;
 use App\Form\ProfilType;
 use App\Entity\Recruteur;
+use App\Form\CalendarType;
 use App\Form\RecruteurType;
+use App\Entity\Disponibilite;
 use App\Form\DisponibiliteType;
+use App\Repository\CalendarRepository;
 use App\Repository\RecruteurRepository;
 use App\Repository\CompetenceRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -149,31 +152,96 @@ class RecruteurController extends AbstractController
         return $this->redirectToRoute('recruteur_index');
     }
 
-    /**
+    // /**
+    //  * @Route("/addDisponibilite/{id}", name="recruteur_dispo_new")
+    //  */
+    // public function newDispo(CalendarRepository $calendarrepo,Recruteur $recruteur,Request $request,CompetenceRepository $competenceRepo): Response
+    // {
+    //     $events=$calendarrepo->findCalendars($recruteur);
+    //     // dd($events);
+    //     $rdvs=[];
+    //     foreach($events as $event){
+    //         $rdvs[]=[
+    //             'id' => $event->getId(),
+    //             'title' => $event->getTitle(),
+    //             'start' => $event->getStart()->format('Y-m-d H:i:s'),
+    //             'end' => $event->getEnd()->format('Y-m-d H:i:s'),
+    //             'description' => $event->getDescription(),
+    //             'allDay' => $event->getAllDay(),
+    //             'backgroundColor' => $event->getBackgroundColor(),
+    //             'borderColor' => $event->getBorderColor(),
+    //             'textColor' => $event->getTextColor()
+    //         ];
+    //     }
+    //     $data= json_encode($rdvs);
+    //     $disponibilite= new Disponibilite();
+    //     $form = $this->createForm(DisponibiliteType::class, $disponibilite);
+        
+    //     $form->handleRequest($request);
+
+    //     if ($form->isSubmitted() && $form->isValid() ) {
+
+    //         $recruteur->addDisponibilite($disponibilite);
+            
+    //         $entityManager = $this->getDoctrine()->getManager();
+    //         $entityManager->persist($disponibilite);
+    //         $entityManager->flush();
+
+    //         return $this->redirectToRoute('recruteur_index');
+    //     }
+        
+
+    //     // return $this->render('recruteur/newDispo.html.twig', [
+    //     //     'recruteur' => $recruteur,
+    //     //     'form' => $form->createView(),
+    //     //     'data' => compact('data'),
+           
+    //     // ]);
+
+    //     return $this->render('recruteur/newDispo.html.twig',compact('data'));
+        
+    // }
+
+     /**
      * @Route("/addDisponibilite/{id}", name="recruteur_dispo_new")
      */
-    public function newDispo(Recruteur $recruteur,Request $request,CompetenceRepository $competenceRepo): Response
+    public function newDispo(CalendarRepository $calendarrepo,Recruteur $recruteur,Request $request,CompetenceRepository $competenceRepo): Response
     {
-        $disponibilite= new Disponibilite();
-        $form = $this->createForm(DisponibiliteType::class, $disponibilite);
-        
+        $events=$calendarrepo->findCalendars($recruteur);
+        // dd($events);
+        $rdvs=[];
+        foreach($events as $event){
+            $rdvs[]=[
+                'id' => $event->getId(),
+                'title' => $event->getTitle(),
+                'start' => $event->getStart()->format('Y-m-d H:i:s'),
+                'end' => $event->getEnd()->format('Y-m-d H:i:s'),
+                'description' => $event->getDescription(),
+                'allDay' => $event->getAllDay(),
+                'backgroundColor' => $event->getBackgroundColor(),
+                'borderColor' => $event->getBorderColor(),
+                'textColor' => $event->getTextColor(),
+                'recruteur' => $recruteur->getId(),
+            ];
+        }
+        $data= json_encode($rdvs);
+
+        $calendar = new Calendar();
+        $form = $this->createForm(CalendarType::class, $calendar);
         $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid() ) {
-
-            $recruteur->addDisponibilite($disponibilite);
-            
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($disponibilite);
+            $entityManager->persist($calendar);
             $entityManager->flush();
 
-            return $this->redirectToRoute('recruteur_index');
+            return $this->redirectToRoute('recruteur_dispo_new', array(
+                'id' => $recruteur->getId())
+            );
         }
+        
+       
 
-        return $this->render('recruteur/newDispo.html.twig', [
-            'recruteur' => $recruteur,
-            'form' => $form->createView(),
-           
-        ]);
+        return $this->render('recruteur/newDispo.html.twig',compact('data'));
+        
     }
 }

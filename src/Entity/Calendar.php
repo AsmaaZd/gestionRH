@@ -57,6 +57,12 @@ class Calendar
      */
     private $text_color;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Recruteur::class, inversedBy="calendars")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $recruteur;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -154,6 +160,18 @@ class Calendar
     public function setTextColor(string $text_color): self
     {
         $this->text_color = $text_color;
+
+        return $this;
+    }
+
+    public function getRecruteur(): ?Recruteur
+    {
+        return $this->recruteur;
+    }
+
+    public function setRecruteur(?Recruteur $recruteur): self
+    {
+        $this->recruteur = $recruteur;
 
         return $this;
     }
