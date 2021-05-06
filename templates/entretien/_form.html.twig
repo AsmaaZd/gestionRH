@@ -3,5 +3,5 @@
     <br>
 	<input class="btn btn-success btn-xs" type="submit" value="{{ button_label|default('Enregistrer') }}">
 <a class="btn btn-outline-secondary" href="{{ path('candidat_index') }}">Retour à la liste</a>
-
+<input type="hidden" name="token" value="{{ csrf_token('delete-item') }}"/>
 {{ form_end(form) }}

@@ -1,7 +1,32 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <br>
-    <button class="btn btn-success btn-xs">{{ button_label|default('Enregistrer') }}</button>
-        <a class="btn btn-outline-secondary" href="{{ path('competence_index') }}">Retour à la liste</a>
+<div class="row d-flex align-items-center">
+	<div
+		class="col">
+		{# <input type="text" class="form-control" placeholder="First name"> #}
+		{{ form_row(form.competence) }}
+	</div>
+	<div class="col row">
+		Couleur: <br><br> <br>
+        <div class="">
+		{# <input type="text" class="form-control" placeholder="Last name"> #}
+		<input type="radio"  name="colors" value="def" checked>
+		<input type="radio" style="background-color:#e3cdc1" name="colors" value="#e3cdc1">
+		<input type="radio" style="background-color:#ffc996" name="colors" value="#ffc996">
+		<input type="radio" style="background-color:#ddffbc" name="colors" value="#ddffbc">
+		<input type="radio" style="background-color:#ffd3b4" name="colors" value="#ffd3b4">
+		<input type="radio" style="background-color:#a7d0cd" name="colors" value="#a7d0cd">
+		<input type="radio" style="background-color:#e7d4b5" name="colors" value="#e7d4b5">
+		<input type="radio" style="background-color:#ffefa1" name="colors" value="#ffefa1">
+        </div>
+	</div>
+</div>
+
+
+
+
+
+<br>
+<button class="btn btn-success btn-xs">{{ button_label|default('Enregistrer') }}</button>
+<a class="btn btn-outline-secondary" href="{{ path('competence_index') }}">Retour à la liste</a>
 
 {{ form_end(form) }}

@@ -28,6 +28,11 @@
                 <td>
                     
                     {{ include('entretien/_delete_form.html.twig') }}
+                    <a href="{{ path('entretien_edit', {'id': entretien.id}) }}">
+							<button class="btn btn-primary btn-xs">
+								<i class="fas fa-edit"></i>
+							</button>
+						</a>
                 </td>
             </tr>
         {% else %}

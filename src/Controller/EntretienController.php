@@ -14,23 +14,23 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-/**
- * @Route("/entretien")
- */
+
 class EntretienController extends AbstractController
 {
     /**
-     * @Route("/", name="entretien_index", methods={"GET"})
+     * @Route("/entretien", name="entretien_index", methods={"GET"})
      */
     public function index(EntretienRepository $entretienRepository): Response
     {
+        // echo phpinfo();
+        // exit;
         return $this->render('entretien/index.html.twig', [
             'entretiens' => $entretienRepository->findAll(),
         ]);
     }
 
     /**
-     * @Route("/new/{id}", name="entretien_new", methods={"GET","POST"})
+     * @Route("/entretien/new/{id}", name="entretien_new", methods={"GET","POST"})
      */
     public function new(Candidat $candidat, Request $request, RecruteurRepository $recruteurRepo): Response
     {
@@ -40,8 +40,6 @@ class EntretienController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            
             $candidatAnneesExp = $candidat->getProfil()->getNbAnneesExp();
             $candidatCompetences = $candidat->getProfil()->getCompetence()->toArray();
             $competenceArray = [];
@@ -50,13 +48,10 @@ class EntretienController extends AbstractController
                 $comp = $competence->getCompetence();
                 array_push($competenceArray, $comp);
             }
-
             // Recuperer les recruteurs qui ont plus d'annees d'exp
             $recruteursPlusExp = $recruteurRepo->searchForAnneesExp($candidatAnneesExp);
 
             //Parmis ces recruteurs, recupere ceux qui ont plus de competences que candidats
-         
-
             //date dispo 
             $dateEntretien=$request->request->get("entretien")["dateEntretien"];
 
@@ -100,7 +95,7 @@ class EntretienController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="entretien_show", methods={"GET"})
+     * @Route("/entretien/{id}", name="entretien_show", methods={"GET"})
      */
     public function show(Entretien $entretien): Response
     {
@@ -110,10 +105,80 @@ class EntretienController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="entretien_edit", methods={"GET","POST"})
+     * @Route("/entretien/{id}/edit", name="entretien_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Entretien $entretien): Response
+    public function edit(Request $request, Entretien $entretien, RecruteurRepository $recruteurRepo): Response
     {
+        $candidat=$entretien->getCandidat();
+
+        
+
+            
+            $candidatAnneesExp = $candidat->getProfil()->getNbAnneesExp();
+            $candidatCompetences = $candidat->getProfil()->getCompetence()->toArray();
+            $competenceArray = [];
+            $recruteurDispo=null;
+            foreach ($candidatCompetences as $competence) {
+                $comp = $competence->getCompetence();
+                array_push($competenceArray, $comp);
+            }
+
+            // Recuperer les recruteurs qui ont plus d'annees d'exp
+            $recruteursPlusExp = $recruteurRepo->searchForAnneesExp($candidatAnneesExp);
+            
+            //Parmis ces recruteurs, recupere ceux qui ont plus de competences que candidats
+         
+
+            //date dispo 
+            $dateEntretien=$entretien->getDateEntretien()->format('Y-m-d');
+            
+            $recruteursList=[];
+            foreach ($recruteursPlusExp as $recruteurPlusExp) {
+
+                foreach ($competenceArray as $competenceOne) {
+                    $recruteurCompetenceOk = $recruteurRepo->findRecruteurCompetenceOk($recruteurPlusExp, $competenceOne,$dateEntretien);
+                   
+                    array_push($recruteursList,$recruteurCompetenceOk);
+                    if (!$recruteurCompetenceOk) {
+                        
+                        break;
+                        
+                    }
+                }
+                // if ($recruteurCompetenceOk) {
+                //     $recruteurDispo=$recruteurCompetenceOk[0];
+                //     break;
+                // }
+            }
+            // dd($recruteursList);
+            // if($recruteurDispo){
+            //     $entretien->setRecruteur($recruteurDispo);
+
+
+            // $entityManager = $this->getDoctrine()->getManager();
+            // $entityManager->persist($entretien);
+            // $entityManager->flush();
+            // $this->addFlash("NewEntretien" , "Entretien ajouté");
+            // return $this->redirectToRoute('entretien_index');
+            // }
+            // else{
+            //     $this->addFlash("pasDeDisponibilite" , "Aucun recruteur disponible!");
+            //     return $this->redirectToRoute('candidat_index');
+            // }
+            
+        
+
+
+
+
+
+
+
+
+
+
+
+
         $form = $this->createForm(EntretienType::class, $entretien);
         $form->handleRequest($request);
 
@@ -126,11 +191,12 @@ class EntretienController extends AbstractController
         return $this->render('entretien/edit.html.twig', [
             'entretien' => $entretien,
             'form' => $form->createView(),
+            'recruteursList' => $recruteursList,
         ]);
     }
 
     /**
-     * @Route("/{id}", name="entretien_delete", methods={"POST"})
+     * @Route("/entretien/{id}", name="entretien_delete", methods={"POST"})
      */
     public function delete(Request $request, Entretien $entretien): Response
     {

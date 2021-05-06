@@ -33,10 +33,18 @@ class CompetenceController extends AbstractController
         $competence = new Competence();
         $form = $this->createForm(CompetenceType::class, $competence);
         $form->handleRequest($request);
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $color="#".substr(md5(rand()), 0, 6);
-            $competence->setColor($color);
+            
+            if(!$request->request->get('colors') or $request->request->get('colors')=="def"){
+                $color="#".substr(md5(rand()), 0, 6);
+                $competence->setColor($color);
+            }
+            else{
+                $competence->setColor($request->request->get('colors'));
+            }
+            
             
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($competence);
@@ -70,6 +78,14 @@ class CompetenceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            if(!$request->request->get('colors') or $request->request->get('colors')=="def"){
+                $color="#".substr(md5(rand()), 0, 6);
+                $competence->setColor($color);
+            }
+            else{
+                $competence->setColor($request->request->get('colors'));
+            }
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('competence_index');

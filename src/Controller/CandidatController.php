@@ -13,13 +13,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-/**
- * @Route("/candidat")
- */
+
 class CandidatController extends AbstractController
 {
     /**
-     * @Route("/", name="candidat_index", methods={"GET"})
+     * @Route("/candidat", name="candidat_index", methods={"GET"})
      */
     public function index(CandidatRepository $candidatRepository): Response
     {
@@ -30,7 +28,7 @@ class CandidatController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="candidat_new", methods={"GET","POST"})
+     * @Route("/candidat/new", name="candidat_new", methods={"GET","POST"})
      */
     public function new(Request $request,CompetenceRepository $competenceRepo): Response
     {
@@ -71,7 +69,7 @@ class CandidatController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="candidat_show", methods={"GET"})
+     * @Route("/candidat/{id}", name="candidat_show", methods={"GET"})
      */
     public function show(Candidat $candidat): Response
     {
@@ -81,7 +79,7 @@ class CandidatController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="candidat_edit", methods={"GET","POST"})
+     * @Route("/candidat/{id}/edit", name="candidat_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Candidat $candidat,CompetenceRepository $competenceRepo): Response
     {
@@ -126,7 +124,7 @@ class CandidatController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="candidat_delete", methods={"POST"})
+     * @Route("/candidat/{id}", name="candidat_delete", methods={"POST"})
      */
     public function delete(Request $request, Candidat $candidat): Response
     {

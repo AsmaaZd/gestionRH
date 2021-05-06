@@ -1,5 +1,5 @@
 # App\Entity\Candidat:
-#   candidat{1..10}:
+#   candidat{1..11}:
 #     nom: candidat<current()>
 #     prenom: prenom<current()>
 App\Entity\Candidat:

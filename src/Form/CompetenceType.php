@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class CompetenceType extends AbstractType
 {
@@ -22,6 +23,21 @@ class CompetenceType extends AbstractType
                 ],
 
             ])
+            // ->add('color',ChoiceType::class, [
+            //     'required' => false,
+            //     'label' => 'Couleur',
+            //     'expanded' => true,
+            //     'choices' => [
+            //         'Apple' => 1,
+            //         'Banana' => 2,
+            //         'Durian' => 3,
+            //     ],
+            //     'choice_attr' => [
+            //         'Apple' => ['style' => 'color:red'],
+            //         'Banana' => ['data-color' => 'Yellow'],
+            //         'Durian' => ['data-color' => 'Green'],
+            //     ],
+            // ])
             // ->add('profils')
         ;
     }

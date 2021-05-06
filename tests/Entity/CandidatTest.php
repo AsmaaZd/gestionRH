@@ -20,7 +20,7 @@ class CandidatTest extends KernelTestCase
         // $validator = Validation::createValidatorBuilder();
         $validator = Validation::createValidator();
 
-        // or if you also need to read constraints from annotations
+        
         $validator = Validation::createValidatorBuilder()
             ->enableAnnotationMapping(true)
             ->addDefaultDoctrineAnnotationReader()

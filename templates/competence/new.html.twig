@@ -1,10 +1,54 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Nouvelle competence{% endblock %}
-
+{% block stylesheets %}
+			{#{{ encore_entry_link_tags('app') }}#}
+		 <style>
+input[type='radio'] {
+  -webkit-appearance:none;
+   width:30px;
+   height:30px;
+   margin-top: 5px; 
+  /* border:1px solid darkgray; */
+  border-radius:10%;
+  /* outline:none; */
+ box-shadow:0 0 5px 0px gray inset;
+ }
+ input[type='radio']:hover {
+  box-shadow:0 0 5px 0px black inset;
+}
+input[type='radio']:before {
+content:'';
+display:block;
+/* width:60%;
+height:60%; */
+   
+ border-radius:50%;    
+}
+ input[type='radio']:checked {
+/* border:1px solid black; */
+box-shadow:0 0 5px 0px black inset;
+}
+</style> 
+{% endblock %}
 {% block body %}
     <h1>Nouvelle Competence</h1>
 
-    {{ include('competence/_form.html.twig') }}
 
+
+    {{ include('competence/_form.html.twig') }}
+{% block javascripts %}
+			{# // <script>
+            // var backgrounde={"red":"red","green":"green","yellow":"yellow","pink":"pink","blue":"blue"}
+
+            // window.onload=function(){
+            //     var bgcolor=document.getElementsByName("colors");
+            //     for(var i=0;i<bgcolor.length;i++){
+                    
+            //             bgcolor[i].style.backgroundColor=backgrounde[this.value];
+                    
+            //     }
+            // }
+            // </script> #}
+		{% endblock %}
 {% endblock %}

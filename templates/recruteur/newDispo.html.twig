@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}New Recruteur{% endblock %}
-
+{% block stylesheets %}
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
+		{% endblock %}
 {% block body %}
     <h1>Ajouter une disponibilité</h1>
 Candidat:
@@ -14,5 +16,30 @@ Candidat:
 <a class="btn btn-outline-secondary" href="{{ path('recruteur_index') }}">Retour à la liste</a>
 {{ form_end(form) }}
 
-   
+<br>
+<div id="calendrier">
+</div>
+
+{% block javascript %}
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.js" integrity="sha256-ekrJn2FeZaiUFq99QswpQCUTME/HxaDfX7R8INzKJGE=" crossorigin="anonymous"></script>
+<script>
+    window.onload = () => {
+        let calendatElement= document.querySelector("#calendrier")
+
+        let calendar = new FullCalendar.Calendar(calendatElement, {
+            initialView: 'dayGridMonth',
+            locale: 'fr',
+            timeZone: 'Europe/Paris',
+            headerToolbar: {
+                start: 'prev,next today',
+                center: 'title',
+                end: 'dayGridMonth,timeGridWeek'    
+            }
+        })
+
+        calendar.render()
+    }
+</script>
+{% endblock %}
+
 {% endblock %}
