@@ -1,28 +1,28 @@
 {{ form_start(form) }}
+{{ form_label(form.competence) }}
 <div class="row d-flex align-items-center">
-	<div
-		class="col">
+
+	<div class="col">
 		{# <input type="text" class="form-control" placeholder="First name"> #}
-		{{ form_row(form.competence) }}
+		{{ form_widget(form.competence) }}
 	</div>
 	<div class="col row">
-		Couleur: <br><br> <br>
-        <div class="">
-		{# <input type="text" class="form-control" placeholder="Last name"> #}
-		<input type="radio"  name="colors" value="def" checked>
-		<input type="radio" style="background-color:#e3cdc1" name="colors" value="#e3cdc1">
-		<input type="radio" style="background-color:#ffc996" name="colors" value="#ffc996">
-		<input type="radio" style="background-color:#ddffbc" name="colors" value="#ddffbc">
-		<input type="radio" style="background-color:#ffd3b4" name="colors" value="#ffd3b4">
-		<input type="radio" style="background-color:#a7d0cd" name="colors" value="#a7d0cd">
-		<input type="radio" style="background-color:#e7d4b5" name="colors" value="#e7d4b5">
-		<input type="radio" style="background-color:#ffefa1" name="colors" value="#ffefa1">
-        </div>
+		{# Couleur: #}
+		
+		<div
+			class="">
+			{# <input type="text" class="form-control" placeholder="Last name"> #}
+			<section class="container">
+				<div type="text" class="pickr" >
+				<input type="hidden" class="hiddencolor" name="hiddencolor">
+				
+				
+				</div>
+			</section>
+		</div>
 	</div>
+	
 </div>
-
-
-
 
 
 <br>

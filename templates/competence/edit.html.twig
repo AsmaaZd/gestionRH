@@ -1,40 +1,72 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier Competence{% endblock %}
+{% block title %}Modifier Competence
+{% endblock %}
 {% block stylesheets %}
-			{#{{ encore_entry_link_tags('app') }}#}
-		 <style>
-input[type='radio'] {
-  -webkit-appearance:none;
-   width:30px;
-   height:30px;
-   margin-top: 5px; 
-  /* border:1px solid darkgray; */
-  border-radius:10%;
-  /* outline:none; */
- box-shadow:0 0 5px 0px gray inset;
- }
- input[type='radio']:hover {
-  box-shadow:0 0 5px 0px black inset;
-}
-input[type='radio']:before {
-content:'';
-display:block;
-/* width:60%;
-height:60%; */
-   
- border-radius:50%;    
-}
- input[type='radio']:checked {
-/* border:1px solid black; */
-box-shadow:0 0 5px 0px black inset;
-}
-</style> 
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/>
+	<link rel="stylesheet" href="{{ asset('css/pickercolor.css') }}">
 {% endblock %}
 {% block body %}
-    <h1>Modifier Competence</h1>
+	<h1>Modifier Competence</h1>
 
-    {{ include('competence/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+	{{ include('competence/_form.html.twig', {'button_label': 'Enregistrer'}) }}
 
-  
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+<script>
+
+const inputElement = document.querySelector('.pickr');
+const hiddenElement = document.querySelector('.hiddencolor');
+const divElement = document.querySelector('.container');
+
+const pickr = new Pickr({
+  el: inputElement,
+  useAsButton: true,
+  default: '#42445A',
+  theme: 'classic',
+
+  swatches: [
+    'rgba(244, 67, 54, 1)',
+    'rgba(233, 30, 99, 0.95)',
+    'rgba(156, 39, 176, 0.9)',
+    'rgba(103, 58, 183, 0.85)',
+    'rgba(63, 81, 181, 0.8)',
+    'rgba(33, 150, 243, 0.75)',
+    'rgba(3, 169, 244, 0.7)',
+    'rgba(0, 188, 212, 0.7)',
+    'rgba(0, 150, 136, 0.75)',
+    'rgba(76, 175, 80, 0.8)',
+    'rgba(139, 195, 74, 0.85)',
+    'rgba(205, 220, 57, 0.9)',
+    'rgba(255, 235, 59, 0.95)',
+    'rgba(255, 193, 7, 1)'
+  ],
+
+  components: {
+    preview: true,
+    opacity: true,
+    hue: true,
+
+    interaction: {
+      hex: true,
+      rgba: true,
+      hsva: true,
+      input: true,
+      save: true
+    }
+  }
+}).on('init', pickr => {
+  hiddenElement.value = pickr.getSelectedColor().toRGBA().toString(0);
+  inputElement.value = "";
+}).on('save', color => {
+  hiddenElement.value = color.toRGBA().toString(0);
+   inputElement.value = "";
+  pickr.hide();
+  inputElement.style.backgroundColor =color.toRGBA().toString(0);
+})
+
+
+</script>
+			{% endblock %}
+
 {% endblock %}
