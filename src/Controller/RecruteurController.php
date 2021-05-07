@@ -230,6 +230,7 @@ class RecruteurController extends AbstractController
         $form = $this->createForm(CalendarType::class, $calendar);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $calendar->setRecruteur($recruteur);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($calendar);
             $entityManager->flush();
@@ -238,10 +239,11 @@ class RecruteurController extends AbstractController
                 'id' => $recruteur->getId())
             );
         }
-        
-       
 
-        return $this->render('recruteur/newDispo.html.twig',compact('data'));
+        return $this->render('recruteur/newDispo.html.twig',[
+            'data'=>compact('data'),
+            'form' =>$form->createView(),
+            ]);
         
     }
 }

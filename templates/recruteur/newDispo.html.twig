@@ -3,10 +3,54 @@
 {% block title %}New Recruteur{% endblock %}
 {% block stylesheets %}
 			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
+
+
+
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
+
+
+
+
+
+
 		{% endblock %}
 {% block body %}
     <h1>Calendrier</h1>
-    
+
+
+{# <section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">Calendar #09</h2>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-4 text-center">
+					<h3 class="h5">Calendar Datepicker</h3>
+					<div class="w-100">
+            <form action="" method="post" class="datepickers">
+              <div class="form-group">
+                <!-- <label class="label-control" for="id_start_datetime">Datetime picker</label> -->
+                <div class="input-group date" id="id_0">
+                  <input type="text" value="" class="form-control" placeholder="MM/DD/YYYY hh:mm:ss" required/>
+                </div>
+              </div>
+            </form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section> #}
+
+
+
+
+
         {# {{ dump(data) }}
         {{ data }} #}
  
@@ -33,11 +77,12 @@ Candidat:
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        
+        {{ include('calendar/_form.html.twig') }}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn btn-primary">Ajouter</button>
+        <button type="submit" class="btn btn-primary">{{ button_label|default('Upload') }}</button>
+        
       </div>
     </div>
   </div>
@@ -85,7 +130,7 @@ Candidat:
                 center: 'title',
                 end: 'dayGridMonth,timeGridWeek'    
             },
-            events: {{ data|raw }},
+            events: {{ data.data|raw }},
             editable: true,
             eventResizableFromStart: true,
         })
@@ -115,7 +160,14 @@ Candidat:
         calendar.render()
     }
 </script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/momentjs/2.14.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+  <script>
+  $(function () {
+    $('#datetimepicker1').datetimepicker();
+ });
+</script>
 {% endblock %}
 
 {% endblock %}
