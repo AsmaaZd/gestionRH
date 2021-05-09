@@ -30,7 +30,6 @@ class CalendarType extends AbstractType
             ])
             ->add('start',DateTimeType::class,[
                 'date_widget' => 'single_text',
-                
                 'attr' => [
                     'class' => "form-control js-datepicker",
                 ],

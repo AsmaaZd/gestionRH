@@ -4,67 +4,15 @@
 {% block stylesheets %}
 			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
 			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
-
-
-
-
-
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
-
-
-
-
-
+<!-- Datetimepicker -->
+		{# <link rel="stylesheet" href="{{ asset('css/style.css') }}"> #}
+		<link rel="stylesheet" href="{{ asset('css/bootstrap-datetimepicker.min.css') }}">
 
 		{% endblock %}
 {% block body %}
     <h1>Calendrier</h1>
 
 
-{# <section class="ftco-section">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-md-6 text-center mb-5">
-					<h2 class="heading-section">Calendar #09</h2>
-				</div>
-			</div>
-			<div class="row justify-content-center">
-				<div class="col-md-4 text-center">
-					<h3 class="h5">Calendar Datepicker</h3>
-					<div class="w-100">
-            <form action="" method="post" class="datepickers">
-              <div class="form-group">
-                <!-- <label class="label-control" for="id_start_datetime">Datetime picker</label> -->
-                <div class="input-group date" id="id_0">
-                  <input type="text" value="" class="form-control" placeholder="MM/DD/YYYY hh:mm:ss" required/>
-                </div>
-              </div>
-            </form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section> #}
-
-
-
-
-
-        {# {{ dump(data) }}
-        {{ data }} #}
- 
-{#     
-Candidat:
-    <input class="form-control" value="{{ recruteur.nom }} {{ recruteur.prenom }}" disabled="disabled">
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-
-    <br>
- <input class="btn btn-success btn-xs" type="submit" value="{{ button_label|default('Enregistrer') }}">
-<a class="btn btn-outline-secondary" href="{{ path('recruteur_index') }}">Retour à la liste</a>
-{{ form_end(form) }} #}
-{# {{ data.recruteur.nom|raw }} #}
 <br>
 
 <!-- Button trigger modal -->
@@ -76,14 +24,104 @@ Candidat:
         <h5 class="modal-title" id="exampleModalLabel">Une nouvelle disponibilité</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        {{ include('calendar/_form.html.twig') }}
-      </div>
-      <div class="modal-footer">
+      
+        {# {{ include('calendar/_form.html.twig') }} #}  
+          
+<div class="datepickers">
+{{ form_start(form) }}
+<div class="modal-body">
+<div class="mb-3">
+	{{ form_widget(form.title) }}
+</div>
+
+<div class="mb-3 ">
+	<label for="date-start" class="visually-hidden">Date debut</label>
+	<div class="input-group">
+		<div class="input-group-text">
+			<i class="fa fa-calendar"></i>
+		</div>
+		<div class="form-control" id="id_0"><input name="date-start" type="text" value="" class="form-control border-0" placeholder="Date debut" required/></div>
+	</div>
+</div>
+
+
+<div class="mb-3 ">
+	<label for="date-end" class="visually-hidden">Date fin</label>
+	<div class="input-group">
+		<div class="input-group-text">
+			<i class="fa fa-calendar"></i>
+		</div>
+		<div class="form-control" id="id_1"><input name="date-end" type="text" value="" class="form-control border-0" placeholder="Date fin" required/></div>
+	</div>
+</div>
+
+
+
+
+<div class="mb-3">
+	{{ form_label(form.end, 'Date fin', {'label_attr': {'class': 'visually-hidden'}}) }}
+	<div class="input-group">
+		<div class="input-group-text">
+			<i class="fa fa-calendar"></i>
+		</div>
+		{{ form_widget(form.end) }}
+	</div>
+</div>
+<div class="mb-3">
+	{{ form_widget(form.description) }}
+</div>
+<div class="mb-3">
+	<div class="form-check">
+		{{ form_widget(form.all_day) }}
+		{{ form_label(form.all_day, 'Toute la journée?', {'label_attr': {'class': 'form-check-label'}}) }}
+	</div>
+</div>
+
+
+<div class="mb-3 row">
+	<div class="col">
+		<div>
+			<div class="input-group d-flex align-items-center">
+				<div class="input-group-text mx-2">
+					<i class="fas fa-palette"></i>
+				</div>
+				{{ form_widget(form.background_color) }}
+			</div>
+		</div>
+	</div>
+	<div class="col">
+		<div>
+			<div class="input-group d-flex align-items-center ">
+				<div class="input-group-text mx-2">
+					<i class="fas fa-pencil-alt"></i>
+				</div>
+				{{ form_widget(form.text_color) }}
+			</div>
+		</div>
+	</div>
+	<div class="col">
+		<div>
+			<div class="input-group d-flex align-items-center">
+				<div class="input-group-text mx-2">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-app" viewbox="0 0 16 16">
+						<path d="M11 2a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3h6zM5 1a4 4 0 0 0-4 4v6a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4V5a4 4 0 0 0-4-4H5z"/>
+					</svg>
+				</div>
+				{{ form_widget(form.border_color) }}
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
         <button type="submit" class="btn btn-primary">{{ button_label|default('Upload') }}</button>
         
       </div>
+{{ form_end(form) }}
+
+</div>
+      
     </div>
   </div>
 </div>
@@ -160,14 +198,12 @@ Candidat:
         calendar.render()
     }
 </script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/momentjs/2.14.1/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-  <script>
-  $(function () {
-    $('#datetimepicker1').datetimepicker();
- });
-</script>
+<!-- Datetimepicker js-->
+		<script src="{{ asset('js/jquery.min.js') }}"></script>
+	
+		 <script src="{{ asset('js/moment-with-locales.min.js') }}"></script>
+		 <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
+		 <script src="{{ asset('js/main.js') }}"></script>
 {% endblock %}
 
 {% endblock %}
