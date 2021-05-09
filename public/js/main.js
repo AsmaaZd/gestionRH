@@ -7,9 +7,10 @@
     showClose: true,
     showClear: true,
     showTodayButton: true,
-    format: "MM/DD/YYYY HH:mm:ss",
+	locale:"fr",
+    format: "DD/MM/YYYY HH:mm",
     icons: {
-		  time:'fa fa-clock-o',
+		  time:'fas fa-clock',
 
 		  date:'fa fa-calendar-o',
 
@@ -25,10 +26,9 @@
 
 		  clear:'fa fa-trash',
 
-		  close:'fa fa-close'
+		  close:'fas fa-window-close'
 		},
 
 	});
 
 })(jQuery);
-
