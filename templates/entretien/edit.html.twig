@@ -1,13 +1,94 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Entretien{% endblock %}
+{% block title %}Modifier Entretien{% endblock %}
 
 {% block body %}
-    <h1>Edit Entretien</h1>
+    <h1>Modifier Entretien</h1>
 
-    {{ include('entretien/_form.html.twig', {'button_label': 'Update'}) }}
+    {# {{ include('entretien/_form.html.twig', {'button_label': 'Enregistrer'}) }} #}
+<div class="accordion accordion-flush" id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingOne">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+        Choisir une autre date
+      </button>
+    </h2>
+    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body"> 
+            <form class="form-horizontal" method="POST">
+                <div class="row">
+                    <div class="col">
+                        <label for="candidat" class="form-label">Candidat</label>
+                        <input type="text" class="form-control" id="candidat" value="{{ entretien.candidat.nom}} {{ entretien.candidat.prenom}}" disabled>
+                    </div>
+                    <div class="col">
+                        <label for="recruteur" class="form-label">Recruteur</label>
+                        <input type="text" class="form-control" id="recruteur" value="{{ entretien.recruteur.nom}} {{ entretien.recruteur.prenom}}" disabled>
+                    </div>
+                    <div class="col">
+                        <label for="newDate" class="form-label">Date</label>
+                        <select class="form-select"  name="newDate" id="newDate">
+                                {% for date in datesDispo %}
+                                    <option value="{{ date.start|date("Y-m-d") }}">{{ date.start|date("Y-m-d") }}</option>
+                                {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <br>          
+                <div class="d-flex align-items-end flex-column">
+                    <input class="btn btn-success btn-xs mt-auto" type="submit" value="{{ button_label|default('Enregistrer') }}">
+                </div>
+                             
+            </form>
+            
+            
+        </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+        Choisir un autre recruteur
+      </button>
+    </h2>
+    <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body"> 
+            <form class="form-horizontal" method="POST">
+                <div class="row">
+                    <div class="col">
+                        <label for="candidat" class="form-label">Candidat</label>
+                        <input type="text" class="form-control" id="candidat" value="{{ entretien.candidat.nom}} {{ entretien.candidat.prenom}}" disabled>
+                    </div>
+                    <div class="col">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="text" class="form-control" id="date" value="{{ entretien.dateEntretien|date("Y-m-d")}}" disabled>
+                    </div>
+                    <div class="col">
+                        <label for="newRecruteur" class="form-label">Recruteur</label>
+                        <select class="form-select"  name="newRecruteur" id="newRecruteur">
+                                {% for recruteur in recruteurs %}
+                                    <option value="{{ recruteur.id }}">{{ recruteur.nom }} {{ recruteur.prenom }}</option>
+                                {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <br>          
+                <div class="d-flex align-items-end flex-column">
+                    <input class="btn btn-success btn-xs mt-auto" type="submit" value="{{ button_label|default('Enregistrer') }}">
+                </div>
+                             
+            </form>
+            
+            
+        </div>
+    </div>
+  </div>
+ 
+</div>
+<br>
+    <a class="btn btn-outline-secondary" href="{{ path('entretien_index') }}">Retour à la liste</a>
+   
 
-    <a href="{{ path('entretien_index') }}">back to list</a>
 
-    {{ include('entretien/_delete_form.html.twig') }}
+    {# {{ include('entretien/_delete_form.html.twig') }} #}
 {% endblock %}

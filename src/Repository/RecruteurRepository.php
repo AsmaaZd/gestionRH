@@ -76,13 +76,23 @@ class RecruteurRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->where('r = :recruteur')
             ->setParameter('recruteur', $recruteursPlusExp)
-            ->leftJoin('r.disponibilites','d')
+            ->leftJoin('r.calendars','d')
             ->leftJoin('r.profil','p')
             ->leftJoin('p.competence','c')
-            ->andWhere('d.dateDispo = :dateDispo ')
+            ->andWhere('d.start = :dateDispo ')
             ->andWhere('c.competence = :competenceOne')
             ->setParameter('dateDispo', $dateDispo)
             ->setParameter('competenceOne', $competenceOne)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function findAllPossibleRecruteurs($OldDateEntretien){
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.calendars','d')
+            ->andWhere('d.start = :dateDispo ')
+            ->setParameter('dateDispo', $OldDateEntretien)
             ->getQuery()
             ->getResult()
         ;
@@ -103,6 +113,19 @@ class RecruteurRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findAllPossibleRecruteursDateAndExp($dateEntretien,$recruteursPlusExp){
+        return $this->createQueryBuilder('r')
+            ->where('r in :recruteur')
+            ->setParameter('recruteur', $recruteursPlusExp)
+            ->leftJoin('r.calendars','d')
+            ->andWhere('d.start = :dateDispo ')
+            ->setParameter('dateDispo', $dateEntretien)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    
     /*
     public function findOneBySomeField($value): ?Recruteur
     {
