@@ -7,8 +7,9 @@
     showClose: true,
     showClear: true,
     showTodayButton: true,
+	
 	locale:"fr",
-    format: "DD/MM/YYYY HH:mm",
+    format: "DD/MM/YYYY",
     icons: {
 		  time:'fas fa-clock',
 
@@ -28,7 +29,7 @@
 
 		  close:'fas fa-window-close'
 		},
-
+	// seconds: false,
 	});
 
 })(jQuery);

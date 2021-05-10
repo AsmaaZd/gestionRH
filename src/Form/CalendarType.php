@@ -21,39 +21,41 @@ class CalendarType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title',TextType::class,[
-                'label' => false,
-                'attr' => [
-                    'placeholder' => "Titre",
-                    'class' => "form-control"
-                ],
-            ])
-            ->add('start',DateTimeType::class,[
-                'date_widget' => 'single_text',
-                'attr' => [
-                    'class' => "form-control js-datepicker",
-                ],
-            ])
-            ->add('end',DateTimeType::class,[
-                'date_widget' => 'single_text',
+            // ->add('title',TextType::class,[
+            //     'label' => false,
+            //     'required' => false,
+            //     'attr' => [
+            //         'placeholder' => "Titre",
+            //         'class' => "form-control"
+            //     ],
+            // ])
+            // ->add('start',DateTimeType::class,[
+            //     'date_widget' => 'single_text',
+            //     'attr' => [
+            //         'class' => "form-control js-datepicker",
+            //     ],
+            // ])
+            // ->add('end',DateTimeType::class,[
+            //     'date_widget' => 'single_text',
                 
-                'attr' => [
-                    'class' => "form-control js-datepicker"
-                ],
+            //     'attr' => [
+            //         'class' => "form-control js-datepicker"
+            //     ],
                 
-            ])
-            ->add('description',TextareaType::class,[
-                'attr' => [
-                    'placeholder' => "Description",
-                    'class' => "form-control"
-                ],
-            ])
+            // ])
+            // ->add('description',TextareaType::class,[
+            //     'required' => false,
+            //     'attr' => [
+            //         'placeholder' => "Description",
+            //         'class' => "form-control"
+            //     ],
+            // ])
             ->add('all_day', CheckboxType::class, [
                 'label'    => 'Toute la journée?',
                 'required' => false,
                 'attr' => [
-                    'class' => "form-check-input",
-                    'checked'=> false,
+                    'class' => "form-check-input myCheck",
+                    'checked' => true,
                 ],
                 
                 
@@ -61,22 +63,26 @@ class CalendarType extends AbstractType
                     'class'=> 'form-check-label'
                 ]
             ])
-            ->add('background_color', ColorType::class,[
-                // 'html5'=> true,
-                'attr' => [
-                    // 'class' => "form-control"
-                ],
-            ])
-            ->add('border_color', ColorType::class,[
-                'attr' => [
-                    // 'class' => "form-control"
-                ],
-            ])
-            ->add('text_color', ColorType::class,[
-                'attr' => [
-                    // 'class' => "form-control"
-                ],
-            ])
+            // ->add('background_color', ColorType::class,[
+            //     'required' => false,
+            //     // 'empty_data' => '#34656d',
+            //     // 'html5'=> true,
+            //     'attr' => [
+            //         // 'class' => "form-control"
+            //     ],
+            // ])
+            // ->add('border_color', ColorType::class,[
+            //     'required' => false,
+            //     'attr' => [
+            //         // 'class' => "form-control"
+            //     ],
+            // ])
+            // ->add('text_color', ColorType::class,[
+            //     'required' => false,
+            //     'attr' => [
+            //         // 'class' => "form-control"
+            //     ],
+            // ])
             // ->add('recruteur', EntityType::class, [
             //     'required' => false,
                 

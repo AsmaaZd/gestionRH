@@ -47,6 +47,16 @@ class CalendarRepository extends ServiceEntityRepository
         ;
     }
     
+    public function findCalendar($recruteurDispo,$dateEntretien){
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.recruteur = :recruteurDispo')
+            ->andWhere('c.start = :dateEntretien')
+            ->setParameter('recruteurDispo', $recruteurDispo)
+            ->setParameter('dateEntretien', $dateEntretien)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 
     /*
     public function findOneBySomeField($value): ?Calendar

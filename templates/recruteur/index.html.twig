@@ -56,22 +56,12 @@
 					</td>
 
 					<td>
-						{% if recruteur.disponibilites %}
-							<select class="form-select" name="" id="">
-								{% for disponibilite in recruteur.disponibilites %}
-									<option value="{{ disponibilite.dateDispo | date('d-m-Y') }}">{{ disponibilite.dateDispo | date('d-m-Y') }}</option>
-								{% endfor %}
-							</select>
-						{% endif %}
-						{% if recruteur.disponibilites %}
-							<input class="form-control" type="date" id="start" name="trip-start" list="malist">
-							<datalist id="malist">
-							{% for disponibilite in recruteur.disponibilites %}
-								<option value="{{ disponibilite.dateDispo | date('d-m-Y') }}">{{ disponibilite.dateDispo | date('d-m-Y') }}</option>
-								{% endfor %}
-							</datalist>
-							{% endif %}
-						</td>
+						<a href="{{ path('recruteur_dispo_new', {'id': recruteur.id}) }}">
+							<button class="btn btn-secondary btn-xs">
+								<i class="fas fa-calendar-plus"></i>
+								</i>
+							</button>
+						</a>
 					</td>
 					<td>
 						<a href="{{ path('recruteur_show', {'id': recruteur.id}) }}">
@@ -84,14 +74,10 @@
 								<i class="fas fa-edit"></i>
 							</button>
 						</a>
-						<a href="{{ path('recruteur_dispo_new', {'id': recruteur.id}) }}">
-							<button class="btn btn-secondary btn-xs">
-								<i class="fas fa-calendar-plus"></i>
-							</i>
-						</button>
+						
 					</td>
 				</tr>
-			</a>
+			
 		</tbody>
 	</td>
 </tr>{% else %}

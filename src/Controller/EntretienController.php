@@ -7,6 +7,7 @@ use App\Entity\Candidat;
 use App\Entity\Entretien;
 use App\Entity\Recruteur;
 use App\Form\EntretienType;
+use App\Repository\CalendarRepository;
 use App\Repository\EntretienRepository;
 use App\Repository\RecruteurRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -207,5 +208,75 @@ class EntretienController extends AbstractController
         }
 
         return $this->redirectToRoute('entretien_index');
+    }
+
+
+    /**
+     * @Route("/entretien/calendar/new/{id}", name="entretien_calendar_new", methods={"GET","POST"})
+     */
+    public function newEntretien(Candidat $candidat, Request $request, RecruteurRepository $recruteurRepo,CalendarRepository $calendarRepo): Response
+    {
+        $entretien = new Entretien();
+        $entretien->setCandidat($candidat);
+        $form = $this->createForm(EntretienType::class, $entretien);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $candidatAnneesExp = $candidat->getProfil()->getNbAnneesExp();
+            $candidatCompetences = $candidat->getProfil()->getCompetence()->toArray();
+            $competenceArray = [];
+            $recruteurDispo=null;
+            foreach ($candidatCompetences as $competence) {
+                $comp = $competence->getCompetence();
+                array_push($competenceArray, $comp);
+            }
+            // Recuperer les recruteurs qui ont plus d'annees d'exp
+            $recruteursPlusExp = $recruteurRepo->searchForAnneesExp($candidatAnneesExp);
+
+            //Parmis ces recruteurs, recupere ceux qui ont plus de competences que candidats
+            //date dispo 
+            $dateEntretien=$request->request->get("entretien")["dateEntretien"];
+
+            foreach ($recruteursPlusExp as $recruteurPlusExp) {
+
+                foreach ($competenceArray as $competenceOne) {
+                    $recruteurCompetenceOk = $recruteurRepo->findRecruteurDateOkCompetenceOk($recruteurPlusExp, $competenceOne,$dateEntretien);
+                    // dd($recruteurCompetenceOk);
+                    if (!$recruteurCompetenceOk) {
+                        
+                        break;
+                        
+                    }
+                }
+                if ($recruteurCompetenceOk) {
+                    $recruteurDispo=$recruteurCompetenceOk[0];
+                    break;
+                }
+            }
+            // dd($recruteurDispo);
+            if($recruteurDispo){
+                $entretien->setRecruteur($recruteurDispo);
+                $dispoToRemove=$calendarRepo->findCalendar($recruteurDispo,$dateEntretien);
+
+               
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($entretien);
+            $entityManager->remove($dispoToRemove);
+            $entityManager->flush();
+
+            $this->addFlash("NewEntretien" , "Entretien ajouté");
+            return $this->redirectToRoute('entretien_index');
+            }
+            else{
+                $this->addFlash("pasDeDisponibilite" , "Aucun recruteur disponible!");
+                return $this->redirectToRoute('candidat_index');
+            }
+            
+        }
+
+        return $this->render('entretien/new.html.twig', [
+            'entretien' => $entretien,
+            'form' => $form->createView(),
+        ]);
     }
 }

@@ -87,6 +87,22 @@ class RecruteurRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findRecruteurDateOkCompetenceOk($recruteurPlusExp, $competenceOne,$dateEntretien){
+        return $this->createQueryBuilder('r')
+            ->where('r = :recruteur')
+            ->setParameter('recruteur', $recruteurPlusExp)
+            ->leftJoin('r.calendars','d')
+            ->leftJoin('r.profil','p')
+            ->leftJoin('p.competence','c')
+            ->andWhere('d.start = :dateDispo ')
+            ->andWhere('c.competence = :competenceOne')
+            ->setParameter('dateDispo', $dateEntretien)
+            ->setParameter('competenceOne', $competenceOne)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     /*
     public function findOneBySomeField($value): ?Recruteur
     {

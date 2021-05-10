@@ -26,10 +26,12 @@ class RecruteurController extends AbstractController
     /**
      * @Route("/", name="recruteur_index", methods={"GET"})
      */
-    public function index(RecruteurRepository $recruteurRepository): Response
+    public function index(RecruteurRepository $recruteurRepository,CalendarRepository $calendarrepo): Response
     {
+        $recruteurs=$recruteurRepository->findAll();
         return $this->render('recruteur/index.html.twig', [
-            'recruteurs' => $recruteurRepository->findAll(),
+            'recruteurs' => $recruteurs,
+            // 'allData'=>$allData
         ]);
     }
 
@@ -213,16 +215,19 @@ class RecruteurController extends AbstractController
         foreach($events as $event){
             $rdvs[]=[
                 'id' => $event->getId(),
-                'title' => $event->getTitle(),
+                // 'title' => $event->getTitle(),
                 'start' => $event->getStart()->format('Y-m-d H:i:s'),
-                'end' => $event->getEnd()->format('Y-m-d H:i:s'),
-                'description' => $event->getDescription(),
+                
+                // 'description' => $event->getDescription(),
                 'allDay' => $event->getAllDay(),
-                'backgroundColor' => $event->getBackgroundColor(),
-                'borderColor' => $event->getBorderColor(),
-                'textColor' => $event->getTextColor(),
+                // 'backgroundColor' => $event->getBackgroundColor(),
+                // 'borderColor' => $event->getBorderColor(),
+                // 'textColor' => $event->getTextColor(),
                 'recruteur' => $recruteur->getId(),
             ];
+            if($event->getEnd()){
+                $rdvs[]=['end' => $event->getEnd()->format('Y-m-d H:i:s'),];
+            }
         }
         $data= json_encode($rdvs);
 
@@ -230,7 +235,19 @@ class RecruteurController extends AbstractController
         $form = $this->createForm(CalendarType::class, $calendar);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $getStart= $request->request->get("date-start");
+            $getEnd= $request->request->get("date-end");
+            $dateStart = \DateTime::createFromFormat('d/m/Y',$getStart);
+            
+            $calendar->setStart($dateStart);
+            if($getEnd){
+                $dateEnd = \DateTime::createFromFormat('d/m/Y',$getEnd);
+                $calendar->setEnd($dateEnd);
+            }
+            
+            // dd($calendar);
             $calendar->setRecruteur($recruteur);
+            // dd($calendar);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($calendar);
             $entityManager->flush();

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Recruteur{% endblock %}
+{% block title %}Recruteur{% endblock %}
 {% block stylesheets %}
 			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
 			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
@@ -30,9 +30,9 @@
 <div class="datepickers">
 {{ form_start(form) }}
 <div class="modal-body">
-<div class="mb-3">
+{# <div class="mb-3">
 	{{ form_widget(form.title) }}
-</div>
+</div> #}
 
 <div class="mb-3 ">
 	<label for="date-start" class="visually-hidden">Date debut</label>
@@ -43,21 +43,36 @@
 		<div class="form-control" id="id_0"><input name="date-start" type="text" value="" class="form-control border-0" placeholder="Date debut" required/></div>
 	</div>
 </div>
-
-
-<div class="mb-3 ">
+ 
+<div class="mb-3 " id="dateFinDiv" style="display:none">
 	<label for="date-end" class="visually-hidden">Date fin</label>
 	<div class="input-group">
 		<div class="input-group-text">
 			<i class="fa fa-calendar"></i>
 		</div>
-		<div class="form-control" id="id_1"><input name="date-end" type="text" value="" class="form-control border-0" placeholder="Date fin" required/></div>
+		<div class="form-control" id="id_1"><input id="dateEnd" name="date-end" type="text" value="" class="form-control border-0" placeholder="Date fin" /></div>
+	</div>
+</div>
+
+<div class="mb-3">
+	<div class="form-check">
+		{{ form_widget(form.all_day, {'attr': {'onclick':'showDateEnd();'} } ) }}
+		{# {{ form_start(form, {'action': path('_demo_hello',{'name':5}),'attr': {'class': 'smart-form userform','id':'formid', 'onsubmit':'return validateForm();'} } ) }} #}
+		{{ form_label(form.all_day, 'Toute la journée?', {'label_attr': {'class': 'form-check-label'}}) }}
 	</div>
 </div>
 
 
 
-
+{# <div class="mb-3">
+	{{ form_label(form.start, 'Date fin', {'label_attr': {'class': 'visually-hidden'}}) }}
+	<div class="input-group">
+		<div class="input-group-text">
+			<i class="fa fa-calendar"></i>
+		</div>
+		{{ form_widget(form.start) }}
+	</div>
+</div>
 <div class="mb-3">
 	{{ form_label(form.end, 'Date fin', {'label_attr': {'class': 'visually-hidden'}}) }}
 	<div class="input-group">
@@ -66,19 +81,14 @@
 		</div>
 		{{ form_widget(form.end) }}
 	</div>
-</div>
-<div class="mb-3">
+</div> #}
+{# <div class="mb-3">
 	{{ form_widget(form.description) }}
-</div>
-<div class="mb-3">
-	<div class="form-check">
-		{{ form_widget(form.all_day) }}
-		{{ form_label(form.all_day, 'Toute la journée?', {'label_attr': {'class': 'form-check-label'}}) }}
-	</div>
-</div>
+</div>#}
 
 
-<div class="mb-3 row">
+
+{# <div class="mb-3 row">
 	<div class="col">
 		<div>
 			<div class="input-group d-flex align-items-center">
@@ -111,11 +121,11 @@
 			</div>
 		</div>
 	</div>
-</div>
-</div>
+</div>#}
+</div> 
 <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-        <button type="submit" class="btn btn-primary">{{ button_label|default('Upload') }}</button>
+        <button type="submit" class="btn btn-success">{{ button_label|default('Ajouter') }}</button>
         
       </div>
 {{ form_end(form) }}
@@ -134,12 +144,12 @@
 </div>
 
 {% block javascript %}
-<script type="text/javascript">
-    jQuery(document).ready(function() {
-    jQuery.datetimepicker.setLocale('fr');
-    })
-    ;
-</script>
+{# // <script type="text/javascript">
+//     jQuery(document).ready(function() {
+//     jQuery.datetimepicker.setLocale('fr');
+//     })
+//     ;
+// </script> #}
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.js" integrity="sha256-ekrJn2FeZaiUFq99QswpQCUTME/HxaDfX7R8INzKJGE=" crossorigin="anonymous"></script>
 <script>
     window.onload = () => {
@@ -177,6 +187,7 @@
             events: {{ data.data|raw }},
             editable: true,
             eventResizableFromStart: true,
+			
         })
 
         calendar.on('eventChange', (e)=>{
@@ -202,6 +213,7 @@
         })
 
         calendar.render()
+		
     }
 </script>
 <!-- Datetimepicker js-->
@@ -210,6 +222,20 @@
 		 <script src="{{ asset('js/moment-with-locales.min.js') }}"></script>
 		 <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
 		 <script src="{{ asset('js/main.js') }}"></script>
+<script>
+function showDateEnd() {
+  var checkBox = document.querySelector(".myCheck");
+  var dateFinDiv = document.getElementById("dateFinDiv");
+  if (checkBox.checked == true){
+    dateFinDiv.style.display = "none";
+  } else {
+     dateFinDiv.style.display = "block";
+	 document.getElementById("dateEnd").required = true;
+  }
+}
+
+</script>
 {% endblock %}
+
 
 {% endblock %}

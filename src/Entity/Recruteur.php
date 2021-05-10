@@ -49,6 +49,8 @@ class Recruteur
      */
     private $calendars;
 
+    public $jsonCalendars;
+
     
 
     public function __construct()
