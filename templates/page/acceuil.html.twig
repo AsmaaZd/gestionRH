@@ -6,7 +6,7 @@
     /* position: fixed; */
     margin:auto;
     font-size: 20px;
-    top: 10vh;
+    /* top: 10vh; */
     z-index: 2;
     text-align: center;
     background-color: rgba(13, 60, 81, 0.7);
@@ -16,14 +16,15 @@
 p{
     color: #fff;
 }
+
         </style>
 
 {% endblock %}
 {% block title %}{% endblock %}
 
 {% block body %}
-<div class="container-fluid">
-<img class="img-fluid" style="width:100vm; " src="{{ asset('img/interview.jpg') }}" alt="interview"/>
+<div class="container-fluid d-flex justify-content-center">
+<img class="img-fluid" style="max-width:100vm;max-height: 100vh; " src="{{ asset('img/interview.jpg') }}" alt="interview"/>
 
 <div class="alert alert-dismissible fade show position-fixed" role="alert">
   <p> Nous devons disposer d’une plateforme numérique afin de pouvoir recruter efficacement et rapidement nos futurs consultants </p>
@@ -33,4 +34,6 @@ p{
 </div>
 
 {% endblock %}
+
+
 {# //class="img-fluid" #}

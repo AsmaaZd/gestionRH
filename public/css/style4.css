@@ -136,10 +136,11 @@ span {
     display: block;
 }
 
-#sidebar ul li a:hover {
-    color: #2F323A;
-    background: #fff;
+#sidebar ul li a:hover,#sidebar ul li a.active {
+    color: #2F323A!important;
+    background: #fff!important;
 }
+
 
 #sidebar ul li a i {
     margin-right: 10px;
