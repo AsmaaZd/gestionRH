@@ -28,9 +28,11 @@
                     <div class="col">
                         <label for="newDate" class="form-label">Date</label>
                         <select class="form-select"  name="newDate" id="newDate">
+                        {% if datesDispo %}
                                 {% for date in datesDispo %}
                                     <option value="{{ date.start|date("Y-m-d") }}">{{ date.start|date("Y-m-d") }}</option>
                                 {% endfor %}
+                        {% endif %}
                         </select>
                     </div>
                 </div>
@@ -66,9 +68,11 @@
                     <div class="col">
                         <label for="newRecruteur" class="form-label">Recruteur</label>
                         <select class="form-select"  name="newRecruteur" id="newRecruteur">
+                        {% if recruteurs %}
                                 {% for recruteur in recruteurs %}
                                     <option value="{{ recruteur.id }}">{{ recruteur.nom }} {{ recruteur.prenom }}</option>
                                 {% endfor %}
+                        {% endif %}
                         </select>
                     </div>
                 </div>

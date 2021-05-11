@@ -116,6 +116,7 @@ class EntretienController extends AbstractController
         $datesDispo=$calendarRepo->findDispo($recruteur);
         
         //edit recruteur
+        $recruteurs=[];
         $candidatAnneesExp = $entretien->getCandidat()->getProfil()->getNbAnneesExp();
             $candidatCompetences = $entretien->getCandidat()->getProfil()->getCompetence()->toArray();
             $competenceArray = [];

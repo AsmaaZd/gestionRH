@@ -156,6 +156,15 @@
         let calendatElement= document.querySelector("#calendrier")
 
         let calendar = new FullCalendar.Calendar(calendatElement, {
+			eventClick: function(info) {
+				var eventObj = info.event.id;
+				
+				// var eventId = event.id;
+				// alert("Are You Remove Event "+event.title);
+				if (confirm("Voulez-vous supprimer cette disponibilité ?"+info.event.id)) {
+        			calendar.getEventById( eventObj ).remove();
+				}
+			},
             initialView: 'dayGridMonth',
             locale: 'fr',
             timeZone: 'Europe/Paris',
@@ -208,6 +217,28 @@
             let xhr = new XMLHttpRequest
 
             xhr.open("PUT",url)
+            xhr.send(JSON.stringify(donnees))
+
+        })
+
+		calendar.on('eventRemove', (e)=>{
+            // console.log(e)
+            let url = `/api/calendar/${e.event.id}/delete`
+            let donnees={
+                "title": e.event.title,
+                "description": e.event.extendedProps.description,
+                "start": e.event.start,
+                "end": e.event.end,
+                "backgroundColor": e.event.backgroundColor,
+                "textColor": e.event.textColor,
+                "borderColor": e.event.borderColor,
+                "allDay": e.event.allDay,
+
+            }
+            console.log(donnees)
+            let xhr = new XMLHttpRequest
+
+            xhr.open("DELETE",url)
             xhr.send(JSON.stringify(donnees))
 
         })

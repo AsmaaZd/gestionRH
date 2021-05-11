@@ -75,4 +75,35 @@ class ApiCalendarController extends AbstractController
             'controller_name' => 'ApiCalendarController',
         ]);
     }
+
+
+    /**
+     * @Route("/api/calendar/{id}/delete", name="api_calendar_event_delete", methods={"DELETE"})
+     */
+    public function deleteEvent(Calendar $calendar, Request $request, EntityManagerInterface $manager): Response
+    {
+
+        // recuperer es donnees envoyer par FullCalendar
+        $donnees= json_decode($request->getContent());
+
+        if( 
+            
+            isset($donnees->start) && !empty($donnees->start)
+        ){
+            //mes donnees sont completes
+            // initialise un code
+            $code=200;
+            $manager->remove($calendar);
+            $manager->flush();
+
+            return new Response('OK',$code);
+        }
+        else{
+            //mes donnees sont incompletes
+            return new Response('Donnees incompletes',404);
+        }
+        return $this->render('api_calendar/index.html.twig', [
+            'controller_name' => 'ApiCalendarController',
+        ]);
+    }
 }
