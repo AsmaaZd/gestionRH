@@ -268,3 +268,22 @@ a.article:hover {
 }
 
 .no-click {pointer-events: none;}
+
+/* Accordion restyle */
+.accordion .accordion-item .accordion-button{
+    text-decoration: none;
+    box-shadow: none;
+    color: white;
+
+}
+
+
+.accordion .accordion-item .accordion-header .accordion-button{
+    background-color: #5C636A;
+    color: white;
+}
+
+.accordion .accordion-item .accordion-button::after{
+    /* width: 0px; */
+}
+
