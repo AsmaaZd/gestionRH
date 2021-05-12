@@ -30,8 +30,8 @@
 					<div
 						class="modal-body">
 						{# <div class="mb-3">
-																															{{ form_widget(form.title) }}
-																														</div> #}
+																																					{{ form_widget(form.title) }}
+																																				</div> #}
 
 						<div class="mb-3 ">
 							<label for="date-start" class="visually-hidden">Date debut</label>
@@ -81,11 +81,15 @@
 		<div class="col d-flex justify-content-end">
 			<div class="">
 				<div class="palette row">
-					<div class="color-dispo col-1"> <span></span></div>
+					<div class="color-dispo col-1">
+						<span></span>
+					</div>
 					<p class="col text-start">Disponibilités</p>
 				</div>
 				<div class="palette row">
-					<div class="color-entretien col-1"><span></span></div>
+					<div class="color-entretien col-1">
+						<span></span>
+					</div>
 					<p class="col text-start">Entretien</p>
 				</div>
 			</div>
@@ -104,9 +108,13 @@ let calendar = new FullCalendar.Calendar(calendatElement, {
 eventClick: function (info) {
 var eventObj = info.event.id;
 
-// var eventId = event.id;
-// alert("Are You Remove Event "+event.title);
-if (confirm("Voulez-vous supprimer cette disponibilité ?")) {
+if(info.event.extendedProps.isInterview===0){
+	var eventTypeMessage = "cette disponibilité?";
+}
+if(info.event.extendedProps.isInterview===1){
+	var eventTypeMessage = "cet entretien?";
+}
+if (confirm("Voulez-vous supprimer "+eventTypeMessage)) {
 calendar.getEventById(eventObj).remove();
 }
 },
@@ -168,6 +176,9 @@ let url = `/api/calendar/${
 e.event.id
 }/delete`
 let donnees = {
+"oldDate": e.event.start,
+"isInterview": e.event.extendedProps.isInterview,
+"recruteur": e.event.extendedProps.recruteur,
 "title": e.event.title,
 "description": e.event.extendedProps.description,
 "start": e.event.start,

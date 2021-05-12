@@ -109,7 +109,7 @@ class ApiCalendarController extends AbstractController
     /**
      * @Route("/api/calendar/{id}/delete", name="api_calendar_event_delete", methods={"DELETE"})
      */
-    public function deleteEvent(Calendar $calendar, Request $request, EntityManagerInterface $manager): Response
+    public function deleteEvent(?Calendar $calendar,?Entretien $entretien, Request $request, EntityManagerInterface $manager,RecruteurRepository $recruteurRepository): Response
     {
 
         // recuperer es donnees envoyer par FullCalendar
@@ -117,14 +117,32 @@ class ApiCalendarController extends AbstractController
 
         if( 
             
-            isset($donnees->start) && !empty($donnees->start)
+            isset($donnees->start) && !empty($donnees->start) && $donnees->isInterview === 0
         ){
+            
             //mes donnees sont completes
             // initialise un code
             $code=200;
             $manager->remove($calendar);
             $manager->flush();
 
+            return new Response('OK',$code);
+        }
+        elseif(
+            isset($donnees->start) && !empty($donnees->start) &&
+            $donnees->isInterview === 1 &&
+            isset($donnees->oldDate) && !empty($donnees->oldDate) &&
+            isset($donnees->recruteur) && !empty($donnees->recruteur)
+        ){
+            $code=200;
+            $calendarWithOldDate = new Calendar();
+            $calendarWithOldDate->setStart(new Datetime($donnees->oldDate))
+                                ->setRecruteur($recruteurRepository->find($donnees->recruteur))
+                                ->setEnd(new Datetime($donnees->oldDate))
+                                ->setAllDay($donnees->allDay);
+            $manager->persist($calendarWithOldDate);
+            $manager->remove($entretien);
+            $manager->flush();
             return new Response('OK',$code);
         }
         else{
