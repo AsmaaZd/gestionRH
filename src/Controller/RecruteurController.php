@@ -13,6 +13,7 @@ use App\Form\DisponibiliteType;
 use App\Repository\CalendarRepository;
 use App\Repository\RecruteurRepository;
 use App\Repository\CompetenceRepository;
+use App\Repository\EntretienRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -207,29 +208,47 @@ class RecruteurController extends AbstractController
      /**
      * @Route("/addDisponibilite/{id}", name="recruteur_dispo_new")
      */
-    public function newDispo(CalendarRepository $calendarrepo,Recruteur $recruteur,Request $request,CompetenceRepository $competenceRepo): Response
+    public function newDispo(CalendarRepository $calendarrepo,Recruteur $recruteur,Request $request,CompetenceRepository $competenceRepo,EntretienRepository $entretienrepo): Response
     {
         $events=$calendarrepo->findCalendars($recruteur);
+        $rdvs=$entretienrepo->findBy(array('recruteur' => $recruteur));
+        // dd($rdvs);
+
         // dd($events);
-        $rdvs=[];
+        $dispos=[];
         foreach($events as $event){
-            $rdvs[]=[
+            $dispos[]=[
                 'id' => $event->getId(),
                 // 'title' => $event->getTitle(),
                 'start' => $event->getStart()->format('Y-m-d H:i:s'),
                 
                 // 'description' => $event->getDescription(),
                 'allDay' => $event->getAllDay(),
-                // 'backgroundColor' => $event->getBackgroundColor(),
+                // 'backgroundColor' => "#34656d",
                 // 'borderColor' => $event->getBorderColor(),
                 // 'textColor' => $event->getTextColor(),
                 'recruteur' => $recruteur->getId(),
             ];
             if($event->getEnd()){
-                $rdvs[]=['end' => $event->getEnd()->format('Y-m-d H:i:s'),];
+                $dispos[]=['end' => $event->getEnd()->format('Y-m-d H:i:s'),];
             }
         }
-        $data= json_encode($rdvs);
+
+        foreach($rdvs as $rdv){
+            $dispos[]=[
+                'id' => $rdv->getId(),
+                // 'title' => $event->getTitle(),
+                'start' => $rdv->getDateEntretien()->format('Y-m-d'),
+                
+                // 'description' => $event->getDescription(),
+                'allDay' => 1,
+                'backgroundColor' => "#de8971",
+                'borderColor' => "#de8971",
+                // 'textColor' => $event->getTextColor(),
+                'recruteur' => $recruteur->getId(),
+            ];
+        }
+        $data= json_encode($dispos);
 
         $calendar = new Calendar();
         $form = $this->createForm(CalendarType::class, $calendar);

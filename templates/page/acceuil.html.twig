@@ -1,36 +1,12 @@
 {% extends 'base.html.twig' %}
-{% block stylesheets %}
-			{#{{ encore_entry_link_tags('app') }}#}
-		<style>
-        .alert{ 
-    /* position: fixed; */
-    margin:auto;
-    font-size: 20px;
-    /* top: 10vh; */
-    z-index: 2;
-    text-align: center;
-    background-color: rgba(13, 60, 81, 0.7);
-    color: #fff;
-    /* opacity:0.5; */
-}
-p{
-    color: #fff;
-}
-
-        </style>
-
-{% endblock %}
 {% block title %}{% endblock %}
 
 {% block body %}
-<div class="container-fluid d-flex justify-content-center">
-<img class="img-fluid" style="max-width:100vm;max-height: 100vh; " src="{{ asset('img/interview.jpg') }}" alt="interview"/>
+<div style="width: 60% !important;"class="container-fluid d-flex justify-content-center row m-auto">
 
-<div class="alert alert-dismissible fade show position-fixed" role="alert">
-  <p> Nous devons disposer d’une plateforme numérique afin de pouvoir recruter efficacement et rapidement nos futurs consultants </p>
-   
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
+<h4 class="text-center mt-4"> Nous devons disposer d’une plateforme numérique afin de pouvoir recruter efficacement et rapidement nos futurs consultants </h4>
+<img class="mt-4" src="{{ asset('img/interview.jpg') }}" alt="interview"/>
+
 </div>
 
 {% endblock %}

@@ -236,9 +236,7 @@ a.article:hover {
     #sidebar ul li a {
         padding: 20px 10px;
     }
-    #sidebar ul li a span {
-        /* font-size: 0.85em; */
-    }
+    
     #sidebar ul li a i {
         margin-right: 0;
         display: block;
@@ -246,9 +244,7 @@ a.article:hover {
     #sidebar ul ul a {
         padding: 10px !important;
     }
-    #sidebar ul li a i {
-        /* font-size: 1.3em; */
-    }
+    
     #sidebar {
         margin-left: 0;
     }
@@ -283,7 +279,16 @@ a.article:hover {
     color: white;
 }
 
-.accordion .accordion-item .accordion-button::after{
-    /* width: 0px; */
+div.palette .color-dispo span,div.palette .color-entretien span{
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
 }
+div.palette .color-dispo span{
+    background-color: #3788D8;
+}
+div.palette .color-entretien span{
+    background-color: #DE8971;
+}
+
 
