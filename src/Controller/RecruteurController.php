@@ -228,6 +228,7 @@ class RecruteurController extends AbstractController
                 // 'borderColor' => $event->getBorderColor(),
                 // 'textColor' => $event->getTextColor(),
                 'recruteur' => $recruteur->getId(),
+                'isInterview' => 0,
             ];
             if($event->getEnd()){
                 $dispos[]=['end' => $event->getEnd()->format('Y-m-d H:i:s'),];
@@ -246,10 +247,12 @@ class RecruteurController extends AbstractController
                 'borderColor' => "#de8971",
                 // 'textColor' => $event->getTextColor(),
                 'recruteur' => $recruteur->getId(),
+                'isInterview' => 1,
+                'candidat' => $rdv->getCandidat()->getId(),
             ];
         }
         $data= json_encode($dispos);
-
+        
         $calendar = new Calendar();
         $form = $this->createForm(CalendarType::class, $calendar);
         $form->handleRequest($request);

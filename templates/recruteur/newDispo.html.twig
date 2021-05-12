@@ -140,8 +140,13 @@ let url = `/api/calendar/${
 e.event.id
 }/edit`
 let donnees = {
+"id": e.event.id,
 "title": e.event.title,
+"oldDate": e.oldEvent.start,
 "description": e.event.extendedProps.description,
+"candidat": e.event.extendedProps.candidat,
+"isInterview": e.event.extendedProps.isInterview,
+"recruteur": e.event.extendedProps.recruteur,
 "start": e.event.start,
 "end": e.event.end,
 "backgroundColor": e.event.backgroundColor,
