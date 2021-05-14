@@ -118,7 +118,7 @@
 			window.onload = () => {
 let calendatElement = document.querySelector("#calendrier")
 var nowDate= new Date();
-console.log(nowDate);
+// console.log(nowDate);
 let calendar = new FullCalendar.Calendar(calendatElement, {
 eventClick: function (info) {
 var eventObj = info.event.id;
@@ -137,6 +137,7 @@ initialView: 'dayGridMonth',
 validRange: {
     start: nowDate,
   },
+eventOverlap: false,
 locale: 'fr',
 timeZone: 'Europe/Paris',
 headerToolbar: {
@@ -178,10 +179,11 @@ let donnees = {
 "backgroundColor": e.event.backgroundColor,
 "textColor": e.event.textColor,
 "borderColor": e.event.borderColor,
-"allDay": e.event.allDay
+"allDay": e.event.allDay,
+"recruteur": e.event.extendedProps.recruteur,
 
 }
-console.log(donnees)
+// console.log(donnees)
 let xhr = new XMLHttpRequest
 
 xhr.open("PUT", url)
@@ -207,7 +209,7 @@ let donnees = {
 "allDay": e.event.allDay
 
 }
-console.log(donnees)
+// console.log(donnees)
 let xhr = new XMLHttpRequest
 
 xhr.open("DELETE", url)

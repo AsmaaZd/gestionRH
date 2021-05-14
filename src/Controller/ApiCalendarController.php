@@ -5,6 +5,7 @@ namespace App\Controller;
 use DateTime;
 use App\Entity\Calendar;
 use App\Entity\Entretien;
+use App\Repository\CalendarRepository;
 use App\Repository\CandidatRepository;
 use App\Repository\EntretienRepository;
 use App\Repository\RecruteurRepository;
@@ -31,17 +32,20 @@ class ApiCalendarController extends AbstractController
     /**
      * @Route("/api/calendar/{id}/edit", name="api_calendar_event_edit", methods={"PUT"})
      */
-    public function majEvent(?Calendar $calendar, Request $request, EntityManagerInterface $manager,EntretienRepository $entretienRepo,RecruteurRepository $recruteurRepository,CandidatRepository $candidatRepository): Response
+    public function majEvent(?Calendar $calendar, Request $request, EntityManagerInterface $manager,EntretienRepository $entretienRepo,RecruteurRepository $recruteurRepository,CandidatRepository $candidatRepository,CalendarRepository $calendarRepo): Response
     {
 
         // recuperer es donnees envoyer par FullCalendar
         $donnees= json_decode($request->getContent());
         // dd($donnees);
-
+        $calendarAlreadyExixst= $calendarRepo->findBy(array("start"=>new Datetime($donnees->start),"recruteur"=>$donnees->recruteur));
+            
         if( 
             isset($donnees->start) && !empty($donnees->start) &&
-            isset($donnees->isInterview) && $donnees->isInterview === 0
+            isset($donnees->isInterview) && $donnees->isInterview === 0 &&
+            !$calendarAlreadyExixst
         ){
+            
             //mes donnees sont completes
             // initialise un code
             $code=200;
