@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\VarDumper\Cloner\Data;
 
 /**
  * @Route("/recruteur")
@@ -220,7 +221,7 @@ class RecruteurController extends AbstractController
             $dispos[]=[
                 'id' => $event->getId(),
                 // 'title' => $event->getTitle(),
-                'start' => $event->getStart()->format('Y-m-d H:i:s'),
+                'start' => $event->getStart()->format('Y-m-d'),
                 
                 // 'description' => $event->getDescription(),
                 'allDay' => $event->getAllDay(),
@@ -231,7 +232,7 @@ class RecruteurController extends AbstractController
                 'isInterview' => 0,
             ];
             if($event->getEnd()){
-                $dispos[]=['end' => $event->getEnd()->format('Y-m-d H:i:s'),];
+                $dispos[]=['end' => $event->getEnd()->format('Y-m-d'),];
             }
         }
 
@@ -260,20 +261,29 @@ class RecruteurController extends AbstractController
             $getStart= $request->request->get("date-start");
             $getEnd= $request->request->get("date-end");
             $dateStart = \DateTime::createFromFormat('d/m/Y',$getStart);
-            
-            $calendar->setStart($dateStart);
-            if($getEnd){
-                $dateEnd = \DateTime::createFromFormat('d/m/Y',$getEnd);
-                $calendar->setEnd($dateEnd);
+            // dd($dateStart->diff((new \DateTime('now')))->format('%a'));
+            $interval=$dateStart->diff((new \DateTime('now')));
+            if($interval->format('%R') == "+" && $interval->format('%a') != "0" ){
+                $this->addFlash("dateInferieureADateActuelle" , "Erreur! la date est ancienne!");
             }
-            
-            // dd($calendar);
-            $calendar->setRecruteur($recruteur);
-            // dd($calendar);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($calendar);
-            $entityManager->flush();
+            elseif($calendarrepo->findBy(array('start'=>$dateStart,'recruteur'=>$recruteur ))){
+                $this->addFlash("dateDejaExixtante" , "Erreur! la date est deja associée à un évènement!");
+            }
+            else{
+                
+                $calendar->setStart($dateStart);
+                if($getEnd){
+                    $dateEnd = \DateTime::createFromFormat('d/m/Y',$getEnd);
+                    $calendar->setEnd($dateEnd);
+                }
+                $calendar->setRecruteur($recruteur);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($calendar);
+                $entityManager->flush();
+                $this->addFlash("ajoutDispo" , "Une nouvelle disponibilité est crée avec succées!");
 
+           
+            }
             return $this->redirectToRoute('recruteur_dispo_new', array(
                 'id' => $recruteur->getId())
             );

@@ -7,6 +7,7 @@
     showClose: true,
     showClear: true,
     showTodayButton: true,
+	minDate:new Date(),
 	
 	locale:"fr",
     format: "DD/MM/YYYY",

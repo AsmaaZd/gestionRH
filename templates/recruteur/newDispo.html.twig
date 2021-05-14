@@ -11,7 +11,21 @@
 {% block body %}
 	<h2> {{ recruteur.nom }} {{ recruteur.prenom }}</h2>
 
-
+{% for message in app.flashes('ajoutDispo') %}
+        <div class="alert alert-success col-md-6 mx-auto text-center">
+            {{message}}
+        </div>
+ {% endfor  %}
+ {% for message in app.flashes('dateInferieureADateActuelle') %}
+        <div class="alert alert-danger col-md-6 mx-auto text-center">
+            {{message}}
+        </div>
+ {% endfor  %}
+ {% for message in app.flashes('dateDejaExixtante') %}
+        <div class="alert alert-warning col-md-6 mx-auto text-center">
+            {{message}}
+        </div>
+ {% endfor  %}
 	<br>
 
 	<!-- Button trigger modal -->
@@ -213,14 +227,14 @@ calendar.render()
 		<script src="{{ asset('js/main.js') }}"></script>
 		<script>
 			function showDateEnd() {
-var checkBox = document.querySelector(".myCheck");
-var dateFinDiv = document.getElementById("dateFinDiv");
-if (checkBox.checked == true) {
-dateFinDiv.style.display = "none";
-} else {
-dateFinDiv.style.display = "block";
-document.getElementById("dateEnd").required = true;
-}
+				var checkBox = document.querySelector(".myCheck");
+				var dateFinDiv = document.getElementById("dateFinDiv");
+				if (checkBox.checked == true) {
+				dateFinDiv.style.display = "none";
+				} else {
+				dateFinDiv.style.display = "block";
+				document.getElementById("dateEnd").required = true;
+			}
 }
 		</script>
 	{% endblock %}
