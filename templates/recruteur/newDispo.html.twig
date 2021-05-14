@@ -9,7 +9,7 @@
 	{# <link rel="stylesheet" href="{{ asset('css/style.css') }}"> #}
 <link rel="stylesheet" href="{{ asset('css/bootstrap-datetimepicker.min.css') }}"> {% endblock %}
 {% block body %}
-	<h1>Calendrier</h1>
+	<h2> {{ recruteur.nom }} {{ recruteur.prenom }}</h2>
 
 
 	<br>
@@ -103,7 +103,8 @@
 		<script>
 			window.onload = () => {
 let calendatElement = document.querySelector("#calendrier")
-
+var nowDate= new Date();
+console.log(nowDate);
 let calendar = new FullCalendar.Calendar(calendatElement, {
 eventClick: function (info) {
 var eventObj = info.event.id;
@@ -119,6 +120,9 @@ calendar.getEventById(eventObj).remove();
 }
 },
 initialView: 'dayGridMonth',
+validRange: {
+    start: nowDate,
+  },
 locale: 'fr',
 timeZone: 'Europe/Paris',
 headerToolbar: {

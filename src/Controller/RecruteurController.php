@@ -282,6 +282,7 @@ class RecruteurController extends AbstractController
         return $this->render('recruteur/newDispo.html.twig',[
             'data'=>compact('data'),
             'form' =>$form->createView(),
+            'recruteur' => $recruteur,
             ]);
         
     }
