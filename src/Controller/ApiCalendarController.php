@@ -30,7 +30,7 @@ class ApiCalendarController extends AbstractController
     }
 
     /**
-     * @Route("/api/calendar/{id}/edit", name="api_calendar_event_edit", methods={"PUT"})
+     * @Route("/api/calendaoor/{id}/edit", name="api_calendar_event_edit", methods={"PUT"})
      */
     public function majEvent(?Calendar $calendar, Request $request, EntityManagerInterface $manager,EntretienRepository $entretienRepo,RecruteurRepository $recruteurRepository,CandidatRepository $candidatRepository,CalendarRepository $calendarRepo): Response
     {
@@ -75,7 +75,14 @@ class ApiCalendarController extends AbstractController
         ){
             $code=201;
 
-            //creer une nouvelle dispo 
+            //1 changer la date de l'entretien
+            $entretienWithNewDate = $entretienRepo->findBy(array('recruteur'=>$donnees->recruteur,'dateEntretien'=>new Datetime($donnees->oldDate) ));
+            if($entretienWithNewDate){
+                $entretienWithNewDate[0]->setDateEntretien(new Datetime($donnees->start));
+                $manager->persist($entretienWithNewDate[0]);
+            }
+
+            //2 creer une nvl dispo avec l'ancienne date de l'entretien
             $calendar= new Calendar();
             $calendar->setRecruteur($recruteurRepository->find($donnees->recruteur))
                     ->setStart(new Datetime($donnees->oldDate))
@@ -87,15 +94,14 @@ class ApiCalendarController extends AbstractController
                 $calendar->setEnd(new Datetime($donnees->start));
             }
             $manager->persist($calendar);
-            //supprimer l'ancien entretien
-            $ancienEntretien= $entretienRepo->find($donnees->id);
-            $manager->remove($ancienEntretien);
-            // creer un nv entretien
-            $entretien = new Entretien();
-            $entretien->setCandidat($candidatRepository->find($donnees->candidat))
-                    ->setDateEntretien(new Datetime($donnees->start))
-                    ->setRecruteur($recruteurRepository->find($donnees->recruteur));
-            $manager->persist($entretien);
+
+
+            //3 supprimer la dispo remplacée par l'entretien
+            $dispoReplaced = $calendarRepo->findBy(array('recruteur'=>$donnees->recruteur,'start'=>new Datetime($donnees->start)));
+            if($dispoReplaced){
+                $manager->remove($dispoReplaced);
+            }
+
             $manager->flush();
 
             return new Response('OK',$code);

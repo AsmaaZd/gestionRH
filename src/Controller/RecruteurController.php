@@ -250,6 +250,11 @@ class RecruteurController extends AbstractController
                 'recruteur' => $recruteur->getId(),
                 'isInterview' => 1,
                 'candidat' => $rdv->getCandidat()->getId(),
+                'candidatObjet' => $rdv->getCandidat(),
+                'candidatNom' => $rdv->getCandidat()->getNom(),
+                'candidatPrenom' => $rdv->getCandidat()->getPrenom(),
+                'candidatEmail' => $rdv->getCandidat()->getEmail(),
+                'candidatPhone' => $rdv->getCandidat()->getTelephone(),
             ];
         }
         $data= json_encode($dispos);
