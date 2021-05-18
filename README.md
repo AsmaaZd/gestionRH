@@ -45,7 +45,7 @@
 
 ### 🏁 Les étapes d'installation
 
-1. Clonez le dépot où vous voulez: `git clonehttps://github.com/AsmaaZd/gestionRH`
+1. Clonez le dépot où vous voulez: `git clone https://github.com/AsmaaZd/gestionRH`
 2. Installez les dépendances  : `composer install`
 3. Créer la base de données : ` php bin/console doctrine:database:create `
 4. Lancez les migrations : ` php bin/console doctrine:migrations:migrate `
