@@ -145,9 +145,7 @@
 						start: nowDate,
 					},
 					eventOverlap: function(stillEvent, movingEvent) {
-						return !stillEvent.extendedProps.isInterview && movingEvent.extendedProps.isInterview
-						||
-						!movingEvent.extendedProps.isInterview && !stillEvent.id;
+						return !stillEvent.extendedProps.isInterview && movingEvent.extendedProps.isInterview;
 					},
 					// eventOverlap: false,
 					locale: 'fr',

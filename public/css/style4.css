@@ -291,4 +291,9 @@ div.palette .color-entretien span{
     background-color: #DE8971;
 }
 
+.grayscale {
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+  }
+
 

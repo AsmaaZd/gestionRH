@@ -1,0 +1,25 @@
+
+{% extends "page/baseError.html.twig" %}
+
+{% block title %}la page n’existe plus
+{% endblock %}
+{% block stylesheets %}
+<style>
+.grayscale {
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+ 
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+
+	<div style="width: 60% !important;" class="container-fluid d-flex justify-content-center row m-auto">
+
+		<h1 class="text-center">Le serveur a renvoyé une "{{ status_code }} {{ status_text}}".</h1>
+		<p class="text-center">la page n’existe plus</p>
+		<img class="mt-4 grayscale" src="{{ asset('img/interview.jpg') }}" alt="interview"/>
+
+	</div>
+{% endblock %}
