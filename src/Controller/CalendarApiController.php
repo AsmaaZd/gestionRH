@@ -50,7 +50,10 @@ class CalendarApiController extends AbstractController
                 $manager->persist($calendar);
                 $manager->flush();
 
-                return new Response('OK',$code);
+                // return new Response('OK',$code);
+                $response= new Response('OK',$code);
+                $response->headers->set('Access-Control-Allow-Origin', '*');
+                return $response;
             }
             elseif(isset($donnees->isInterview) && !empty($donnees->isInterview) && $donnees->isInterview === 1){
                 $code=201;
@@ -77,7 +80,9 @@ class CalendarApiController extends AbstractController
 
                 $manager->flush();
 
-                return new Response('OK',$code);
+                $response= new Response('OK',$code);
+                // $response->headers->set('Access-Control-Allow-Origin', '*');
+                return $response;
             }
         }
         else{

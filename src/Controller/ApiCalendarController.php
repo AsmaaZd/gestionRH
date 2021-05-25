@@ -136,7 +136,9 @@ class ApiCalendarController extends AbstractController
             $manager->remove($calendar);
             $manager->flush();
 
-            return new Response('OK',$code);
+            $response= new Response('OK',$code);
+                $response->headers->set('Access-Control-Allow-Origin', '*');
+                return $response;
         }
         elseif(
             isset($donnees->start) && !empty($donnees->start) &&
@@ -153,7 +155,9 @@ class ApiCalendarController extends AbstractController
             $manager->persist($calendarWithOldDate);
             $manager->remove($entretien);
             $manager->flush();
-            return new Response('OK',$code);
+            $response= new Response('OK',$code);
+                $response->headers->set('Access-Control-Allow-Origin', '*');
+                return $response;
         }
         else{
             //mes donnees sont incompletes
