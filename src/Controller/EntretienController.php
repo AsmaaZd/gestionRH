@@ -117,7 +117,7 @@ class EntretienController extends AbstractController
     /**
      * @Route("/entretien/{id}/edit", name="entretien_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Entretien $entretien, CalendarRepository $calendarRepo, RecruteurRepository $recruteurRepo): Response
+    public function edit(Request $request, Entretien $entretien, CalendarRepository $calendarRepo, RecruteurRepository $recruteurRepo,VisioconferenceRepository $visioconfRepo,SalleRepository $salleRepo): Response
     {
         //edit date
         $recruteur= $entretien->getRecruteur();
@@ -191,14 +191,60 @@ class EntretienController extends AbstractController
                 $this->addFlash("EditEntretien" , "Entretien modifié");
                 return $this->redirectToRoute('entretien_index');
             }
-            
-            // dd($recruteurs);
-            //     if ($recruteurCompetenceOk) {
+
+            $isVisio=$request->request->get("isvisio");
+            if(isset($isVisio)){
+                $visioconf= $visioconfRepo->findBy(array("entretien"=>null));
+                    // dd($visioconf);
+                    if($visioconf){
+
+                        $entretien->getSalle()->setDisponible(1);
+                        $entretien->setSalle(null);
+                        $visioconf[0]->setEntretien($entretien);
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $entityManager->persist($visioconf[0]);
+                        $entityManager->persist($entretien);
+
+                        $entityManager->flush();
+                        $this->addFlash("EditEntretien" , "Entretien modifié");
+                        return $this->redirectToRoute('entretien_index');
+                        
+                    }
+                    else{
+                        $this->addFlash("pasDeVisioConfLibre" , "Aucune visioconférence n'est possible!");
+                        return $this->redirectToRoute('candidat_index');
+                    }
+            }
+
+            $isPresentiel=$request->request->get("ispresentiel");
+            if(isset($isPresentiel)){
+                $capacityMin=2;
+                    $dispo=1;
                     
-            //         $recruteurDispo[]=$recruteurCompetenceOk;
-                  
-            //     }
-            // dd($recruteurDispo);
+                    $salle= $salleRepo->findSaleForEntretien($capacityMin,$dispo,$dateEntretien);
+                    if($salle){
+                        $entretien->setSalle($salle);
+                        
+                        $salleDispoOff= $salleRepo->find($salle->getId());
+                        if($salleDispoOff){
+                            $salleDispoOff->setDisponible(0);
+                            $entityManager = $this->getDoctrine()->getManager();
+                            $entityManager->persist($salleDispoOff);
+
+                            $entretien->getVisioconference()->setEntretien(null);
+                            $entityManager->persist($entretien);
+
+                            $entityManager->flush();
+                            $this->addFlash("EditEntretien" , "Entretien modifié");
+                            return $this->redirectToRoute('entretien_index');
+                        }
+    
+                    }
+                    else{
+                        $this->addFlash("pasDeSalleLibre" , "Aucune salle n'est libre!");
+                        return $this->redirectToRoute('candidat_index');
+                    }
+            }
 
 
 
