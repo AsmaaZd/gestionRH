@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des salles{% endblock %}
+
+{% block body %}
+    <h1>Liste des salles</h1>
+
+    <table class="table table-striped table-index">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Capacité</th>
+                <th>Disponible</th>
+                <th>Adresse</th>
+                <th>Equipements</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for salle in salles %}
+            <tr>
+                <td>{{ salle.nom }}</td>
+                <td>{{ salle.capacity }}</td>
+                <td>{{ salle.disponible ? 'Oui' : 'Non' }}</td>
+                <td>{{ salle.adresse }}</td>
+                <td>
+						{% if salle.equipement %}
+							{% for equipement in salle.equipement %}
+								<button class="no-click">
+									{{ equipement.nom }}
+								</button>
+							{% endfor %}
+						{% endif %}
+					</td>
+                <td>
+                    <a href="{{ path('salle_show', {'id': salle.id}) }}">
+                        <button class="btn btn-success btn-xs">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </a>
+                    <a href="{{ path('salle_edit', {'id': salle.id}) }}">
+                        <button class="btn btn-primary btn-xs">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Liste vide</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('salle_new') }}"><button class="btn btn-outline-success btn-xs"><i class="fas fa-plus"></i> Ajouter une nouvelle salle</button></a>
+{% endblock %}

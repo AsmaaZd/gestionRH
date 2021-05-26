@@ -37,11 +37,11 @@
                     {% if entretien.salle %}
                         
                         <!-- Button trigger modal -->
-                        <button style="background-color: #FAFAFA;border: 1px solid #FAFAFA;color: #2F323A;" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <button style="background-color: #FAFAFA;border: 1px solid #FAFAFA;color: #2F323A;" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{ entretien.salle.id }}">
                         {{ entretien.salle.nom }} 
                         </button>
                         <!-- Modal -->
-                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="exampleModal{{ entretien.salle.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">

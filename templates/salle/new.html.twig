@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle salle{% endblock %}
+{% block stylesheets %}
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+
+{% endblock %}
+{% block body %}
+    <h1>Nouvelle salle</h1>
+
+    {{ include('salle/_form.html.twig') }}
+
+  
+    {% block javascripts %}
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+		<script>
+			$(document).ready(function () {
+                $('.js-example-basic-multiple').select2();
+                });
+		</script>
+	{% endblock %}
+{% endblock %}
