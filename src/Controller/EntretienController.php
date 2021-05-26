@@ -7,11 +7,13 @@ use DateTime;
 use App\Entity\Candidat;
 use App\Entity\Entretien;
 use App\Entity\Recruteur;
+use App\Entity\Visioconference;
 use App\Form\EntretienType;
 use App\Repository\CalendarRepository;
 use App\Repository\EntretienRepository;
 use App\Repository\RecruteurRepository;
 use App\Repository\SalleRepository;
+use App\Repository\VisioconferenceRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -227,7 +229,7 @@ class EntretienController extends AbstractController
     /**
      * @Route("/entretien/calendar/new/{id}", name="entretien_calendar_new", methods={"GET","POST"})
      */
-    public function newEntretien(Candidat $candidat, Request $request, RecruteurRepository $recruteurRepo,CalendarRepository $calendarRepo,SalleRepository $salleRepo): Response
+    public function newEntretien(Candidat $candidat, Request $request, RecruteurRepository $recruteurRepo,CalendarRepository $calendarRepo,SalleRepository $salleRepo,VisioconferenceRepository $visioconfRepo): Response
     {
         $entretien = new Entretien();
         $entretien->setCandidat($candidat);
@@ -235,6 +237,7 @@ class EntretienController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // dd($request->request);
             $candidatAnneesExp = $candidat->getProfil()->getNbAnneesExp();
             $candidatCompetences = $candidat->getProfil()->getCompetence()->toArray();
             $competenceArray = [];
@@ -266,27 +269,49 @@ class EntretienController extends AbstractController
                     break;
                 }
             }
+            $entityManager = $this->getDoctrine()->getManager();
             // dd($recruteurDispo);
             if($recruteurDispo){
                 $entretien->setRecruteur($recruteurDispo);
                 $dispoToRemove=$calendarRepo->findCalendar($recruteurDispo,$dateEntretien);
-                $capacityMin=2;
-                $dispo=1;
-                
-                $salle= $salleRepo->findSaleForEntretien($capacityMin,$dispo,$dateEntretien);
-                $entityManager = $this->getDoctrine()->getManager();
-                // dd($salle);
-                if($salle){
-                    $entretien->setSalle($salle);
-                    
-                    $salleDispoOff= $salleRepo->find($salle->getId());
-                    if($salleDispoOff){
-                        $salleDispoOff->setDisponible(0);
-                        $entityManager->persist($salleDispoOff);
 
+                //if visioconf
+                $getVisio=$request->request->get("visioconf");
+                if( isset($getVisio) ){
+                    $visioconf= $visioconfRepo->findBy(array("entretien"=>null));
+                    // dd($visioconf);
+                    if($visioconf){
+                        $visioconf[0]->setEntretien($entretien);
+                        $entityManager->persist($visioconf[0]);
+                        
                     }
+                    else{
+                        $this->addFlash("pasDeVisioConfLibre" , "Aucune visioconférence n'est possible!");
+                        return $this->redirectToRoute('candidat_index');
+                    }
+                   
 
                 }
+                else{
+                    $capacityMin=2;
+                    $dispo=1;
+                    
+                    $salle= $salleRepo->findSaleForEntretien($capacityMin,$dispo,$dateEntretien);
+                    if($salle){
+                        $entretien->setSalle($salle);
+                        
+                        $salleDispoOff= $salleRepo->find($salle->getId());
+                        if($salleDispoOff){
+                            $salleDispoOff->setDisponible(0);
+                            $entityManager->persist($salleDispoOff);
+    
+                        }
+    
+                    }
+                }
+                
+                // dd($salle);
+               
                
             
             $entityManager->persist($entretien);

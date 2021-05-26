@@ -1,5 +1,11 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
+    <div class="form-check mt-2">
+        <input class="form-check-input" type="checkbox" value="" name="visioconf" id="visioconf">
+        <label class="form-check-label" for="visioconf">
+            Visioconférence
+        </label>
+    </div>
     <br>
 	<input class="btn btn-success btn-xs" type="submit" value="{{ button_label|default('Enregistrer') }}">
 <a class="btn btn-outline-secondary" href="{{ path('candidat_index') }}">Retour à la liste</a>
