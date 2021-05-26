@@ -1,8 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Entretiens{% endblock %}
+{% block stylesheets %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
+{% endblock %}
 {% block body %}
+
+
+
+
 {% for message in app.flashes('NewEntretien') %}
         <div class="alert alert-success col-md-6 mx-auto text-center">
             {{message}}
@@ -16,6 +23,7 @@
                 <th><i class="fas fa-user"></i> Candidat</th>
                 <th><i class="fas fa-user-tie"></i> Recruteur</th>
                 <th><i class="fas fa-calendar-alt"></i> Date de l'entretien</th>
+                <th><i class="fas fa-map-marker-alt"></i> Salle</th>
                 <th><i class="fas fa-edit"></i> Actions</th>
             </tr>
         </thead>
@@ -25,6 +33,65 @@
                 <td>{{ entretien.candidat.nom }} {{ entretien.candidat.prenom }}</td>
                 <td>{{ entretien.recruteur.nom }} {{ entretien.recruteur.prenom }}</td>
                 <td>{{ entretien.dateEntretien ? entretien.dateEntretien|date('Y-m-d') : '' }}</td>
+                <td>
+                    {% if entretien.salle %}
+                        
+                        <!-- Button trigger modal -->
+                        <button style="background-color: #FAFAFA;border: 1px solid #FAFAFA;color: #2F323A;" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        {{ entretien.salle.nom }} 
+                        </button>
+                        <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">
+                                        {{ entretien.salle.nom }} 
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class=" row">
+                                            <div class="col-md-3">
+                                                <label for="formGroupExampleInput" class="form-label ">Adresse:</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control col-md-7" value="{{ entretien.salle.adresse }}" disabled>
+                                            </div>
+                                        </div>
+                                        <div class=" row mt-4">
+                                            <div class="col-md-3">
+                                                <label for="formGroupExampleInput" class="form-label ">Capacité:</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control col-md-7" value="{{ entretien.salle.capacity }} personne(s)" disabled>
+                                            </div>
+                                        </div>
+                                        <div class=" row mt-4">
+                                            <div class="col-md-3">
+                                                <label for="formGroupExampleInput" class="form-label ">Equipements:</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                {% if entretien.salle.equipement %}
+                                                    {% for equipement in entretien.salle.equipement %}
+                                                        <button class="no-click" >
+                                                            {{ equipement.nom }}
+                                                        </button>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                    {% endif %}
+                
+                </td>
                 <td>
                             <a href="{{ path('entretien_edit', {'id': entretien.id}) }}">
                                     <button class="btn btn-primary btn-xs">
@@ -45,6 +112,13 @@
         {% endfor %}
         </tbody>
     </table>
-
+{% block javascripts %}
+			<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+            <script>
+            $(document).ready(function() {
+    $('.js-example-basic-multiple').select2();
+});
+</script>
+		{% endblock %}
  
 {% endblock %}

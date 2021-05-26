@@ -11,6 +11,7 @@ use App\Form\EntretienType;
 use App\Repository\CalendarRepository;
 use App\Repository\EntretienRepository;
 use App\Repository\RecruteurRepository;
+use App\Repository\SalleRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,7 +35,7 @@ class EntretienController extends AbstractController
     /**
      * @Route("/entretien/new/{id}", name="entretien_new", methods={"GET","POST"})
      */
-    public function new(Candidat $candidat, Request $request, RecruteurRepository $recruteurRepo): Response
+    public function new(Candidat $candidat, Request $request, RecruteurRepository $recruteurRepo,SalleRepository $salleRepo): Response
     {
         $entretien = new Entretien();
         $entretien->setCandidat($candidat);
@@ -75,12 +76,17 @@ class EntretienController extends AbstractController
             // dd($recruteurDispo);
             if($recruteurDispo){
                 $entretien->setRecruteur($recruteurDispo);
+                $capacityMin=2;
+                $dispo=1;
+
+                $salle= $salleRepo->findSaleForEntretien($capacityMin,$dispo,$dateEntretien);
+                dd($salle);
 
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($entretien);
             $entityManager->flush();
-            $this->addFlash("NewEntretien" , "Entretien ajouté");
+            // $this->addFlash("NewEntretien" , "Entretien ajouté");
             return $this->redirectToRoute('entretien_index');
             }
             else{
@@ -221,7 +227,7 @@ class EntretienController extends AbstractController
     /**
      * @Route("/entretien/calendar/new/{id}", name="entretien_calendar_new", methods={"GET","POST"})
      */
-    public function newEntretien(Candidat $candidat, Request $request, RecruteurRepository $recruteurRepo,CalendarRepository $calendarRepo): Response
+    public function newEntretien(Candidat $candidat, Request $request, RecruteurRepository $recruteurRepo,CalendarRepository $calendarRepo,SalleRepository $salleRepo): Response
     {
         $entretien = new Entretien();
         $entretien->setCandidat($candidat);
@@ -264,9 +270,25 @@ class EntretienController extends AbstractController
             if($recruteurDispo){
                 $entretien->setRecruteur($recruteurDispo);
                 $dispoToRemove=$calendarRepo->findCalendar($recruteurDispo,$dateEntretien);
+                $capacityMin=2;
+                $dispo=1;
                 
+                $salle= $salleRepo->findSaleForEntretien($capacityMin,$dispo,$dateEntretien);
+                $entityManager = $this->getDoctrine()->getManager();
+                // dd($salle);
+                if($salle){
+                    $entretien->setSalle($salle);
+                    
+                    $salleDispoOff= $salleRepo->find($salle->getId());
+                    if($salleDispoOff){
+                        $salleDispoOff->setDisponible(0);
+                        $entityManager->persist($salleDispoOff);
+
+                    }
+
+                }
                
-            $entityManager = $this->getDoctrine()->getManager();
+            
             $entityManager->persist($entretien);
             $entityManager->remove($dispoToRemove);
             $entityManager->flush();

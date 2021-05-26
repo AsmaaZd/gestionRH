@@ -34,6 +34,11 @@ class Entretien
      */
     private $recruteur;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Salle::class, inversedBy="entretiens")
+     */
+    private $salle;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +76,18 @@ class Entretien
     public function setRecruteur(?Recruteur $recruteur): self
     {
         $this->recruteur = $recruteur;
+
+        return $this;
+    }
+
+    public function getSalle(): ?Salle
+    {
+        return $this->salle;
+    }
+
+    public function setSalle(?Salle $salle): self
+    {
+        $this->salle = $salle;
 
         return $this;
     }
