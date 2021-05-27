@@ -4,11 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Salle;
 use App\Form\SalleType;
+use App\Entity\Visioconference;
+use App\Form\VisioconferenceType;
 use App\Repository\SalleRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\VisioconferenceRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/salle")
@@ -16,12 +19,25 @@ use Symfony\Component\Routing\Annotation\Route;
 class SalleController extends AbstractController
 {
     /**
-     * @Route("/", name="salle_index", methods={"GET"})
+     * @Route("/", name="salle_index", methods={"GET","POST"})
      */
-    public function index(SalleRepository $salleRepository): Response
+    public function index(Request $request,SalleRepository $salleRepository,VisioconferenceRepository $visioconferenceRepository): Response
     {
+        $visioconference = new Visioconference();
+        $form = $this->createForm(VisioconferenceType::class, $visioconference);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($visioconference);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('salle_index');
+        }
         return $this->render('salle/index.html.twig', [
             'salles' => $salleRepository->findAll(),
+            'visioconferences' => $visioconferenceRepository->findAll(),
+            'form' => $form->createView(),
         ]);
     }
 

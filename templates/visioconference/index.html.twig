@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Visioconference index{% endblock %}
+
+{% block body %}
+    <h1>Visioconference index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Lien</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for visioconference in visioconferences %}
+            <tr>
+                <td>{{ visioconference.id }}</td>
+                <td>{{ visioconference.lien }}</td>
+                <td>
+                    <a href="{{ path('visioconference_show', {'id': visioconference.id}) }}">show</a>
+                    <a href="{{ path('visioconference_edit', {'id': visioconference.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('visioconference_new') }}">Create new</a>
+{% endblock %}

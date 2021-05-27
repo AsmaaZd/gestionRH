@@ -141,6 +141,9 @@
 						}
 					},
 					initialView: 'dayGridMonth',
+					
+					
+					firstDay: 1,
 					validRange: {
 						start: nowDate,
 					},
@@ -148,6 +151,7 @@
 						return !stillEvent.extendedProps.isInterview && movingEvent.extendedProps.isInterview;
 					},
 					// eventOverlap: false,
+					businessHours: true,
 					locale: 'fr',
 					timeZone: 'Europe/Paris',
 					headerToolbar: {
