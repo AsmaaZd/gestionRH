@@ -51,6 +51,11 @@ class Recruteur
 
     public $jsonCalendars;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $email;
+
     
 
     public function __construct()
@@ -187,6 +192,18 @@ class Recruteur
                 $calendar->setRecruteur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
 
         return $this;
     }

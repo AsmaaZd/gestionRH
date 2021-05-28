@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use DateTime;
+use Swift_Mailer;
 use App\Entity\Calendar;
 use App\Entity\Candidat;
 use App\Entity\Entretien;
@@ -265,7 +266,7 @@ class EntretienController extends AbstractController
     /**
      * @Route("/entretien/calendar/new/{id}", name="entretien_calendar_new", methods={"GET","POST"})
      */
-    public function newEntretien(Candidat $candidat, Request $request, RecruteurRepository $recruteurRepo, CalendarRepository $calendarRepo, SalleRepository $salleRepo, VisioconferenceRepository $visioconfRepo,MailerInterface $mailer): Response
+    public function newEntretien(Candidat $candidat, Request $request, RecruteurRepository $recruteurRepo, CalendarRepository $calendarRepo, SalleRepository $salleRepo, VisioconferenceRepository $visioconfRepo,MailerInterface $mailere,\Swift_Mailer $mailer ): Response
     {
         $entretien = new Entretien();
         $entretien->setCandidat($candidat);
@@ -346,22 +347,58 @@ class EntretienController extends AbstractController
                 $entityManager->remove($dispoToRemove);
                 $entityManager->flush();
 
-                $this->addFlash("NewEntretien", "Entretien ajouté");
+                
+
+        //         // mailer
+        //         $email = (new Email())
+        //     ->from('hello@example.com')
+        //     ->to('ziadi.asmaa.ginfo@gmail.com')
+        //     //->cc('cc@example.com')
+        //     //->bcc('bcc@example.com')
+        //     //->replyTo('fabien@example.com')
+        //     //->priority(Email::PRIORITY_HIGH)
+        //     ->subject('Time for Symfony Mailer!')
+        //     ->text('Sending emails is fun again!')
+        //     ->html('<p>See Twig integration for better HTML integration!</p>');
+
+        // $mailer->send($email);
 
 
-                // mailer
-                $email = (new Email())
-            ->from('hello@example.com')
-            ->to('ziadi.asmaa.ginfo@gmail.com')
-            //->cc('cc@example.com')
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
-            //->priority(Email::PRIORITY_HIGH)
-            ->subject('Time for Symfony Mailer!')
-            ->text('Sending emails is fun again!')
-            ->html('<p>See Twig integration for better HTML integration!</p>');
+        $message = (new \Swift_Message('Hello Email'))
+        ->setFrom('recrutementrh@gmail.com')
+        ->setTo([
+            $entretien->getRecruteur()->getEmail() => $entretien->getRecruteur()->getNom()." ".$entretien->getRecruteur()->getPrenom(),
+            
+            $entretien->getCandidat()->getEmail() => $entretien->getCandidat()->getNom()." ".$entretien->getCandidat()->getPrenom()
+            ])
+        ->setSubject('Nouveau entretien')
+        ->setBody(
+            $this->renderView(
+                // templates/emails/registration.html.twig
+                'emails/registration.html.twig',
+                [
+                    'candidat' => $entretien->getCandidat(),
+                    'recruteur' => $entretien->getRecruteur(),
+                    'entretien' => $entretien,
+                ]
+            ),
+            'text/html'
+        )
 
-        $mailer->send($email);
+        // you can remove the following code if you don't define a text version for your emails
+        ->addPart(
+            $this->renderView(
+                // templates/emails/registration.txt.twig
+                'emails/registration.txt.twig',
+                ['name' => 'asmaa']
+            ),
+            'text/plain'
+        )
+    ;
+
+    $mailer->send($message);
+
+    $this->addFlash("NewEntretien", "Entretien ajouté, et email de confirmation est envoyé au participants");
 
 
 
@@ -384,4 +421,6 @@ class EntretienController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    
 }
