@@ -37,6 +37,62 @@ class EntretienController extends AbstractController
         ]);
     }
 
+    public function changeEntretienEmail($entretien, \Swift_Mailer $mailer, $templateCandidat, $templateRecruteur)
+    {
+        $messageToCandidat = (new \Swift_Message('Hello Email'))
+            ->setFrom('recrutementrh@gmail.com')
+            ->setTo([
+                $entretien->getCandidat()->getEmail() => $entretien->getCandidat()->getNom() . " " . $entretien->getCandidat()->getPrenom()
+            ])
+            ->setSubject('Nouveau entretien')
+            ->setBody(
+                $this->renderView(
+                    // 'emails/nvEntretienCandidat.html.twig',
+                    $templateCandidat,
+                    [
+                        'candidat' => $entretien->getCandidat(),
+                        'recruteur' => $entretien->getRecruteur(),
+                        'entretien' => $entretien,
+                    ]
+                ),
+                'text/html'
+            )
+
+            ->addPart(
+                $this->renderView(
+                    'emails/nvEntretienCandidat.txt.twig'
+                ),
+                'text/plain'
+            );
+        $messageToRecruteur = (new \Swift_Message('Hello Email'))
+            ->setFrom('recrutementrh@gmail.com')
+            ->setTo([
+                $entretien->getRecruteur()->getEmail() => $entretien->getRecruteur()->getNom() . " " . $entretien->getRecruteur()->getPrenom()
+            ])
+            ->setSubject('Nouveau entretien')
+            ->setBody(
+                $this->renderView(
+                    $templateRecruteur,
+                    [
+                        'candidat' => $entretien->getCandidat(),
+                        'recruteur' => $entretien->getRecruteur(),
+                        'entretien' => $entretien,
+                    ]
+                ),
+                'text/html'
+            )
+
+            ->addPart(
+                $this->renderView(
+                    'emails/nvEntretienRecruteur.txt.twig'
+                ),
+                'text/plain'
+            );
+
+        $mailer->send($messageToCandidat);
+        $mailer->send($messageToRecruteur);
+    }
+
     /**
      * @Route("/entretien/new/{id}", name="entretien_new", methods={"GET","POST"})
      */
@@ -84,7 +140,7 @@ class EntretienController extends AbstractController
                 $dispo = 1;
 
                 $salle = $salleRepo->findSaleForEntretien($capacityMin, $dispo, $dateEntretien);
-                dd($salle);
+                // dd($salle);
 
 
                 $entityManager = $this->getDoctrine()->getManager();
@@ -117,7 +173,7 @@ class EntretienController extends AbstractController
     /**
      * @Route("/entretien/{id}/edit", name="entretien_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Entretien $entretien, CalendarRepository $calendarRepo, RecruteurRepository $recruteurRepo, VisioconferenceRepository $visioconfRepo, SalleRepository $salleRepo): Response
+    public function edit(Request $request, Entretien $entretien, CalendarRepository $calendarRepo, RecruteurRepository $recruteurRepo, VisioconferenceRepository $visioconfRepo, SalleRepository $salleRepo, \Swift_Mailer $mailer): Response
     {
         //edit date
         $recruteur = $entretien->getRecruteur();
@@ -167,6 +223,9 @@ class EntretienController extends AbstractController
                 $getDate = $request->request->get("newDate");
                 $newDate = \DateTime::createFromFormat('Y-m-d', $getDate);
                 $entretien->setDateEntretien($newDate);
+                $templateCandidat = 'emails/editEntretienCandidat.html.twig';
+                $templateRecruteur = 'emails/editEntretienRecruteur.html.twig';
+                $this->changeEntretienEmail($entretien, $mailer, $templateCandidat, $templateRecruteur);
             } elseif ($request->request->get("newRecruteur")) {
                 $entretien->setRecruteur($recruteurRepo->find($request->request->get("newRecruteur")));
             }
@@ -180,6 +239,8 @@ class EntretienController extends AbstractController
             $dispoToRemove = $calendarRepo->findBy(
                 ['recruteur' => $entretien->getRecruteur(), 'start' => $entretien->getDateEntretien()]
             );
+
+            
 
             $entityManager->remove($dispoToRemove[0]);
             $entityManager->flush();
@@ -201,6 +262,9 @@ class EntretienController extends AbstractController
                 $entityManager->persist($entretien);
 
                 $entityManager->flush();
+                $templateCandidat = 'emails/editEntretienCandidat.html.twig';
+                $templateRecruteur = 'emails/editEntretienRecruteur.html.twig';
+                $this->changeEntretienEmail($entretien, $mailer, $templateCandidat, $templateRecruteur);
                 $this->addFlash("EditEntretien", "Entretien modifié");
                 return $this->redirectToRoute('entretien_index');
             } else {
@@ -217,6 +281,7 @@ class EntretienController extends AbstractController
             $salle = $salleRepo->findSaleForEntretien($capacityMin, $dispo, $dateEntretien);
             if ($salle) {
                 $entretien->setSalle($salle);
+                
 
                 $salleDispoOff = $salleRepo->find($salle->getId());
                 if ($salleDispoOff) {
@@ -229,6 +294,9 @@ class EntretienController extends AbstractController
 
                     $entityManager->flush();
                     $this->addFlash("EditEntretien", "Entretien modifié");
+                    $templateCandidat = 'emails/editEntretienCandidat.html.twig';
+                    $templateRecruteur = 'emails/editEntretienRecruteur.html.twig';
+                    $this->changeEntretienEmail($entretien, $mailer, $templateCandidat, $templateRecruteur);
                     return $this->redirectToRoute('entretien_index');
                 }
             } else {
@@ -266,7 +334,7 @@ class EntretienController extends AbstractController
     /**
      * @Route("/entretien/calendar/new/{id}", name="entretien_calendar_new", methods={"GET","POST"})
      */
-    public function newEntretien(Candidat $candidat, Request $request, RecruteurRepository $recruteurRepo, CalendarRepository $calendarRepo, SalleRepository $salleRepo, VisioconferenceRepository $visioconfRepo,MailerInterface $mailere,\Swift_Mailer $mailer ): Response
+    public function newEntretien(Candidat $candidat, Request $request, RecruteurRepository $recruteurRepo, CalendarRepository $calendarRepo, SalleRepository $salleRepo, VisioconferenceRepository $visioconfRepo, MailerInterface $mailere, \Swift_Mailer $mailer): Response
     {
         $entretien = new Entretien();
         $entretien->setCandidat($candidat);
@@ -289,6 +357,7 @@ class EntretienController extends AbstractController
             //Parmis ces recruteurs, recupere ceux qui ont plus de competences que candidats
             //date dispo 
             $dateEntretien = $request->request->get("entretien")["dateEntretien"];
+
 
             foreach ($recruteursPlusExp as $recruteurPlusExp) {
 
@@ -318,6 +387,7 @@ class EntretienController extends AbstractController
                     // dd($visioconf);
                     if ($visioconf) {
                         $visioconf[0]->setEntretien($entretien);
+                        $entretien->setVisioconference($visioconf[0]);
                         $entityManager->persist($visioconf[0]);
                     } else {
                         $this->addFlash("pasDeVisioConfLibre", "Aucune visioconférence n'est possible!");
@@ -339,75 +409,16 @@ class EntretienController extends AbstractController
                     }
                 }
 
-                // dd($salle);
-
-
-
                 $entityManager->persist($entretien);
+                // dd($entretien->getVisioconference());
                 $entityManager->remove($dispoToRemove);
                 $entityManager->flush();
 
-                
+                $templateCandidat = 'emails/nvEntretienCandidat.html.twig';
+                $templateRecruteur = 'emails/nvEntretienRecruteur.html.twig';
+                $this->changeEntretienEmail($entretien, $mailer, $templateCandidat, $templateRecruteur);
 
-        //         // mailer
-        //         $email = (new Email())
-        //     ->from('hello@example.com')
-        //     ->to('ziadi.asmaa.ginfo@gmail.com')
-        //     //->cc('cc@example.com')
-        //     //->bcc('bcc@example.com')
-        //     //->replyTo('fabien@example.com')
-        //     //->priority(Email::PRIORITY_HIGH)
-        //     ->subject('Time for Symfony Mailer!')
-        //     ->text('Sending emails is fun again!')
-        //     ->html('<p>See Twig integration for better HTML integration!</p>');
-
-        // $mailer->send($email);
-
-
-        $message = (new \Swift_Message('Hello Email'))
-        ->setFrom('recrutementrh@gmail.com')
-        ->setTo([
-            $entretien->getRecruteur()->getEmail() => $entretien->getRecruteur()->getNom()." ".$entretien->getRecruteur()->getPrenom(),
-            
-            $entretien->getCandidat()->getEmail() => $entretien->getCandidat()->getNom()." ".$entretien->getCandidat()->getPrenom()
-            ])
-        ->setSubject('Nouveau entretien')
-        ->setBody(
-            $this->renderView(
-                // templates/emails/registration.html.twig
-                'emails/registration.html.twig',
-                [
-                    'candidat' => $entretien->getCandidat(),
-                    'recruteur' => $entretien->getRecruteur(),
-                    'entretien' => $entretien,
-                ]
-            ),
-            'text/html'
-        )
-
-        // you can remove the following code if you don't define a text version for your emails
-        ->addPart(
-            $this->renderView(
-                // templates/emails/registration.txt.twig
-                'emails/registration.txt.twig',
-                ['name' => 'asmaa']
-            ),
-            'text/plain'
-        )
-    ;
-
-    $mailer->send($message);
-
-    $this->addFlash("NewEntretien", "Entretien ajouté, et email de confirmation est envoyé au participants");
-
-
-
-
-
-
-
-
-
+                $this->addFlash("NewEntretien", "Entretien ajouté, et des emails de confirmation sont envoyés au participants");
 
                 return $this->redirectToRoute('entretien_index');
             } else {
@@ -421,6 +432,4 @@ class EntretienController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
-    
 }

@@ -28,7 +28,7 @@ class CalendarApiController extends AbstractController
     /**
      * @Route("/api/calendar/{id}/edit", name="api_calendar_event_edit", methods={"PUT"})
      */
-    public function majEvent(?Calendar $calendar, Request $request, EntityManagerInterface $manager,EntretienRepository $entretienRepo,RecruteurRepository $recruteurRepository,CandidatRepository $candidatRepository,CalendarRepository $calendarRepo): Response
+    public function majEvent(?Calendar $calendar, Request $request, EntityManagerInterface $manager,EntretienRepository $entretienRepo,RecruteurRepository $recruteurRepository,CandidatRepository $candidatRepository,CalendarRepository $calendarRepo, \Swift_Mailer $mailer): Response
     {
         // recuperer es donnees envoyer par FullCalendar
         $donnees= json_decode($request->getContent());
@@ -80,6 +80,11 @@ class CalendarApiController extends AbstractController
 
                 $manager->flush();
 
+                // $templateCandidat = 'emails/editEntretienCandidat.html.twig';
+                // $templateRecruteur = 'emails/editEntretienRecruteur.html.twig';
+                // $entretien= $entretienRepo->findBy(array(''))
+                // $this->changeEntretienEmail($entretien, $mailer, $templateCandidat, $templateRecruteur);
+
                 $response= new Response('OK',$code);
                 // $response->headers->set('Access-Control-Allow-Origin', '*');
                 return $response;
@@ -93,5 +98,62 @@ class CalendarApiController extends AbstractController
             'controller_name' => 'ApiCalendarController',
         ]);
 
+    }
+
+
+    public function changeEntretienEmail($entretien, \Swift_Mailer $mailer, $templateCandidat, $templateRecruteur)
+    {
+        $messageToCandidat = (new \Swift_Message('Hello Email'))
+            ->setFrom('recrutementrh@gmail.com')
+            ->setTo([
+                $entretien->getCandidat()->getEmail() => $entretien->getCandidat()->getNom() . " " . $entretien->getCandidat()->getPrenom()
+            ])
+            ->setSubject('Nouveau entretien')
+            ->setBody(
+                $this->renderView(
+                    // 'emails/nvEntretienCandidat.html.twig',
+                    $templateCandidat,
+                    [
+                        'candidat' => $entretien->getCandidat(),
+                        'recruteur' => $entretien->getRecruteur(),
+                        'entretien' => $entretien,
+                    ]
+                ),
+                'text/html'
+            )
+
+            ->addPart(
+                $this->renderView(
+                    'emails/nvEntretienCandidat.txt.twig'
+                ),
+                'text/plain'
+            );
+        $messageToRecruteur = (new \Swift_Message('Hello Email'))
+            ->setFrom('recrutementrh@gmail.com')
+            ->setTo([
+                $entretien->getRecruteur()->getEmail() => $entretien->getRecruteur()->getNom() . " " . $entretien->getRecruteur()->getPrenom()
+            ])
+            ->setSubject('Nouveau entretien')
+            ->setBody(
+                $this->renderView(
+                    $templateRecruteur,
+                    [
+                        'candidat' => $entretien->getCandidat(),
+                        'recruteur' => $entretien->getRecruteur(),
+                        'entretien' => $entretien,
+                    ]
+                ),
+                'text/html'
+            )
+
+            ->addPart(
+                $this->renderView(
+                    'emails/nvEntretienRecruteur.txt.twig'
+                ),
+                'text/plain'
+            );
+
+        $mailer->send($messageToCandidat);
+        $mailer->send($messageToRecruteur);
     }
 }

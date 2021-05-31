@@ -216,6 +216,8 @@ class RecruteurController extends AbstractController
         // dd($rdvs);
 
         // dd($events);
+
+        
         $dispos=[];
         foreach($events as $event){
             $dispos[]=[
@@ -257,8 +259,111 @@ class RecruteurController extends AbstractController
                 'candidatPhone' => $rdv->getCandidat()->getTelephone(),
             ];
         }
-        $data= json_encode($dispos);
+        //weeekends
+        $today = date("Y-m-d");
+        $dateAfterOneM =date("Y-m-d", strtotime("$today +3 month"));
+        $maDate=$today;
+        while($maDate<$dateAfterOneM){
+            // echo($maDate);
+            $dayOfWeek= date('N', strtotime("$maDate"));
+            
+                if($dayOfWeek==7 or $dayOfWeek==6){
+                    // echo($dayOfWeek);
+                    $dispos[]=[
+                        
+                        'start' => $maDate,
+                        'end' => $maDate,
+                        'overlap' => false,
+                        'display' => 'background',
+                        'color' => '#FFE1DB',
+                        'allDay' => 1,
+                        'recruteur' => $recruteur->getId(),
+                        'isInterview' => 2,
+                    ];
+                }
+            $maDate=date("Y-m-d", strtotime("$maDate +1 day"));
+        }   
+
+        // jours fériés
+        function dimanche_paques($annee)
+        {
+          
+            $dimPacq=date("Y-m-d", easter_date($annee));
+            return date("Y-m-d", strtotime("$dimPacq +1 day"));
+        }
+        function vendredi_saint($annee)
+        {
+            $dimanche_paques = dimanche_paques($annee);
+            return date("Y-m-d", strtotime("$dimanche_paques -2 day"));
+        }
+        function lundi_paques($annee)
+        {
+            $dimanche_paques = dimanche_paques($annee);
+            return date("Y-m-d", strtotime("$dimanche_paques +1 day"));
+        }
+        function jeudi_ascension($annee)
+        {
+            $dimanche_paques = dimanche_paques($annee);
+            return date("Y-m-d", strtotime("$dimanche_paques +39 day"));
+        }
+        function lundi_pentecote($annee)
+        {
+            $dimanche_paques = dimanche_paques($annee);
+            return date("Y-m-d", strtotime("$dimanche_paques +50 day"));
+        }
         
+        
+        function jours_feries($annee, $alsacemoselle=false)
+        {
+            $jours_feries = array
+            (    dimanche_paques($annee)
+            ,    lundi_paques($annee)
+            ,    jeudi_ascension($annee)
+            ,    lundi_pentecote($annee)
+            
+            ,    "$annee-01-01"        //    Nouvel an
+            ,    "$annee-05-01"        //    Fête du travail
+            ,    "$annee-05-08"        //    Armistice 1945
+            ,    "$annee-05-15"        //    Assomption
+            ,    "$annee-07-14"        //    Fête nationale
+            ,    "$annee-11-11"        //    Armistice 1918
+            ,    "$annee-11-01"        //    Toussaint
+            ,    "$annee-12-25"        //    Noël
+            );
+            if($alsacemoselle)
+            {
+                $jours_feries[] = "$annee-12-26";
+                $jours_feries[] = vendredi_saint($annee);
+            }
+            sort($jours_feries);
+            return $jours_feries;
+        }
+        function est_ferie($jour, $alsacemoselle=false)
+        {
+            $jour = date("Y-m-d", strtotime($jour));
+            $annee = substr($jour, 0, 4);
+            return in_array($jour, jours_feries($annee, $alsacemoselle));
+        }
+        
+        $outs = jours_feries(date('Y')); 
+        // dd($outs);
+
+        
+        foreach ($outs as $out) {
+            $dispos[]=[
+                        
+                'start' => $out,
+                'end' => $out,
+                'overlap' => false,
+                'display' => 'background',
+                'color' => '#EEEEEE',
+                'allDay' => 1,
+                'recruteur' => $recruteur->getId(),
+                'isInterview' => 2,
+            ];
+        }
+        $data= json_encode($dispos);
+        // dd($data) ;
         $calendar = new Calendar();
         $form = $this->createForm(CalendarType::class, $calendar);
         $form->handleRequest($request);

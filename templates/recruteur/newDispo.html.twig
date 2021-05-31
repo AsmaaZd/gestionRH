@@ -150,19 +150,19 @@
 					eventOverlap: function(stillEvent, movingEvent) {
 						return !stillEvent.extendedProps.isInterview && movingEvent.extendedProps.isInterview;
 					},
-					eventAllow: function(dropInfo, draggedEvent) {
+					// eventAllow: function(dropInfo, draggedEvent) {
 
-						if (moment(dropInfo).clone().weekday() == 6 || moment(dropInfo).clone().weekday() == 0 ) {
-							console.log(moment(dropInfo).clone().weekday());
-							return false;
-						}
-						else {
-							console.log(moment(dropInfo).clone().weekday());
-							return true;
-						}
-					},
+					// 	if (moment(dropInfo).clone().weekday() == 6 || moment(dropInfo).clone().weekday() == 0 ) {
+					// 		console.log(moment(dropInfo).clone().weekday());
+					// 		return false;
+					// 	}
+					// 	else {
+					// 		console.log(moment(dropInfo).clone().weekday());
+					// 		return true;
+					// 	}
+					// },
 					// eventOverlap: false,
-					businessHours: true,
+					// businessHours: true,
 					locale: 'fr',
 					timeZone: 'Europe/Paris',
 					headerToolbar: {
