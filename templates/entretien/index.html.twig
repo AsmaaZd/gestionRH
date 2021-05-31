@@ -1,50 +1,175 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Entretiens{% endblock %}
+{% block title %}Entretiens
+{% endblock %}
+{% block stylesheets %}
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
 
+{% endblock %}
 {% block body %}
-{% for message in app.flashes('NewEntretien') %}
-        <div class="alert alert-success col-md-6 mx-auto text-center">
-            {{message}}
-        </div>
-    {% endfor  %}
-    <h1>Liste des entretiens</h1>
 
-    <table class="table table-striped table-index">
-        <thead class="thead-dark">
-            <tr>
-                <th><i class="fas fa-user"></i> Candidat</th>
-                <th><i class="fas fa-user-tie"></i> Recruteur</th>
-                <th><i class="fas fa-calendar-alt"></i> Date de l'entretien</th>
-                <th><i class="fas fa-edit"></i> Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entretien in entretiens %}
-            <tr>
-                <td>{{ entretien.candidat.nom }} {{ entretien.candidat.prenom }}</td>
-                <td>{{ entretien.recruteur.nom }} {{ entretien.recruteur.prenom }}</td>
-                <td>{{ entretien.dateEntretien ? entretien.dateEntretien|date('Y-m-d') : '' }}</td>
-                <td>
-                            <a href="{{ path('entretien_edit', {'id': entretien.id}) }}">
-                                    <button class="btn btn-primary btn-xs">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                            </a>
-                            <a href="{{ path('entretien_delete', {'id': entretien.id}) }}">
-							<button class="btn btn-danger btn-xs">
-								<i class="fas fa-trash-alt"></i>
+
+	{% for message in app.flashes('NewEntretien') %}
+		<div class="alert alert-success col-md-6 mx-auto text-center">
+			{{message}}
+		</div>
+	{% endfor  %}
+	<h1>Liste des entretiens</h1>
+
+	<table class="table table-striped table-index">
+		<thead class="thead-dark">
+			<tr>
+				<th>
+					<i class="fas fa-user"></i>
+					Candidat</th>
+				<th>
+					<i class="fas fa-user-tie"></i>
+					Recruteur</th>
+				<th>
+					<i class="fas fa-calendar-alt"></i>
+					Date de l'entretien</th>
+				<th>
+					<i class="fas fa-map-marker-alt"></i>
+					|
+					<i class="fas fa-laptop"></i>
+					Salle</th>
+				<th>
+					<i class="fas fa-edit"></i>
+					Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for entretien in entretiens %}
+				<tr>
+					<td>{{ entretien.candidat.nom }}
+						{{ entretien.candidat.prenom }}</td>
+					<td>{{ entretien.recruteur.nom }}
+						{{ entretien.recruteur.prenom }}</td>
+					<td>{{ entretien.dateEntretien ? entretien.dateEntretien|date('Y-m-d') : '' }}</td>
+					<td>
+						{% if entretien.salle %}
+
+							<!-- Button trigger modal -->
+							<button style="background-color: #FAFAFA;border: 1px solid #FAFAFA;color: #2F323A;" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{ entretien.salle.id }}">
+								{{ entretien.salle.nom }}
 							</button>
-						</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">Liste vide!</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+							<!-- Modal -->
+							<div class="modal fade" id="exampleModal{{ entretien.salle.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">
+												{{ entretien.salle.nom }}
+											</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											<div class=" row">
+												<div class="col-md-3">
+													<label for="formGroupExampleInput" class="form-label ">Adresse:</label>
+												</div>
+												<div class="col-md-9">
+													<input type="text" class="form-control col-md-7" value="{{ entretien.salle.adresse }}" disabled>
+												</div>
+											</div>
+											<div class=" row mt-4">
+												<div class="col-md-3">
+													<label for="formGroupExampleInput" class="form-label ">Capacité:</label>
+												</div>
+												<div class="col-md-9">
+													<input type="text" class="form-control col-md-7" value="{{ entretien.salle.capacity }} personne(s)" disabled>
+												</div>
+											</div>
+											<div class=" row mt-4">
+												<div class="col-md-3">
+													<label for="formGroupExampleInput" class="form-label ">Equipements:</label>
+												</div>
+												<div class="col-md-9">
+													{% if entretien.salle.equipement %}
+														{% for equipement in entretien.salle.equipement %}
+															<button class="no-click">
+																{{ equipement.nom }}
+															</button>
+														{% endfor %}
+													{% endif %}
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
 
- 
+										</div>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+						{% if entretien.visioconference %}
+
+							<!-- Button trigger modal -->
+							<button style="background-color: #FAFAFA;border: 1px solid #FAFAFA;color: #2F323A;" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{ entretien.visioconference.id }}V">
+								Visioconférence
+							</button>
+							<!-- Modal -->
+							<div class="modal fade" id="exampleModal{{ entretien.visioconference.id }}V" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">
+												Visioconférence
+											</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											<div class=" row">
+												<div class="col-md-3">
+													<label for="formGroupExampleInput" class="form-label ">Lien:</label>
+												</div>
+												<div class="col-md-9">
+													<a style="color:blue; text-decoration: underline;" href="{{ entretien.visioconference.lien }}">{{ entretien.visioconference.lien }}</a>
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+
+					</td>
+					<td>
+						<div class="row d-flex justify-content-center">
+							<a class="col-md-3" href="{{ path('entretien_edit', {'id': entretien.id}) }}">
+								<button class="btn btn-primary btn-xs">
+									<i class="fas fa-edit"></i>
+								</button>
+							</a>
+
+							<form class="col-md-1"  method="post" action="{{ path('entretien_delete', {'id': entretien.id}) }}" onsubmit="return confirm('êtes-vous sûr de vouloir supprimer?');">
+								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ entretien.id) }}">
+								<button class="btn btn-danger btn-xs">
+									<i class="fas fa-trash-alt"></i>
+								</button>
+							</form>
+						</div>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="3">Liste vide!</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{% block javascripts %}
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+		<script>
+			$(document).ready(function () {
+$('.js-example-basic-multiple').select2();
+});
+		</script>
+	{% endblock %}
+
 {% endblock %}

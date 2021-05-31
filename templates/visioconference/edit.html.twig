@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Visioconference{% endblock %}
+
+{% block body %}
+    <h1>Edit Visioconference</h1>
+
+    {{ include('visioconference/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('visioconference_index') }}">back to list</a>
+
+    {{ include('visioconference/_delete_form.html.twig') }}
+{% endblock %}

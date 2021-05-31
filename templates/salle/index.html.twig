@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des salles
+{% endblock %}
+
+{% block body %}
+	<h1>Liste des salles</h1>
+
+	<table class="table table-striped table-index">
+		<thead>
+			<tr>
+				<th>Nom</th>
+				<th>Capacité</th>
+				<th>Disponible</th>
+				<th>Adresse</th>
+				<th>Equipements</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for salle in salles %}
+				<tr>
+					<td>{{ salle.nom }}</td>
+					<td>{{ salle.capacity }}</td>
+					<td>{{ salle.disponible ? 'Oui' : 'Non' }}</td>
+					<td>{{ salle.adresse }}</td>
+					<td>
+						{% if salle.equipement %}
+							{% for equipement in salle.equipement %}
+								<button class="no-click">
+									{{ equipement.nom }}
+								</button>
+							{% endfor %}
+						{% endif %}
+					</td>
+					<td>
+						<a href="{{ path('salle_show', {'id': salle.id}) }}">
+							<button class="btn btn-success btn-xs">
+								<i class="fas fa-search"></i>
+							</button>
+						</a>
+						<a href="{{ path('salle_edit', {'id': salle.id}) }}">
+							<button class="btn btn-primary btn-xs">
+								<i class="fas fa-edit"></i>
+							</button>
+						</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="6">Liste vide</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<a href="{{ path('salle_new') }}">
+		<button class="btn btn-outline-success btn-xs">
+			<i class="fas fa-plus"></i>
+			Ajouter une nouvelle salle</button>
+	</a>
+	<h2 class="mt-4">Salles virtuelles</h2>
+
+	<table class="table table-striped table-index">
+		<thead>
+			<tr>
+				<th>Lien</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for visioconference in visioconferences %}
+				<tr>
+					<td>{{ visioconference.lien }}</td>
+					<td>
+						{{ visioconference.entretien ? 'Occupé' : 'Libre' }}
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="3">Liste vide</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	{# <a href="{{ path('visioconference_new') }}"> #}
+	<button class="btn btn-outline-success btn-xs" onclick="display()">
+		<i class="fas fa-plus"></i>
+		Ajouter une nouvelle salle virtuelle</button>
+	{# </a> #}
+
+	{# <form class="row mt-2 g-3 myform d-flex justify-content-center">
+		<div class="col-md-7">
+			<label for="inputSalle" class="form-label">Lien de la salle</label>
+			<input type="text" class="form-control" id="inputSalle" name="inputSalle">
+		</div>
+        <div class="col-md-7 d-flex justify-content-end">
+			<a class="link-primary" href="https://meet.google.com/" target="_blank"><u>Génerer un lien</u></a>
+		</div>
+		<div class="col-md-8 d-flex justify-content-center">
+			<button type="submit" class="btn btn-primary">Ajouter</button>
+		</div>
+	</form> #}
+    <div id="myform" style="display: none;">
+    {{ form_start(form) }}
+	<div class="row mt-2 g-3  d-flex justify-content-center" style="display: none;">
+    
+		<div class="col-md-7">
+			<label for="inputSalle" class="form-label">Lien de la salle</label>
+			{{ form_widget(form) }}
+		</div>
+        <div class="col-md-7 d-flex justify-content-end">
+			<a class="link-primary" href="https://meet.google.com/" target="_blank"><u>Génerer un lien</u></a>
+		</div>
+		<div class="col-md-8 d-flex justify-content-center">
+			<button type="submit" class="btn btn-primary">Ajouter</button>
+		</div>
+         
+	</div>
+      {{ form_end(form) }}
+      </div>
+
+	{% block javascripts %}
+		<script>
+			function display() {
+               document.getElementById("myform").style.display = "block";
+               document.getElementById("myInput").focus()
+            }
+		</script>
+	{% endblock %}
+{% endblock %}

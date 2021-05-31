@@ -1,0 +1,20 @@
+<h3>Confirmation d'entretien</h3>
+
+Bonjour {{ recruteur.nom }},
+<br>
+Nous vous confirmons que vous êtes programmés pour un entretien qui aura lieu le {{ entretien.dateEntretien | date('d-m-Y') }}
+{% if entretien.salle %}
+	à {{ entretien.salle.adresse }}. <br>
+{% elseif entretien.visioconference %}
+	- sur <a href="{{ entretien.visioconference.lien }}">lien visioconférence</a>.
+{% endif %}
+<br>
+Merci de nous avertir en cas d'empêchement et si vous ne pouvez participer à cet entretien à
+<a href="mailto:recrutementrh@gmail.com">recrutementrh@gmail.com</a>.
+<br> <br>
+---------------Merci de ne pas répondre à cette convocation, -------------------------
+<br>
+Cordialement.
+<br>
+Equipe RecrutementRh. <br>
+<img src="{{ asset('img/interview.jpg') }}">

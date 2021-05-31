@@ -34,6 +34,16 @@ class Entretien
      */
     private $recruteur;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Salle::class, inversedBy="entretiens")
+     */
+    private $salle;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Visioconference::class, mappedBy="entretien", cascade={"persist", "remove"})
+     */
+    private $visioconference;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +81,40 @@ class Entretien
     public function setRecruteur(?Recruteur $recruteur): self
     {
         $this->recruteur = $recruteur;
+
+        return $this;
+    }
+
+    public function getSalle(): ?Salle
+    {
+        return $this->salle;
+    }
+
+    public function setSalle(?Salle $salle): self
+    {
+        $this->salle = $salle;
+
+        return $this;
+    }
+
+    public function getVisioconference(): ?Visioconference
+    {
+        return $this->visioconference;
+    }
+
+    public function setVisioconference(?Visioconference $visioconference): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($visioconference === null && $this->visioconference !== null) {
+            $this->visioconference->setEntretien(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($visioconference !== null && $visioconference->getEntretien() !== $this) {
+            $visioconference->setEntretien($this);
+        }
+
+        $this->visioconference = $visioconference;
 
         return $this;
     }

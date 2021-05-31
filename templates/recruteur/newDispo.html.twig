@@ -141,13 +141,28 @@
 						}
 					},
 					initialView: 'dayGridMonth',
+					
+					
+					firstDay: 1,
 					validRange: {
 						start: nowDate,
 					},
 					eventOverlap: function(stillEvent, movingEvent) {
 						return !stillEvent.extendedProps.isInterview && movingEvent.extendedProps.isInterview;
 					},
+					// eventAllow: function(dropInfo, draggedEvent) {
+
+					// 	if (moment(dropInfo).clone().weekday() == 6 || moment(dropInfo).clone().weekday() == 0 ) {
+					// 		console.log(moment(dropInfo).clone().weekday());
+					// 		return false;
+					// 	}
+					// 	else {
+					// 		console.log(moment(dropInfo).clone().weekday());
+					// 		return true;
+					// 	}
+					// },
 					// eventOverlap: false,
+					// businessHours: true,
 					locale: 'fr',
 					timeZone: 'Europe/Paris',
 					headerToolbar: {

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Visioconference{% endblock %}
+
+{% block body %}
+    <h1>Create new Visioconference</h1>
+
+    {{ include('visioconference/_form.html.twig') }}
+
+    <a href="{{ path('visioconference_index') }}">back to list</a>
+{% endblock %}

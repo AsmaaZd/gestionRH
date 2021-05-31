@@ -9,6 +9,17 @@
 			{{message}}
 		</div>
 	{% endfor  %}
+	{% for message in app.flashes('pasDeVisioConfLibre') %}
+		<div class="alert alert-danger col-md-6 mx-auto text-center">
+			{{message}}
+		</div>
+	{% endfor  %}
+	{% for message in app.flashes('pasDeSalleLibre') %}
+		<div class="alert alert-danger col-md-6 mx-auto text-center">
+			{{message}}
+		</div>
+	{% endfor  %}
+
 	<h1>Liste des candidats</h1>
 	<a href="{{ path('candidat_new') }}">
 		<button class="btn btn-outline-success btn-xs">
