@@ -14,6 +14,9 @@
 			<section class="container">
 				<div type="text" class="pickr" style="background-color:{{ competence.color }}!important">
 				<input type="hidden" class="hiddencolor" name="hiddencolor">
+				{% if competence %}
+				<input type="hidden" value="{{ competence.color }}" class="hiddencoloredit" name="hiddencoloredit">
+				{% endif %}
 				
 				
 				</div>

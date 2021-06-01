@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class CandidatType extends AbstractType
 {
@@ -16,7 +17,6 @@ class CandidatType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class, [
-                'required' => false,
                 'attr' => [
                     'placeholder' => "Nom",
                     'class' => "form-control"
@@ -24,9 +24,15 @@ class CandidatType extends AbstractType
 
             ])
             ->add('prenom', TextType::class, [
-                'required' => false,
                 'attr' => [
                     'placeholder' => "Prénom",
+                    'class' => "form-control"
+                ],
+
+            ])
+            ->add('email', EmailType::class, [
+                'attr' => [
+                    'placeholder' => "Email",
                     'class' => "form-control"
                 ],
 

@@ -80,10 +80,9 @@ class CalendarApiController extends AbstractController
 
                 $manager->flush();
 
-                // $templateCandidat = 'emails/editEntretienCandidat.html.twig';
-                // $templateRecruteur = 'emails/editEntretienRecruteur.html.twig';
-                // $entretien= $entretienRepo->findBy(array(''))
-                // $this->changeEntretienEmail($entretien, $mailer, $templateCandidat, $templateRecruteur);
+                $type = "modif";
+                $entretienChanged=$entretienWithNewDate[0];
+                $this->entretienEmail($candidat = $entretienChanged->getCandidat(), $recruteur = $entretienChanged->getRecruteur(), $type, $entretien=$entretienChanged, $mailer);
 
                 $response= new Response('OK',$code);
                 // $response->headers->set('Access-Control-Allow-Origin', '*');
@@ -101,59 +100,140 @@ class CalendarApiController extends AbstractController
     }
 
 
-    public function changeEntretienEmail($entretien, \Swift_Mailer $mailer, $templateCandidat, $templateRecruteur)
+    public function entretienEmail($candidat, $recruteur, $type, $entretien, $mailer)
     {
-        $messageToCandidat = (new \Swift_Message('Hello Email'))
-            ->setFrom('recrutementrh@gmail.com')
-            ->setTo([
-                $entretien->getCandidat()->getEmail() => $entretien->getCandidat()->getNom() . " " . $entretien->getCandidat()->getPrenom()
-            ])
-            ->setSubject('Nouveau entretien')
-            ->setBody(
-                $this->renderView(
-                    // 'emails/nvEntretienCandidat.html.twig',
-                    $templateCandidat,
-                    [
-                        'candidat' => $entretien->getCandidat(),
-                        'recruteur' => $entretien->getRecruteur(),
-                        'entretien' => $entretien,
-                    ]
-                ),
-                'text/html'
-            )
 
-            ->addPart(
-                $this->renderView(
-                    'emails/nvEntretienCandidat.txt.twig'
-                ),
-                'text/plain'
-            );
-        $messageToRecruteur = (new \Swift_Message('Hello Email'))
-            ->setFrom('recrutementrh@gmail.com')
-            ->setTo([
-                $entretien->getRecruteur()->getEmail() => $entretien->getRecruteur()->getNom() . " " . $entretien->getRecruteur()->getPrenom()
-            ])
-            ->setSubject('Nouveau entretien')
-            ->setBody(
-                $this->renderView(
-                    $templateRecruteur,
-                    [
-                        'candidat' => $entretien->getCandidat(),
-                        'recruteur' => $entretien->getRecruteur(),
-                        'entretien' => $entretien,
-                    ]
-                ),
-                'text/html'
-            )
+        if ($candidat) {
+            if ($type === "nv") {
+                $messageToCandidat = (new \Swift_Message('Hello Email'))
+                    ->setFrom('recrutementrh@gmail.com')
+                    ->setTo([
+                        $candidat->getEmail() => $candidat->getNom() . " " . $candidat->getPrenom()
+                    ])
+                    ->setSubject('Nouveau entretien')
+                    ->setBody(
+                        $this->renderView(
+                            // 'emails/nvEntretienCandidat.html.twig',
+                            'emails/nvEntretienCandidat.html.twig',
+                            [
+                                'candidat' => $candidat,
+                                'entretien' => $entretien,
+                            ]
+                        ),
+                        'text/html'
+                    )
+                    ;
+                    $mailer->send($messageToCandidat);
+            }
+            elseif($type === "modif"){
 
-            ->addPart(
-                $this->renderView(
-                    'emails/nvEntretienRecruteur.txt.twig'
-                ),
-                'text/plain'
-            );
+                $messageToCandidat = (new \Swift_Message('Hello Email'))
+                    ->setFrom('recrutementrh@gmail.com')
+                    ->setTo([
+                        $candidat->getEmail() => $candidat->getNom() . " " . $candidat->getPrenom()
+                    ])
+                    ->setSubject('Modification d\'entretien')
+                    ->setBody(
+                        $this->renderView(
+                            // 'emails/nvEntretienCandidat.html.twig',
+                            'emails/editEntretienCandidat.html.twig',
+                            [
+                                'candidat' => $candidat,
+                                'entretien' => $entretien,
+                            ]
+                        ),
+                        'text/html'
+                    )
+                    ;
+                    $mailer->send($messageToCandidat);
+            }
+            elseif($type === "annul"){
 
-        $mailer->send($messageToCandidat);
-        $mailer->send($messageToRecruteur);
+                $messageToCandidat = (new \Swift_Message('Hello Email'))
+                    ->setFrom('recrutementrh@gmail.com')
+                    ->setTo([
+                        $candidat->getEmail() => $candidat->getNom() . " " . $candidat->getPrenom()
+                    ])
+                    ->setSubject('Annulation d\'entretien')
+                    ->setBody(
+                        $this->renderView(
+                            // 'emails/nvEntretienCandidat.html.twig',
+                            'emails/annulationEntretienCandidat.html.twig',
+                            [
+                                'candidat' => $candidat,
+                                'entretien' => $entretien,
+                            ]
+                        ),
+                        'text/html'
+                    )
+                    ;
+                    $mailer->send($messageToCandidat);
+            }
+        }
+        if ($recruteur) {
+            if ($type === "nv") {
+                $messageToRecruteur = (new \Swift_Message('Hello Email'))
+                    ->setFrom('recrutementrh@gmail.com')
+                    ->setTo([
+                        $recruteur->getEmail() => $recruteur->getNom() . " " . $recruteur->getPrenom()
+                    ])
+                    ->setSubject('Nouveau entretien')
+                    ->setBody(
+                        $this->renderView(
+                            // 'emails/nvEntretienCandidat.html.twig',
+                            'emails/nvEntretienRecruteur.html.twig',
+                            [
+                                'recruteur' => $recruteur,
+                                'entretien' => $entretien,
+                            ]
+                        ),
+                        'text/html'
+                    )
+                    ;
+                    $mailer->send($messageToRecruteur);
+            }
+            elseif($type === "modif"){
+
+                $messageToRecruteur = (new \Swift_Message('Hello Email'))
+                    ->setFrom('recrutementrh@gmail.com')
+                    ->setTo([
+                        $recruteur->getEmail() => $recruteur->getNom() . " " . $recruteur->getPrenom()
+                    ])
+                    ->setSubject('Modification d\'entretien')
+                    ->setBody(
+                        $this->renderView(
+                            'emails/editEntretienRecruteur.html.twig',
+                            [
+                                'recruteur' => $recruteur,
+                                'entretien' => $entretien,
+                            ]
+                        ),
+                        'text/html'
+                    )
+                    ;
+                    $mailer->send($messageToRecruteur);
+            }
+            elseif($type === "annul"){
+
+                $messageToRecruteur = (new \Swift_Message('Hello Email'))
+                    ->setFrom('recrutementrh@gmail.com')
+                    ->setTo([
+                        $recruteur->getEmail() => $recruteur->getNom() . " " . $recruteur->getPrenom()
+                    ])
+                    ->setSubject('Annulation d\'entretien')
+                    ->setBody(
+                        $this->renderView(
+                            'emails/annulationEntretienRecruteur.html.twig',
+                            [
+                                'recruteur' => $recruteur,
+                                'entretien' => $entretien,
+                            ]
+                        ),
+                        'text/html'
+                    )
+                    ;
+                    $mailer->send($messageToRecruteur);
+            }
+        }
     }
 }
