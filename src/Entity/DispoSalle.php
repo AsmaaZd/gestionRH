@@ -32,6 +32,12 @@ class DispoSalle
      */
     private $jour;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isOccupied;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -72,4 +78,17 @@ class DispoSalle
 
         return $this;
     }
+
+    public function getIsOccupied(): ?bool
+    {
+        return $this->isOccupied;
+    }
+
+    public function setIsOccupied(?bool $isOccupied): self
+    {
+        $this->isOccupied = $isOccupied;
+
+        return $this;
+    }
+    
 }

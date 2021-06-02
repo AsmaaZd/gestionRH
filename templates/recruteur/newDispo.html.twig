@@ -9,23 +9,25 @@
 	{# <link rel="stylesheet" href="{{ asset('css/style.css') }}"> #}
 <link rel="stylesheet" href="{{ asset('css/bootstrap-datetimepicker.min.css') }}"> {% endblock %}
 {% block body %}
-	<h2> {{ recruteur.nom }} {{ recruteur.prenom }}</h2>
+	<h2>
+		{{ recruteur.nom }}
+		{{ recruteur.prenom }}</h2>
 
-{% for message in app.flashes('ajoutDispo') %}
-        <div class="alert alert-success col-md-6 mx-auto text-center">
-            {{message}}
-        </div>
- {% endfor  %}
- {% for message in app.flashes('dateInferieureADateActuelle') %}
-        <div class="alert alert-danger col-md-6 mx-auto text-center">
-            {{message}}
-        </div>
- {% endfor  %}
- {% for message in app.flashes('dateDejaExixtante') %}
-        <div class="alert alert-warning col-md-6 mx-auto text-center">
-            {{message}}
-        </div>
- {% endfor  %}
+	{% for message in app.flashes('ajoutDispo') %}
+		<div class="alert alert-success col-md-6 mx-auto text-center">
+			{{message}}
+		</div>
+	{% endfor  %}
+	{% for message in app.flashes('dateInferieureADateActuelle') %}
+		<div class="alert alert-danger col-md-6 mx-auto text-center">
+			{{message}}
+		</div>
+	{% endfor  %}
+	{% for message in app.flashes('dateDejaExixtante') %}
+		<div class="alert alert-warning col-md-6 mx-auto text-center">
+			{{message}}
+		</div>
+	{% endfor  %}
 	<br>
 
 	<!-- Button trigger modal -->
@@ -44,8 +46,8 @@
 					<div
 						class="modal-body">
 						{# <div class="mb-3">
-																																					{{ form_widget(form.title) }}
-																																				</div> #}
+																																											{{ form_widget(form.title) }}
+																																										</div> #}
 
 						<div class="mb-3 ">
 							<label for="date-start" class="visually-hidden">Date debut</label>
@@ -116,211 +118,212 @@
 		<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.js" integrity="sha256-ekrJn2FeZaiUFq99QswpQCUTME/HxaDfX7R8INzKJGE=" crossorigin="anonymous"></script>
 		<script>
 			window.onload = () => {
-				let calendatElement = document.querySelector("#calendrier")
-				var nowDate= new Date();
-				// console.log(nowDate);
-				let calendar = new FullCalendar.Calendar(calendatElement, {
-					eventClick: function (info) {
-						var eventObj = info.event.id;
+let calendatElement = document.querySelector("#calendrier")
+var nowDate = new Date();
+// console.log(nowDate);
+let calendar = new FullCalendar.Calendar(calendatElement, {
+eventClick: function (info) {
+var eventObj = info.event.id;
 
-						if(info.event.extendedProps.isInterview===0){
-							var eventCandidatPrenom="";
-							var eventTypeMessage = "cette disponibilité?";
-						}
-						if(info.event.extendedProps.isInterview===1){
-							var eventCandidatPrenom = info.event.extendedProps.candidatPrenom;
-							var eventCandidatNom = info.event.extendedProps.candidatNom;
-							var eventCandidatEmail = info.event.extendedProps.candidatEmail;
-							var eventCandidatPhone = info.event.extendedProps.candidatPhone;
-							// console.log(info.event.extendedProps.candidatPrenom);
-							var eventCandidat = "Entretien avec "+eventCandidatNom+" "+eventCandidatPrenom+"\r\n"+"Email: "+eventCandidatEmail+"\r\n"+"Téléphone: "+eventCandidatPhone;
-							var eventTypeMessage = "cet entretien?";
-						}
-						if (confirm(eventCandidat+"\r\n"+"Voulez-vous supprimer "+eventTypeMessage)) {
-						calendar.getEventById(eventObj).remove();
-						}
-					},
-					initialView: 'dayGridMonth',
-					
-					
-					firstDay: 1,
-					validRange: {
-						start: nowDate,
-					},
-					eventOverlap: function(stillEvent, movingEvent) {
-						return !stillEvent.extendedProps.isInterview && movingEvent.extendedProps.isInterview;
-					},
-					// eventAllow: function(dropInfo, draggedEvent) {
-
-					// 	if (moment(dropInfo).clone().weekday() == 6 || moment(dropInfo).clone().weekday() == 0 ) {
-					// 		console.log(moment(dropInfo).clone().weekday());
-					// 		return false;
-					// 	}
-					// 	else {
-					// 		console.log(moment(dropInfo).clone().weekday());
-					// 		return true;
-					// 	}
-					// },
-					// eventOverlap: false,
-					// businessHours: true,
-					locale: 'fr',
-					timeZone: 'Europe/Paris',
-					headerToolbar: {
-					start: 'prev,next today',
-					center: 'title',
-					end: 'dayGridMonth,timeGridWeek'
-					},
-					buttonText: {
-					today: 'Aujourd\'hui',
-					month: 'Mois',
-					week: 'Semaine',
-					day: 'Jour',
-					},
-					headerToolbar: {
-					start: 'prev,next today',
-					center: 'title',
-					end: 'dayGridMonth,timeGridWeek'
-					},
-					events: {{ data.data|raw }},
-					editable: true,
-					eventResizableFromStart: true
-
-					})
-
-				// calendar.on('eventChange', (e) => {
-				// 	let url = `/api/calendar/${e.event.id}/edit`
-				// 	let donnees = {
-				// 		"id": e.event.id,
-				// 		"title": e.event.title,
-				// 		"oldDate": e.oldEvent.start,
-				// 		"description": e.event.extendedProps.description,
-				// 		"candidat": e.event.extendedProps.candidat,
-				// 		"isInterview": e.event.extendedProps.isInterview,
-				// 		"recruteur": e.event.extendedProps.recruteur,
-				// 		"start": e.event.start,
-				// 		"end": e.event.end,
-				// 		"backgroundColor": e.event.backgroundColor,
-				// 		"textColor": e.event.textColor,
-				// 		"borderColor": e.event.borderColor,
-				// 		"allDay": e.event.allDay,
-				// 		"recruteur": e.event.extendedProps.recruteur,
-
-				// 	}
-
-				// 	// {{ data.data|raw }}.forEach(element => console.log(element));
-				// 	for (let element of {{ data.data|raw }}) {
-				// 		// console.log(element);
-				// 		let oldDispo=e.event.start.toISOString().slice(0,10).replace(/-/g,"-");
-				// 		// console.log(element.start);
-				// 		if(element.start==oldDispo){
-				// 			// console.log(element);
-				// 			calendar.getEventById(element.id).remove();
-							
-				// 		}
-				// 		}
-					
-				// 	let newDispo={
-				// 		"id": e.event.id,
-				// 		"isInterview": 0,
-				// 		"recruteur": e.event.extendedProps.recruteur,
-				// 		"start": e.oldEvent.start,
-				// 		"end": e.oldEvent.start,
-				// 		"allDay": 1,
-
-				// 	}
-				// 	calendar.addEvent(newDispo);
-				// 	// calendar.getEventById(eventObj).remove();
-				// 	// console.log(donnees)
-				// 	let xhr = new XMLHttpRequest
-
-				// 	xhr.open("PUT", url)
-				// 	xhr.send(JSON.stringify(donnees))
-
-				// })
-
-				calendar.on('eventChange', (e) => {
-					let url = `/api/calendar/${e.event.id}/edit`
-					let donnees = {
-					"id": e.event.id,
-					"title": e.event.title,
-					"oldDate": e.oldEvent.start,
-					"description": e.event.extendedProps.description,
-					"candidat": e.event.extendedProps.candidat,
-					"isInterview": e.event.extendedProps.isInterview,
-					"recruteur": e.event.extendedProps.recruteur,
-					"start": e.event.start,
-					"end": e.event.end,
-					"backgroundColor": e.event.backgroundColor,
-					"textColor": e.event.textColor,
-					"borderColor": e.event.borderColor,
-					"allDay": e.event.allDay,
-					"recruteur": e.event.extendedProps.recruteur,
-					}
-						if(e.event.extendedProps.isInterview==1){
-								// {{ data.data|raw }}.forEach(element => console.log(element));
-								let elements = calendar.getEvents();
-								// console.log(Math.floor(Math.random() * (500 - 200)) + 200);
-								// console.log(elements[0].start.toISOString().slice(0,10).replace(/-/g,"-"));
-								let oldDispo=e.event.start.toISOString().slice(0,10).replace(/-/g,"-");
-									
-								for (let element of elements) {
-									// console.log(element);
-									
-									if(element.start.toISOString().slice(0,10).replace(/-/g,"-")==oldDispo && element.extendedProps.isInterview ===0){
-										// console.log(element);
-										calendar.getEventById(element.id).remove();
-										
-									}
-									}
-								
-								let newDispo={
-									"id": Math.floor(Math.random() * (1000 - 500)) + 500,
-									"isInterview": 0,
-									"recruteur": e.event.extendedProps.recruteur,
-									"start": e.oldEvent.start,
-									"end": e.oldEvent.start,
-									"allDay": 1,
-
-								}
-								calendar.addEvent(newDispo);
-								// calendar.getEventById(eventObj).remove();
-								// console.log(donnees)
-						}
+if (info.event.extendedProps.isInterview === 0) {
+var eventCandidatPrenom = "";
+var eventTypeMessage = "cette disponibilité?";
+}
+if (info.event.extendedProps.isInterview === 1) {
+var eventCandidatPrenom = info.event.extendedProps.candidatPrenom;
+var eventCandidatNom = info.event.extendedProps.candidatNom;
+var eventCandidatEmail = info.event.extendedProps.candidatEmail;
+var eventCandidatPhone = info.event.extendedProps.candidatPhone;
+// console.log(info.event.extendedProps.candidatPrenom);
+var eventCandidat = "Entretien avec " + eventCandidatNom + " " + eventCandidatPrenom + "\r\n" + "Email: " + eventCandidatEmail + "\r\n" + "Téléphone: " + eventCandidatPhone;
+var eventTypeMessage = "cet entretien?";
+}
+if (confirm(eventCandidat + "\r\n" + "Voulez-vous supprimer " + eventTypeMessage)) {
+calendar.getEventById(eventObj).remove();
+}
+},
+initialView: 'dayGridMonth',
 
 
-					// console.log(donnees)
-					let xhr = new XMLHttpRequest
-					xhr.open("PUT", url)
-					xhr.send(JSON.stringify(donnees))
-					})
-				calendar.on('eventRemove', (e) => { // console.log(e)
-					let url = `/api/calendar/${e.event.id}/delete`
-					let donnees = {
-						"oldDate": e.event.start,
-						"isInterview": e.event.extendedProps.isInterview,
-						"recruteur": e.event.extendedProps.recruteur,
-						"title": e.event.title,
-						"description": e.event.extendedProps.description,
-						"start": e.event.start,
-						"end": e.event.end,
-						"backgroundColor": e.event.backgroundColor,
-						"textColor": e.event.textColor,
-						"borderColor": e.event.borderColor,
-						"allDay": e.event.allDay
+firstDay: 1,
+validRange: {
+start: nowDate
+},
+eventOverlap: function (stillEvent, movingEvent) {
+return ! stillEvent.extendedProps.isInterview && movingEvent.extendedProps.isInterview;
+},
+// eventAllow: function(dropInfo, draggedEvent) {
 
-					}
-					// console.log(donnees)
-					let xhr = new XMLHttpRequest
+// if (moment(dropInfo).clone().weekday() == 6 || moment(dropInfo).clone().weekday() == 0 ) {
+// console.log(moment(dropInfo).clone().weekday());
+// return false;
+// }
+// else {
+// console.log(moment(dropInfo).clone().weekday());
+// return true;
+// }
+// },
+// eventOverlap: false,
+// businessHours: true,
+locale: 'fr',
+timeZone: 'Europe/Paris',
+headerToolbar: {
+start: 'prev,next today',
+center: 'title',
+end: 'dayGridMonth,timeGridWeek'
+},
+buttonText: {
+today: 'Aujourd\'hui',
+month: 'Mois',
+week: 'Semaine',
+day: 'Jour'
+},
+headerToolbar: {
+start: 'prev,next today',
+center: 'title',
+end: 'dayGridMonth,timeGridWeek'
+},
+events: {{ data.data|raw }},
+editable: true,
+eventResizableFromStart: true
 
-					xhr.open("DELETE", url)
-					xhr.send(JSON.stringify(donnees))
+})
 
-				})
+// calendar.on('eventChange', (e) => {
+// let url = `/api/calendar/${e.event.id}/edit`
+// let donnees = {
+// "id": e.event.id,
+// "title": e.event.title,
+// "oldDate": e.oldEvent.start,
+// "description": e.event.extendedProps.description,
+// "candidat": e.event.extendedProps.candidat,
+// "isInterview": e.event.extendedProps.isInterview,
+// "recruteur": e.event.extendedProps.recruteur,
+// "start": e.event.start,
+// "end": e.event.end,
+// "backgroundColor": e.event.backgroundColor,
+// "textColor": e.event.textColor,
+// "borderColor": e.event.borderColor,
+// "allDay": e.event.allDay,
+// "recruteur": e.event.extendedProps.recruteur,
 
-				calendar.render()
+// }
 
-			}
-</script>
+// // {{ data.data|raw }}.forEach(element => console.log(element));
+// for (let element of {{ data.data|raw }}) {
+// // console.log(element);
+// let oldDispo=e.event.start.toISOString().slice(0,10).replace(/-/g,"-");
+// // console.log(element.start);
+// if(element.start==oldDispo){
+// // console.log(element);
+// calendar.getEventById(element.id).remove();
+
+// }
+// }
+
+// let newDispo={
+// "id": e.event.id,
+// "isInterview": 0,
+// "recruteur": e.event.extendedProps.recruteur,
+// "start": e.oldEvent.start,
+// "end": e.oldEvent.start,
+// "allDay": 1,
+
+// }
+// calendar.addEvent(newDispo);
+// // calendar.getEventById(eventObj).remove();
+// // console.log(donnees)
+// let xhr = new XMLHttpRequest
+
+// xhr.open("PUT", url)
+// xhr.send(JSON.stringify(donnees))
+
+// })
+
+calendar.on('eventChange', (e) => {
+let url = `/api/calendar/${
+e.event.id
+}/edit`
+let donnees = {
+"id": e.event.id,
+"title": e.event.title,
+"oldDate": e.oldEvent.start,
+"description": e.event.extendedProps.description,
+"candidat": e.event.extendedProps.candidat,
+"isInterview": e.event.extendedProps.isInterview,
+"recruteur": e.event.extendedProps.recruteur,
+"start": e.event.start,
+"end": e.event.end,
+"backgroundColor": e.event.backgroundColor,
+"textColor": e.event.textColor,
+"borderColor": e.event.borderColor,
+"allDay": e.event.allDay,
+"recruteur": e.event.extendedProps.recruteur
+}
+if (e.event.extendedProps.isInterview == 1) { // {{ data.data|raw }}.forEach(element => console.log(element));
+let elements = calendar.getEvents();
+// console.log(Math.floor(Math.random() * (500 - 200)) + 200);
+// console.log(elements[0].start.toISOString().slice(0,10).replace(/-/g,"-"));
+let oldDispo = e.event.start.toISOString().slice(0, 10).replace(/-/g, "-");
+
+for (let element of elements) { // console.log(element);
+
+if (element.start.toISOString().slice(0, 10).replace(/-/g, "-") == oldDispo && element.extendedProps.isInterview === 0) { // console.log(element);
+calendar.getEventById(element.id).remove();
+
+}
+}
+
+let newDispo = {
+"id": Math.floor(Math.random() * (1000 - 500)) + 500,
+"isInterview": 0,
+"recruteur": e.event.extendedProps.recruteur,
+"start": e.oldEvent.start,
+"end": e.oldEvent.start,
+"allDay": 1
+
+}
+calendar.addEvent(newDispo);
+// calendar.getEventById(eventObj).remove();
+// console.log(donnees)
+}
+
+
+// console.log(donnees)
+let xhr = new XMLHttpRequest
+xhr.open("PUT", url)
+xhr.send(JSON.stringify(donnees))
+})
+calendar.on('eventRemove', (e) => { // console.log(e)
+let url = `/api/calendar/${
+e.event.id
+}/delete`
+let donnees = {
+"oldDate": e.event.start,
+"isInterview": e.event.extendedProps.isInterview,
+"recruteur": e.event.extendedProps.recruteur,
+"title": e.event.title,
+"description": e.event.extendedProps.description,
+"start": e.event.start,
+"end": e.event.end,
+"backgroundColor": e.event.backgroundColor,
+"textColor": e.event.textColor,
+"borderColor": e.event.borderColor,
+"allDay": e.event.allDay
+
+}
+// console.log(donnees)
+let xhr = new XMLHttpRequest
+
+xhr.open("DELETE", url)
+xhr.send(JSON.stringify(donnees))
+
+})
+
+calendar.render()
+
+}
+		</script>
 		<!-- Datetimepicker js-->
 		<script src="{{ asset('js/jquery.min.js') }}"></script>
 
@@ -329,14 +332,14 @@
 		<script src="{{ asset('js/main.js') }}"></script>
 		<script>
 			function showDateEnd() {
-				var checkBox = document.querySelector(".myCheck");
-				var dateFinDiv = document.getElementById("dateFinDiv");
-				if (checkBox.checked == true) {
-				dateFinDiv.style.display = "none";
-				} else {
-				dateFinDiv.style.display = "block";
-				document.getElementById("dateEnd").required = true;
-			}
+var checkBox = document.querySelector(".myCheck");
+var dateFinDiv = document.getElementById("dateFinDiv");
+if (checkBox.checked == true) {
+dateFinDiv.style.display = "none";
+} else {
+dateFinDiv.style.display = "block";
+document.getElementById("dateEnd").required = true;
+}
 }
 		</script>
 	{% endblock %}
