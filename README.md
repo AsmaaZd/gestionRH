@@ -39,7 +39,7 @@
 ### 🛠️ Les pré-requis techniques 
 
 1. Installez PHP 7.4 ou une version supérieure [lien](https://www.php.net/downloads.php)[tutoriel](https://www.youtube.com/watch?v=OVTnj3hcHuc) et décommenter la ligne `extension=mysqli` dans le fichier php.ini
-2. [Installer Composer](https://getcomposer.org/download/) ⚠️ pensez à bien choisir la version 7.4 pour composer lors de l'installation.
+2. [Installer Composer](https://getcomposer.org/download/) ⚠️ pensez à bien choisir la version PHP 7.4 pour composer lors de l'installation.
 3. [installer Symfony CLI ](https://symfony.com/download)
 4. Pour verifier si votre ordinateur répond à toutes les exigences, ouvrez votre terminal et exécutez cette commande: ` symfony check:requirements `
 
