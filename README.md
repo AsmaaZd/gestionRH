@@ -38,14 +38,15 @@
 
 ### 🛠️ Les pré-requis techniques 
 
-1. Installez PHP 7.2.5 ou une version supérieure
-2. [Installer Composer](https://getcomposer.org/download/)
+1. Installez PHP 7.4 ou une version supérieure [lien](https://www.php.net/downloads.php)[tutoriel](https://www.youtube.com/watch?v=OVTnj3hcHuc) et décommenter la ligne `extension=mysqli` dans le fichier php.ini
+2. [Installer Composer](https://getcomposer.org/download/) ⚠️ pensez à bien choisir la version PHP 7.4 pour composer lors de l'installation.
 3. [installer Symfony CLI ](https://symfony.com/download)
 4. Pour verifier si votre ordinateur répond à toutes les exigences, ouvrez votre terminal et exécutez cette commande: ` symfony check:requirements `
 
 ### 🏁 Les étapes d'installation
 
-1. Clonez le dépot où vous voulez: `git clone https://github.com/AsmaaZd/gestionRH`
+1. Clonez le dépot où vous voulez: `git clone --single-branch --branch master https://github.com/AsmaaZd/gestionRH`
+2. Placez vous dans le dossier du projet gestionRH `cd gestionRH`
 2. Installez les dépendances  : `composer install`
 3. Créez la base de données : ` php bin/console doctrine:database:create `
 4. Lancez les migrations : ` php bin/console doctrine:migrations:migrate `

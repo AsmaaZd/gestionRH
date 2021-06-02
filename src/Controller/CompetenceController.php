@@ -79,9 +79,16 @@ class CompetenceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            
             if(!$request->request->get('hiddencolor') or $request->request->get('hiddencolor')=="rgba(66, 68, 90, 1)"){
-                $color="#".substr(md5(rand()), 0, 6);
-                $competence->setColor($color);
+                if($request->request->get('hiddencoloredit')){
+                    $competence->setColor($request->request->get('hiddencoloredit'));
+                }
+                else{
+                    $color="#".substr(md5(rand()), 0, 6);
+                    $competence->setColor($color);
+                }
+                
             }
             else{
                 $competence->setColor($request->request->get('hiddencolor'));
