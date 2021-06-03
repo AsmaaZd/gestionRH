@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+</head>
+<body>
+	
+Formulaire de connexion
+
+
+<div class="col-md-10 mx-auto">
+	{% for message in app.flashes('inscriptionUser') %}
+        <div class="alert alert-success col-6 mx-auto">
+            {{message}}
+        </div>
+    {% endfor %}
+
+
+        <form action="{{ path('user_connexion')}}" method="post" class=" col-md-4 mx-auto">
+        <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" id="email" name="_username" placeholder="Saisir votre email">
+            </div>
+            <div class="form-group">
+                <label for="password">Mod de passe</label>
+                <input type="password" class="form-control" id="password" name="_password" placeholder="Saisir votre mot de passe">
+            </div>
+            
+            <input type="submit" value="Connexion" class="btn btn-success col-md-12 mt-3">
+            
+            
+            {# <button type="submit" class="btn btn-success mt-3">Ajouter</button> #}
+        </div>
+        
+        </form>
+
+</body>
+</html>

@@ -29,57 +29,61 @@
 	</head>
 	<body>
 		<div class="wrapper" >
+		{% if app.user %}
+			{% if is_granted('ROLE_ADMIN') %}
 			<!-- Sidebar  -->
-			<nav id="sidebar">
-				<div class="sidebar-header">
-					{# <h4 id="logo">Recrutement RH</h4> #}
-					<a href="" class="logo"><b>Recrut<span>ement RH</span></b></a>
+				<nav id="sidebar">
+					<div class="sidebar-header">
+						{# <h4 id="logo">Recrutement RH</h4> #}
+						<a href="" class="logo"><b>Recrut<span>ement RH</span></b></a>
 
-				</div>
+					</div>
 
-				<ul class="list-unstyled components ">
-					<li  >
-						<a data-position="0" href="{{ path('acceuil') }}">
-							<i class="fas fa-home"></i>
-							Accueil
-						</a>
-					</li>
-					<li class="mymenu-item">
-						<a data-position="1" href="{{ path('candidat_index') }}">
-							<i class="fas fa-briefcase"></i>
-							Gestion des Candidats
-						</a>
-					</li>
-					<li>
-						<a data-position="2" href="{{ path('recruteur_index') }}">
-							<i class="fas fa-user-tie"></i>
-							Gestion des Recruteurs
-						</a>
-					</li>
-					<li>
-						<a  data-position="3" href="{{ path('entretien_index') }}">
-							<i class="fas fa-handshake"></i>
-							Gestion des Entretiens
-						</a>
-					</li>
-					<li>
-						<a  data-position="3" href="{{ path('salle_index') }}">
-							<i class="fas fa-map-marker-alt"></i>
-							Gestion des Salles
-						</a>
-					</li>
-					<li>
-						<a data-position="4" href="{{ path('competence_index') }}">
-							<i class="fas fa-cogs"></i>
-							Compétences
-						</a>
-					</li>
+					<ul class="list-unstyled components ">
+						<li  >
+							<a data-position="0" href="{{ path('acceuil') }}">
+								<i class="fas fa-home"></i>
+								Accueil
+							</a>
+						</li>
+						<li class="mymenu-item">
+							<a data-position="1" href="{{ path('candidat_index') }}">
+								<i class="fas fa-briefcase"></i>
+								Gestion des Candidats
+							</a>
+						</li>
+						<li>
+							<a data-position="2" href="{{ path('recruteur_index') }}">
+								<i class="fas fa-user-tie"></i>
+								Gestion des Recruteurs
+							</a>
+						</li>
+						<li>
+							<a  data-position="3" href="{{ path('entretien_index') }}">
+								<i class="fas fa-handshake"></i>
+								Gestion des Entretiens
+							</a>
+						</li>
+						<li>
+							<a  data-position="3" href="{{ path('salle_index') }}">
+								<i class="fas fa-map-marker-alt"></i>
+								Gestion des Salles
+							</a>
+						</li>
+						<li>
+							<a data-position="4" href="{{ path('competence_index') }}">
+								<i class="fas fa-cogs"></i>
+								Compétences
+							</a>
+						</li>
 
-				</ul>
+					</ul>
 
 
-			</nav>
+				</nav>
 
+			{% endif %}
+		{% endif %}
 			<!-- Page Content  -->
 			<div id="content">
 

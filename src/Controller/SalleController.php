@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @Route("/salle")
+ * @Route("/admin/salle")
  */
 class SalleController extends AbstractController
 {

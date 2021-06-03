@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+</head>
+<body>
+Formulaire d'inscription
+
+<div class="col-md-6 mx-auto">
+{{ form_start(formUser) }}
+            
+                {{ form_row(formUser.email) }}
+            
+                {{ form_row(formUser.password)}}
+          
+            
+            {# <button type="submit" class="btn btn-success mt-3">Ajouter</button> #}
+     
+        
+        
+        <input type="submit" value="S'inscrire" class="btn btn-success mt-3">
+       
+        
+    {{ form_end(formUser) }}
+        
+</div>
+
+
+    
+</body>
+</html>
