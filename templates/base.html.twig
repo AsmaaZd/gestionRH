@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>
-			{% block title %}Welcome!
+			{% block title %}Accueil
 			{% endblock %}
 		</title>
 		<!-- Bootstrap CSS CDN -->
@@ -88,8 +88,7 @@
 			<div id="content">
 
 				<nav class="navbar navbar-expand-lg navbar-light bg-light">
-					<div
-						class="container-fluid">
+					<div class="container-fluid" >
 
 						{# <button type="button" id="sidebarCollapse" class="btn btn-info">
 													<i class="fas fa-align-left"></i>
@@ -100,7 +99,19 @@
 												</button> #}
 
 						<div class="collapse navbar-collapse" id="navbarSupportedContent">
-							<ul class="nav navbar-nav ml-auto"></ul>
+							<ul class="nav navbar-nav ml-auto  d-flex justify-content-end" style='width:100%'>
+							{% if not app.user %} 
+								<li class="mx-2">
+									<a href="{{ path('user_connexion') }}"><i class="fas fa-chalkboard-teacher"></i> <u>Se connecter</u></a>
+								</li>
+								|
+								<li class="mx-2">
+									<a href="{{ path('user_inscription') }}"><i class="fas fa-user-plus"></i> <u>S'inscrire</u></a>
+								</li>
+							{% else %}
+								<li class="mx-2"><a href="{{ path('logout') }}"><u>Déconnexion</u></a></li>
+							{% endif %}
+							</ul>
 						</div>
 					</div>
 				</nav>

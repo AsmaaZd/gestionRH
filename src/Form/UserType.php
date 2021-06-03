@@ -18,16 +18,29 @@ class UserType extends AbstractType
             ->add('email', EmailType::class, [
                 "required" => false,
                 "attr" => [
-                    "placeholder" => "Veuillez saisir votre email"
+                    "placeholder" => "Veuillez saisir votre email",
+                    'class' => "form-control"
                 ]
             ])
 
             ->add('password', PasswordType::class, [
                 "required" => false,
+                'label' => "Mot de passe",
                 "attr" => [
-                    "placeholder" => "Veuillez saisir votre password"
+                    "placeholder" => "Veuillez saisir votre password",
+                    'class' => "form-control"
                     ]
                 ])
+            
+            ->add('confirm_password', PasswordType::class, [
+                "required" => false,
+                'label' => "Confirmation du mot de passe",
+                "attr" => [
+                    "placeholder" => "Veuillez confirmer votre mot de passe",
+                    'class' => "form-control"
+                ]
+
+            ])
         ;
     }
 

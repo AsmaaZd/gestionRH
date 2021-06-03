@@ -32,13 +32,25 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez renseigner le mot de passe")
+     * @Assert\EqualTo(
+     * propertyPath="confirm_password",
+     * message="Les mots de passe ne sont pas identiques"
+     * )
      */
     private $password;
+
+    /**
+     * @Assert\NotBlank(message="Veuillez renseigner la confirmation du mot de passe")
+     */
+    public $confirm_password;
 
     /**
      * @ORM\Column(type="json")
      */
     private $roles = [];
+
+    
 
     public function getId(): ?int
     {
