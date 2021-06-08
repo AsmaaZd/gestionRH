@@ -2,7 +2,13 @@
 
 {% block title %}Liste des salles
 {% endblock %}
-
+{% block stylesheets %}
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
+	<!-- Datetimepicker -->
+	{# <link rel="stylesheet" href="{{ asset('css/style.css') }}"> #}
+	<link rel="stylesheet" href="{{ asset('css/bootstrap-datetimepicker.min.css') }}"> 
+{% endblock %}
 {% block body %}
 	<h1>Liste des salles</h1>
 
@@ -14,6 +20,7 @@
 				<th>Disponible</th>
 				<th>Adresse</th>
 				<th>Equipements</th>
+				<th>Disponibilités</th>
 				<th>Actions</th>
 			</tr>
 		</thead>
@@ -32,6 +39,40 @@
 								</button>
 							{% endfor %}
 						{% endif %}
+					</td>
+					<td>
+						<a href="{{ path('salle_calendar', {'id': salle.id}) }}">
+							<button class="btn btn-secondary btn-xs">
+								<i class="fas fa-calendar-plus"></i>
+							</button>
+						</a>
+
+						<!-- Button trigger modal -->
+						<button type="button" id="buttonSalle{{ salle.id}}" class="btn modal-salle-button btn-secondary" data-bs-toggle="modal" data-bs-target="#modal{{ salle.id }}">
+							<i class="fas fa-calendar-plus"></i>
+						</button>
+
+						<!-- Modal -->
+						<div  class="modal fade" id="modal{{ salle.id }}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-fullscreen">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="modalLabel">{{ salle.nom }}</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										<div id="calendrier" ></div>
+										{# {{ include('salle/_calendar.html.twig') }} #}
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+										<button type="button" class="btn btn-primary">Enregistrer</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
 					</td>
 					<td>
 						<a href="{{ path('salle_show', {'id': salle.id}) }}">
@@ -83,49 +124,50 @@
 		</tbody>
 	</table>
 
-	{# <a href="{{ path('visioconference_new') }}"> #}
 	<button class="btn btn-outline-success btn-xs" onclick="display()">
 		<i class="fas fa-plus"></i>
 		Ajouter une nouvelle salle virtuelle</button>
-	{# </a> #}
+	<div id="myform" style="display: none;">
+		{{ form_start(form) }}
+		<div class="row mt-2 g-3  d-flex justify-content-center" style="display: none;">
 
-	{# <form class="row mt-2 g-3 myform d-flex justify-content-center">
-		<div class="col-md-7">
-			<label for="inputSalle" class="form-label">Lien de la salle</label>
-			<input type="text" class="form-control" id="inputSalle" name="inputSalle">
+			<div class="col-md-7">
+				<label for="inputSalle" class="form-label">Lien de la salle</label>
+				{{ form_widget(form) }}
+			</div>
+			<div class="col-md-7 d-flex justify-content-end">
+				<a class="link-primary" href="https://meet.google.com/" target="_blank">
+					<u>Génerer un lien</u>
+				</a>
+			</div>
+			<div class="col-md-8 d-flex justify-content-center">
+				<button type="submit" class="btn btn-primary">Ajouter</button>
+			</div>
+
 		</div>
-        <div class="col-md-7 d-flex justify-content-end">
-			<a class="link-primary" href="https://meet.google.com/" target="_blank"><u>Génerer un lien</u></a>
-		</div>
-		<div class="col-md-8 d-flex justify-content-center">
-			<button type="submit" class="btn btn-primary">Ajouter</button>
-		</div>
-	</form> #}
-    <div id="myform" style="display: none;">
-    {{ form_start(form) }}
-	<div class="row mt-2 g-3  d-flex justify-content-center" style="display: none;">
-    
-		<div class="col-md-7">
-			<label for="inputSalle" class="form-label">Lien de la salle</label>
-			{{ form_widget(form) }}
-		</div>
-        <div class="col-md-7 d-flex justify-content-end">
-			<a class="link-primary" href="https://meet.google.com/" target="_blank"><u>Génerer un lien</u></a>
-		</div>
-		<div class="col-md-8 d-flex justify-content-center">
-			<button type="submit" class="btn btn-primary">Ajouter</button>
-		</div>
-         
+		{{ form_end(form) }}
 	</div>
-      {{ form_end(form) }}
-      </div>
 
 	{% block javascripts %}
+		<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.js" integrity="sha256-ekrJn2FeZaiUFq99QswpQCUTME/HxaDfX7R8INzKJGE=" crossorigin="anonymous"></script>
+		<script>
+			let elementCalendrier = document.querySelector(".modal-salle-button");
+			elementCalendrier.addEventListener('click', function() {
+				
+				var calendarEl = document.getElementById('calendrier');
+				var calendar = new FullCalendar.Calendar(calendarEl, {
+				initialView: 'dayGridMonth'
+				});
+				calendar.render();
+      
+			}
+			);
+		</script>
 		<script>
 			function display() {
-               document.getElementById("myform").style.display = "block";
-               document.getElementById("myInput").focus()
-            }
+				document.getElementById("myform").style.display = "block";
+				document.getElementById("myInput").focus()
+			}
 		</script>
 	{% endblock %}
 {% endblock %}

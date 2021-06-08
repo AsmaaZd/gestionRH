@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>
-			{% block title %}Welcome!
+			{% block title %}Accueil
 			{% endblock %}
 		</title>
 		<!-- Bootstrap CSS CDN -->
@@ -29,63 +29,106 @@
 	</head>
 	<body>
 		<div class="wrapper" >
+		{% if app.user %}
+			{% if is_granted('ROLE_ADMIN') %}
 			<!-- Sidebar  -->
-			<nav id="sidebar">
-				<div class="sidebar-header">
-					{# <h4 id="logo">Recrutement RH</h4> #}
-					<a href="" class="logo"><b>Recrut<span>ement RH</span></b></a>
+				<nav id="sidebar">
+					<div class="sidebar-header">
+						{# <h4 id="logo">Recrutement RH</h4> #}
+						<a href="" class="logo"><b>Recrut<span>ement RH</span></b></a>
 
-				</div>
+					</div>
 
-				<ul class="list-unstyled components ">
-					<li  >
-						<a data-position="0" href="{{ path('acceuil') }}">
-							<i class="fas fa-home"></i>
-							Accueil
-						</a>
-					</li>
-					<li class="mymenu-item">
-						<a data-position="1" href="{{ path('candidat_index') }}">
-							<i class="fas fa-briefcase"></i>
-							Gestion des Candidats
-						</a>
-					</li>
-					<li>
-						<a data-position="2" href="{{ path('recruteur_index') }}">
-							<i class="fas fa-user-tie"></i>
-							Gestion des Recruteurs
-						</a>
-					</li>
-					<li>
-						<a  data-position="3" href="{{ path('entretien_index') }}">
-							<i class="fas fa-handshake"></i>
-							Gestion des Entretiens
-						</a>
-					</li>
-					<li>
-						<a  data-position="3" href="{{ path('salle_index') }}">
-							<i class="fas fa-map-marker-alt"></i>
-							Gestion des Salles
-						</a>
-					</li>
-					<li>
-						<a data-position="4" href="{{ path('competence_index') }}">
-							<i class="fas fa-cogs"></i>
-							Compétences
-						</a>
-					</li>
+					<ul class="list-unstyled components ">
+						<li  >
+							<a data-position="0" href="{{ path('acceuil') }}">
+								<i class="fas fa-home"></i>
+								Accueil
+							</a>
+						</li>
+						<li class="mymenu-item">
+							<a data-position="1" href="{{ path('candidat_index') }}">
+								<i class="fas fa-briefcase"></i>
+								Gestion des Candidats
+							</a>
+						</li>
+						<li>
+							<a data-position="2" href="{{ path('recruteur_index') }}">
+								<i class="fas fa-user-tie"></i>
+								Gestion des Recruteurs
+							</a>
+						</li>
+						<li>
+							<a  data-position="3" href="{{ path('entretien_index') }}">
+								<i class="fas fa-handshake"></i>
+								Gestion des Entretiens
+							</a>
+						</li>
+						<li>
+							<a  data-position="3" href="{{ path('salle_index') }}">
+								<i class="fas fa-map-marker-alt"></i>
+								Gestion des Salles
+							</a>
+						</li>
+						<li>
+							<a data-position="4" href="{{ path('competence_index') }}">
+								<i class="fas fa-cogs"></i>
+								Compétences
+							</a>
+						</li>
 
-				</ul>
+					</ul>
 
 
-			</nav>
+				</nav>
 
+			{% endif %}
+			{# {% if is_granted('ROLE_RECRUTEUR') %}
+			<!-- Sidebar  -->
+				<nav id="sidebar">
+					<div class="sidebar-header">
+						<a href="" class="logo"><b>Recrut<span>ement RH</span></b></a>
+
+					</div>
+
+					<ul class="list-unstyled components ">
+						<li  >
+							<a data-position="0" href="{{ path('acceuil') }}">
+								<i class="fas fa-home"></i>
+								Accueil
+							</a>
+						</li>
+						<li>
+							<a data-position="2" href="{{ path('recruteur_index', {'id': app.user.id}) }}">
+								<i class="fas fa-user-tie"></i>
+								Gestion du Profile
+							</a>
+						</li>
+						<li>
+							<a data-position="2" href="{{ path('recruteur_user_calendar') }}">
+								<i class="fas fa-user-tie"></i>
+								Gestion du Calendrier
+							</a>
+						</li>
+						<li>
+							<a  data-position="3" href="{{ path('entretien_index') }}">
+								<i class="fas fa-handshake"></i>
+								Gestion des Entretiens
+							</a>
+						</li>
+
+					</ul>
+
+
+				</nav>
+
+			{% endif %} #}
+		{% endif %}
 			<!-- Page Content  -->
 			<div id="content">
 
 				<nav class="navbar navbar-expand-lg navbar-light bg-light">
-					<div
-						class="container-fluid">
+					<div class="container-fluid" >
 
 						{# <button type="button" id="sidebarCollapse" class="btn btn-info">
 													<i class="fas fa-align-left"></i>
@@ -96,7 +139,19 @@
 												</button> #}
 
 						<div class="collapse navbar-collapse" id="navbarSupportedContent">
-							<ul class="nav navbar-nav ml-auto"></ul>
+							<ul class="nav navbar-nav ml-auto  d-flex justify-content-end" style='width:100%'>
+							{% if not app.user %} 
+								<li class="mx-2">
+									<a href="{{ path('user_connexion') }}"><i class="fas fa-chalkboard-teacher"></i> <u>Se connecter</u></a>
+								</li>
+								|
+								<li class="mx-2">
+									<a href="{{ path('user_inscription') }}"><i class="fas fa-user-plus"></i> <u>S'inscrire</u></a>
+								</li>
+							{% else %}
+								<li class="mx-2"><a href="{{ path('logout') }}"><u>Déconnexion</u></a></li>
+							{% endif %}
+							</ul>
 						</div>
 					</div>
 				</nav>

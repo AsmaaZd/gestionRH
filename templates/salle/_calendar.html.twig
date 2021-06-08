@@ -1,0 +1,140 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Disponibilités de la salle
+{% endblock %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
+	<!-- Datetimepicker -->
+	{# <link rel="stylesheet" href="{{ asset('css/style.css') }}"> #}
+	<link rel="stylesheet" href="{{ asset('css/bootstrap-datetimepicker.min.css') }}"> 
+{% endblock %}
+{% block body %}
+	
+    <h2>{{ salle.nom }}</h2>
+
+    <div class="col d-flex justify-content-end">
+			<div class="">
+				{# <div class="palette row">
+					<div class="color-dispo col-1">
+						<span></span>
+					</div>
+					<p class="col text-start">Libre</p>
+				</div> #}
+				<div class="palette row">
+					<div class="color-entretien col-1">
+						<span></span>
+					</div>
+					<p class="col text-start">Occupé</p>
+				</div>
+			</div>
+		</div>
+	<div id="calendrier" class="mt-4" ></div>
+									
+
+
+	{% block javascripts %}
+		<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.js" integrity="sha256-ekrJn2FeZaiUFq99QswpQCUTME/HxaDfX7R8INzKJGE=" crossorigin="anonymous"></script>
+		<script>
+            var nowDate = new Date();
+			document.addEventListener('DOMContentLoaded', function() {
+                var calendarEl = document.getElementById('calendrier');
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                firstDay: 1,
+                validRange: {
+                    start: nowDate,
+                },
+                events: {{ data.data|raw }},
+                eventOverlap: false,
+                businessHours: true,
+                locale: 'fr',
+                timeZone: 'Europe/Paris',
+                headerToolbar: {
+                start: 'prev,next today',
+                center: 'title',
+                end: 'dayGridMonth,timeGridWeek'
+                },
+                buttonText: {
+                today: 'Aujourd\'hui',
+                month: 'Mois',
+                week: 'Semaine',
+                day: 'Jour'
+                },
+                headerToolbar: {
+                start: 'prev,next today',
+                center: 'title',
+                end: 'addEventButton dayGridMonth,timeGridWeek'
+                },
+                editable: false,
+                customButtons: {
+                    addEventButton: {
+                    text: 'Réserver une salle',
+                    click: function() {
+                        var dateStr = prompt('Saisissez une date au format AAAA-MM-JJ');
+                        var date = new Date(dateStr); // will be in local time
+
+                        if (!isNaN(date.valueOf())) { // valid?
+                        calendar.addEvent({
+                            salle: {{ salle.id }},
+                            id: {{ salle.id }},
+                            start: date,
+                            allDay: true,
+                            jour: date,
+                            isOccupied: true,
+                            backgroundColor:"#DE8971",
+                            borderColor:"#DE8971",
+                        });
+                        // alert('La nouvelle disponibilité est enregistré!');
+                        // var xhr = new XMLHttpRequest(); 
+                        // xhr.open('GET', '/api/calendarDispo/${e.event.id}/edit');
+                        // xhr.onreadystatechange = function() {
+                        // if (xhr.readyState === 4) {
+                        //     alert(xhr.responseText);
+                        // }
+                        // };
+                        // xhr.send();
+
+                        } else {
+                        alert('Date invalide.');
+                        }
+                    }
+                    }
+                }
+                });
+                // addDispo with ajax
+                calendar.on('eventAdd', (e) => {
+                    let url = `/api/calendarDispo/reserve`
+                    let donnees = {
+                    "id": e.event.id,
+                    // "description": e.event.extendedProps.description,
+                    // "isOccupied": e.event.extendedProps.isOccupied,
+                    "isOccupied": true,
+                    "start": e.event.start,
+                    "backgroundColor": e.event.backgroundColor,
+                    "borderColor": e.event.borderColor,
+                    "allDay": e.event.allDay,
+                    "salle": e.event.extendedProps.salle
+                    }
+                    // console.log(donnees)
+                    let xhr = new XMLHttpRequest
+                    xhr.open("PUT", url)
+                    xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if(xhr.responseText == "OK"){
+                            alert('La salle a bien été réservée!');
+                        }
+                        else if(xhr.responseText == "Salle déjà réservée"){
+                            alert(xhr.responseText);
+                        }
+                    }
+                    };
+                    xhr.send(JSON.stringify(donnees))
+                    });
+                calendar.render();
+            });
+
+		</script>
+		
+	{% endblock %}
+{% endblock %}

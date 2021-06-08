@@ -38,7 +38,8 @@
 
 ### 🛠️ Les pré-requis techniques 
 
-1. Installez PHP 7.4 ou une version supérieure [lien](https://www.php.net/downloads.php)[tutoriel](https://www.youtube.com/watch?v=OVTnj3hcHuc) et décommenter la ligne `extension=mysqli` dans le fichier php.ini
+1. Installez WampServer [lien](https://www.wampserver.com/) - Si vous rencontrez une erreur de type ` MSVCR120.dll is missing ` voici un tuto vous aider à installer le serveur et résoudre ce problème : [tutoriel](https://www.youtube.com/watch?v=trPjbiGRw6w).
+
 2. [Installer Composer](https://getcomposer.org/download/) ⚠️ pensez à bien choisir la version PHP 7.4 pour composer lors de l'installation.
 3. [installer Symfony CLI ](https://symfony.com/download)
 4. Pour verifier si votre ordinateur répond à toutes les exigences, ouvrez votre terminal et exécutez cette commande: ` symfony check:requirements `

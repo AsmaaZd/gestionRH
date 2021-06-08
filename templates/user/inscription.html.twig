@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulaire d'inscription
+{% endblock %}
+
+{% block body %}
+
+	<div class="col-md-6 mx-auto p-4 border rounded">
+		{{ form_start(formUser) }}
+		<div class="row g-3">
+			<div class="col-12">
+				{{ form_row(formUser.email) }}
+			</div>
+			<div class="col-md-6">
+				{{ form_row(formUser.password)}}
+			</div>
+			<div class="col-md-6">
+				{{ form_row(formUser.confirm_password)}}
+			</div>
+			<div class="col-12">
+				<button type="submit" class="btn btn-primary">S'inscrire</button>
+			</div>
+		</div>
+		{{ form_end(formUser) }}
+	</div>
+{% endblock %}

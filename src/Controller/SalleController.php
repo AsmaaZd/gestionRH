@@ -6,6 +6,7 @@ use App\Entity\Salle;
 use App\Form\SalleType;
 use App\Entity\Visioconference;
 use App\Form\VisioconferenceType;
+use App\Repository\DispoSalleRepository;
 use App\Repository\SalleRepository;
 use App\Repository\VisioconferenceRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @Route("/salle")
+ * @Route("/admin/salle")
  */
 class SalleController extends AbstractController
 {
@@ -107,5 +108,46 @@ class SalleController extends AbstractController
         }
 
         return $this->redirectToRoute('salle_index');
+    }
+
+    /**
+     * @Route("/calendar/{id}", name="salle_calendar", methods={"GET","POST"})
+     */
+    public function salleCalendar(Salle $salle,DispoSalleRepository $dispoSalleRepo): Response
+    {
+
+        $disposSalle=$dispoSalleRepo->findBy(array('salle'=>$salle));
+        // dd($disposSalle);
+        $dispos=[];
+        foreach($disposSalle as $dispo){
+            if($dispo->getIsOccupied() == true){
+
+                $dispos[]=[
+                    'id' => $dispo->getId(),
+                    'start' => $dispo->getJour()->format('Y-m-d'),
+                    'allDay' => 1,
+                    'backgroundColor' => "#DE8971",
+                    'borderColor' => "#DE8971",
+                    'isOccupied' => $dispo->getIsOccupied(),
+                ];
+            }
+            // else{
+            //     $dispos[]=[
+            //         'id' => $dispo->getId(),
+            //         'start' => $dispo->getJour()->format('Y-m-d'),
+            //         'allDay' => 1,
+            //         'backgroundColor' => "#3788D8",
+            //         'borderColor' => "#3788D8",
+            //         'isOccupied' => $dispo->getIsOccupied(),
+            //     ];
+            // }
+            
+        }
+        $data= json_encode($dispos);
+
+        return $this->render('salle/_calendar.html.twig', [
+            'salle' => $salle,
+            'data'=>compact('data'),
+        ]);
     }
 }

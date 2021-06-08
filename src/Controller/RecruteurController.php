@@ -21,7 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\VarDumper\Cloner\Data;
 
 /**
- * @Route("/recruteur")
+ * @Route("/admin/recruteur")
  */
 class RecruteurController extends AbstractController
 {
