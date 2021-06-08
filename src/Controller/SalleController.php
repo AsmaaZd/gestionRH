@@ -131,16 +131,16 @@ class SalleController extends AbstractController
                     'isOccupied' => $dispo->getIsOccupied(),
                 ];
             }
-            else{
-                $dispos[]=[
-                    'id' => $dispo->getId(),
-                    'start' => $dispo->getJour()->format('Y-m-d'),
-                    'allDay' => 1,
-                    'backgroundColor' => "#3788D8",
-                    'borderColor' => "#3788D8",
-                    'isOccupied' => $dispo->getIsOccupied(),
-                ];
-            }
+            // else{
+            //     $dispos[]=[
+            //         'id' => $dispo->getId(),
+            //         'start' => $dispo->getJour()->format('Y-m-d'),
+            //         'allDay' => 1,
+            //         'backgroundColor' => "#3788D8",
+            //         'borderColor' => "#3788D8",
+            //         'isOccupied' => $dispo->getIsOccupied(),
+            //     ];
+            // }
             
         }
         $data= json_encode($dispos);

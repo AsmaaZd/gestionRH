@@ -31,6 +31,7 @@ class UserController extends AbstractController
             $hash= $encoder->encodePassword($user, $user->getPassword());
 
             $user->setPassword($hash);
+            $user->setRoles(['ROLE_RECRUTEUR']);
 
             $manager->persist($user);
             $manager->flush();
@@ -82,9 +83,39 @@ class UserController extends AbstractController
         if($this->isGranted('ROLE_ADMIN')){
             return $this->redirectToRoute('acceuil');
         }
-        // elseif($this->isGranted('ROLE_USER')){
-        //     return $this->redirectToRoute('acceuil');
-        // }
+        elseif($this->isGranted('ROLE_RECRUTEUR')){
+            return $this->redirectToRoute('acceuil');
+        }
+    }
+
+    /**
+     * @Route("/profile/{id}", name="recruteur_user_profile")
+     */
+    public function profileUserRecruteur(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder): Response
+    {
+        $user = new User;
+        $form = $this->createForm(UserType::class, $user);
+
+        $form->handleRequest($request);
+       
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $hash= $encoder->encodePassword($user, $user->getPassword());
+
+            $user->setPassword($hash);
+            $user->setRoles(['ROLE_RECRUTEUR']);
+
+            $manager->persist($user);
+            $manager->flush();
+            $this->addFlash("inscriptionUser","Bienvenu ".$user->getEmail()."!");
+            return $this->redirectToRoute("user_connexion");
+
+        }
+        return $this->render('user/inscription.html.twig', [
+            "formUser" => $form->createView()
+         
+        ]);
     }
 
 }

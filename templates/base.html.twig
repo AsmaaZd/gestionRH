@@ -83,6 +83,46 @@
 				</nav>
 
 			{% endif %}
+			{# {% if is_granted('ROLE_RECRUTEUR') %}
+			<!-- Sidebar  -->
+				<nav id="sidebar">
+					<div class="sidebar-header">
+						<a href="" class="logo"><b>Recrut<span>ement RH</span></b></a>
+
+					</div>
+
+					<ul class="list-unstyled components ">
+						<li  >
+							<a data-position="0" href="{{ path('acceuil') }}">
+								<i class="fas fa-home"></i>
+								Accueil
+							</a>
+						</li>
+						<li>
+							<a data-position="2" href="{{ path('recruteur_index', {'id': app.user.id}) }}">
+								<i class="fas fa-user-tie"></i>
+								Gestion du Profile
+							</a>
+						</li>
+						<li>
+							<a data-position="2" href="{{ path('recruteur_user_calendar') }}">
+								<i class="fas fa-user-tie"></i>
+								Gestion du Calendrier
+							</a>
+						</li>
+						<li>
+							<a  data-position="3" href="{{ path('entretien_index') }}">
+								<i class="fas fa-handshake"></i>
+								Gestion des Entretiens
+							</a>
+						</li>
+
+					</ul>
+
+
+				</nav>
+
+			{% endif %} #}
 		{% endif %}
 			<!-- Page Content  -->
 			<div id="content">

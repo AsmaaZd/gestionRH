@@ -39,7 +39,6 @@
 ### 🛠️ Les pré-requis techniques 
 
 1. Installez WampServer [lien](https://www.wampserver.com/) - Si vous rencontrez une erreur de type ` MSVCR120.dll is missing ` voici un tuto vous aider à installer le serveur et résoudre ce problème : [tutoriel](https://www.youtube.com/watch?v=trPjbiGRw6w).
-  💡 Si vous êtes sur Linux ou Mac ça sera mieux d’utiliser [XAMPP](https://www.apachefriends.org/fr/download.html) ou [MAMP](https://www.mamp.info/en/downloads/) 
 
 2. [Installer Composer](https://getcomposer.org/download/) ⚠️ pensez à bien choisir la version PHP 7.4 pour composer lors de l'installation.
 3. [installer Symfony CLI ](https://symfony.com/download)

@@ -15,12 +15,12 @@
 
     <div class="col d-flex justify-content-end">
 			<div class="">
-				<div class="palette row">
+				{# <div class="palette row">
 					<div class="color-dispo col-1">
 						<span></span>
 					</div>
 					<p class="col text-start">Libre</p>
-				</div>
+				</div> #}
 				<div class="palette row">
 					<div class="color-entretien col-1">
 						<span></span>
@@ -69,7 +69,7 @@
                 editable: false,
                 customButtons: {
                     addEventButton: {
-                    text: 'Ajouter une disponibilité',
+                    text: 'Réserver une salle',
                     click: function() {
                         var dateStr = prompt('Saisissez une date au format AAAA-MM-JJ');
                         var date = new Date(dateStr); // will be in local time
@@ -81,7 +81,9 @@
                             start: date,
                             allDay: true,
                             jour: date,
-                            isOccupied: false,
+                            isOccupied: true,
+                            backgroundColor:"#DE8971",
+                            borderColor:"#DE8971",
                         });
                         // alert('La nouvelle disponibilité est enregistré!');
                         // var xhr = new XMLHttpRequest(); 
@@ -102,12 +104,12 @@
                 });
                 // addDispo with ajax
                 calendar.on('eventAdd', (e) => {
-                    let url = `/api/calendarDispo/new`
+                    let url = `/api/calendarDispo/reserve`
                     let donnees = {
                     "id": e.event.id,
                     // "description": e.event.extendedProps.description,
                     // "isOccupied": e.event.extendedProps.isOccupied,
-                    "isOccupied": false,
+                    "isOccupied": true,
                     "start": e.event.start,
                     "backgroundColor": e.event.backgroundColor,
                     "borderColor": e.event.borderColor,
@@ -120,9 +122,9 @@
                     xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4) {
                         if(xhr.responseText == "OK"){
-                            alert('La nouvelle disponibilité est enregistré!');
+                            alert('La salle a bien été réservée!');
                         }
-                        else if(xhr.responseText == "Date existe déjà"){
+                        else if(xhr.responseText == "Salle déjà réservée"){
                             alert(xhr.responseText);
                         }
                     }

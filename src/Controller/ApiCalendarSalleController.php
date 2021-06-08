@@ -24,7 +24,7 @@ class ApiCalendarSalleController extends AbstractController
     }
 
     /**
-     * @Route("/api/calendarDispo/new", name="api_calendar_salle_event_new", methods={"PUT"})
+     * @Route("/api/calendarDispo/reserve", name="api_calendar_salle_event_new", methods={"PUT"})
      */
     public function majEvent(Request $request, EntityManagerInterface $manager,SalleRepository $salleRepo,DispoSalleRepository $dispoSalle)
     {
@@ -35,7 +35,7 @@ class ApiCalendarSalleController extends AbstractController
         // dd($donnees);
         $salle=$salleRepo->find($donnees->salle);
         $dateDispo=new \Datetime($donnees->start);
-        $dateAlreadyExist= $dispoSalle->findBy(array("salle"=>$salle,"jour"=>$dateDispo));
+        $dateAlreadyExist= $dispoSalle->findBy(array("salle"=>$salle,"jour"=>$dateDispo,"isOccupied"=>1));
        
         if(!$dateAlreadyExist){
             $dispoSalle= new DispoSalle();
@@ -50,7 +50,7 @@ class ApiCalendarSalleController extends AbstractController
         }
 
         else{
-            return new Response('Date existe déjà');
+            return new Response('Salle déjà réservée');
         }
 
         
