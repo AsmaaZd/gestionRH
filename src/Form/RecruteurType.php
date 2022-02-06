@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class RecruteurType extends AbstractType
 {
@@ -28,7 +29,14 @@ class RecruteurType extends AbstractType
                     'class' => "form-control"
                 ],
 
-            ])      
+            ]) 
+            ->add('email', EmailType::class, [
+                'attr' => [
+                    'placeholder' => "Email",
+                    'class' => "form-control"
+                ],
+
+            ])       
         
         ;
     }
